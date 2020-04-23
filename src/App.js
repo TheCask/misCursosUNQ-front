@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import Home from './Home';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CourseList from './CourseList';
+import CourseEdit from './CourseEdit';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import logo from './logo.svg';
 
 class App extends Component {
@@ -12,6 +13,7 @@ class App extends Component {
         <Switch>
           <Route path='/' exact={true} component={Home}/>
           <Route path='/courses' exact={true} component={CourseList}/>
+          <Route path='/courses/:id' component={CourseEdit}/>
         </Switch>
       </Router>
     )
