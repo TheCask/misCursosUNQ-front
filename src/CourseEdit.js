@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label, Spinner } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 
 class CourseEdit extends Component {
@@ -8,10 +8,10 @@ class CourseEdit extends Component {
     emptyItem = {
         courseName: '',
         courseCode: '',
-        courseShift: '',
-        courseIsOpen: '',
-        students: '',
-        lessons: '',
+        courseShift: 'Mañana',
+        courseIsOpen: true,
+        students: [],
+        lessons: [],
     };
 
   constructor(props) {
@@ -25,7 +25,7 @@ class CourseEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const course = await (await fetch(`/courses/${this.props.match.params.id}`)).json();
+      const course = await (await fetch(`/api/course/${this.props.match.params.id}`)).json();
       this.setState({item: course});
     }
   }
@@ -43,7 +43,7 @@ class CourseEdit extends Component {
     event.preventDefault();
     const {item} = this.state;
 
-    await fetch('/courses', {
+    await fetch('/api/course', {
       method: (item.id) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
@@ -56,7 +56,7 @@ class CourseEdit extends Component {
 
   render() {
     const {item} = this.state;
-    const title = <h2>{item.id ? 'Edit Course' : 'Add Course'}</h2>;
+    const title = <h2>{item.courseId ? 'Edit Course' : 'Add Course'}</h2>;
 
     return <div>
       <AppNavbar/>
@@ -64,31 +64,31 @@ class CourseEdit extends Component {
         {title}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
-            <Label for="name">Name</Label>
-            <Input type="text" name="name" id="name" value={item.courseName || ''}
+            <Label for="courseName">Name</Label>
+            <Input type="text" name="courseName" id="courseName" value={item.courseName || ''}
                    onChange={this.handleChange} autoComplete="Course Name"/>
           </FormGroup>
           <FormGroup>
             <Label for="code">Code</Label>
-            <Input type="text" name="code" id="code" value={item.courseCode || ''}
+            <Input type="text" name="courseCode" id="code" value={item.courseCode || ''}
                    onChange={this.handleChange} autoComplete="Course Code"/>
           </FormGroup>
           <FormGroup>
             <Label for="shift">Shift</Label>
-            <Input type="select" name="shift" id="shift" value={item.courseShift || ''}
+            <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
                     onChange={this.handleChange} autoComplete="Course Shift">
                 <option>Mañana</option>
                 <option>Tarde</option>
                 <option>Noche</option>
             </Input>
           </FormGroup>
-          <FormGroup check>
+          {/* <FormGroup check>
             <Label check for="isOpen">
-                <Input type="checkbox" name="isOpen" id="isOpen" chequed={item.courseIsOpen}
+                <Input type="checkbox" name="courseIsOpen" id="isOpen" chequed={item.courseIsOpen}
                    onChange={this.handleChange} />
                 isOpen       
             </Label>
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/courses">Cancel</Button>

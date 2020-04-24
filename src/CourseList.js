@@ -14,13 +14,13 @@ class CourseList extends Component {
   componentDidMount() {
     this.setState({isLoading: true});
 
-    fetch('courses')
+    fetch('/api/courses')
       .then(response => response.json())
       .then(data => this.setState({courses: data, isLoading: false}));
   }
 
   async remove(id) {
-    await fetch(`/course/${id}`, {
+    await fetch(`/api/course/${id}`, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',
@@ -46,7 +46,7 @@ class CourseList extends Component {
         <td>{courseData}</td>
         <td>
           <ButtonGroup>
-            <Button size="sm" color="primary" tag={Link} to={"/courses/" + course.courseId}>Edit</Button>
+            <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(course.courseId)}>Delete</Button>
           </ButtonGroup>
         </td>
@@ -58,7 +58,7 @@ class CourseList extends Component {
         <AppNavbar/>
         <Container fluid>
           <div className="float-right">
-            <Button color="success" tag={Link} to="/courses/new">Add Course</Button>
+            <Button color="success" tag={Link} to="/course/new">Add Course</Button>
           </div>
           <h3>Mis Cursos UNQ</h3>
           <Table className="mt-4">
