@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, Label, CustomInput } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 
 class CourseEdit extends Component {
@@ -64,30 +64,27 @@ class CourseEdit extends Component {
         {title}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
-            <Label for="courseName">Name</Label>
+            <Label for="courseName" hidden>Name</Label>
             <Input type="text" name="courseName" id="courseName" value={item.courseName || ''}
-                   onChange={this.handleChange} autoComplete="Course Name"/>
+                   onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
           </FormGroup>
           <FormGroup>
-            <Label for="code">Code</Label>
+            <Label for="code" hidden>Code</Label>
             <Input type="text" name="courseCode" id="code" value={item.courseCode || ''}
-                   onChange={this.handleChange} autoComplete="Course Code"/>
+                   onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
           </FormGroup>
           <FormGroup>
             <Label for="shift">Shift</Label>
             <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
-                    onChange={this.handleChange} autoComplete="Course Shift">
+              onChange={this.handleChange} autoComplete="Course Shift" label="Shift">
                 <option>Mañana</option>
                 <option>Tarde</option>
                 <option>Noche</option>
             </Input>
           </FormGroup>
-          {/* <FormGroup check>
-            <Label check for="isOpen">
-                <Input type="checkbox" name="courseIsOpen" id="isOpen" chequed={item.courseIsOpen}
-                   onChange={this.handleChange} />
-                isOpen       
-            </Label>
+          {/* <FormGroup>
+            <CustomInput type="switch" name="courseIsOpen" id="isOpen" label="Open Course"
+              value={item.courseIsOpen} onChange={this.handleChange} />
           </FormGroup> */}
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}

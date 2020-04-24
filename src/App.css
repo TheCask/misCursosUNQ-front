@@ -39,4 +39,8 @@
 
 .container, .container-fluid {
   margin-top: 20px;
-}  
+}
+
+.logo {
+  border:5px solid black;
+}
