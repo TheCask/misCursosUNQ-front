@@ -40,10 +40,13 @@ class CourseList extends Component {
     }
 
     const courseList = courses.map(course => {
-      const courseData = `${course.courseName || ''} ${course.courseCode || ''} ${course.courseShift || ''}`;
       return <tr key={course.courseId}>
-        <td style={{whiteSpace: 'nowrap'}}>{course.courseName}</td>
-        <td>{courseData}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.courseShift || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{this.formatYESoNO(course.courseIsOpen) || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.students.length || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
         <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId}>Edit</Button>
@@ -60,13 +63,17 @@ class CourseList extends Component {
           <div className="float-right">
             <Button color="success" tag={Link} to="/course/new">Add Course</Button>
           </div>
-          <h3>Mis Cursos UNQ</h3>
+          <h3>Courses</h3>
           <Table className="mt-4">
             <thead>
             <tr>
-              <th width="20%">Name</th>
-              <th width="20%">Data</th>
-              <th width="10%">Actions</th>
+              <th width="10%">Name</th>
+              <th width="15%">Code</th>
+              <th width="5%">Shift</th>
+              <th width="5%">Open</th>
+              <th width="1%">Students</th>
+              <th width="1%">Lessons</th>
+              <th width="5%">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -76,6 +83,10 @@ class CourseList extends Component {
         </Container>
       </div>
     );
+  }
+
+  formatYESoNO(value) {
+    return value===false ? 'No' : 'Yes';
   }
 }
 
