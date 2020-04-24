@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 
-class StudentList extends Component {
+class Attendance extends Component {
 
   constructor(props) {
     super(props);
@@ -15,7 +15,7 @@ class StudentList extends Component {
     this.setState({isLoading: true});
     fetch(`/api/course/${this.props.match.params.id}/students`)
         .then(response => response.json())
-        .then(data => this.setState({students: data, courseId: this.props.match.params.id, isLoading: false}));
+        .then(data => this.setState({students: data, isLoading: false}));
   }
 
   async remove(id) {
@@ -82,4 +82,4 @@ class StudentList extends Component {
   }
 }
 
-export default StudentList;
+export default Attendance;

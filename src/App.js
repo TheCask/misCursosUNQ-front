@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Home from './Home';
 import CourseList from './CourseList';
-import StudentList from './StudentList';
+import Attendance from './Attendance';
 import CourseEdit from './CourseEdit';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ class App extends Component {
         <Switch>
           <Route path='/' exact={true} component={Home}/>
           <Route path='/courses' exact={true} component={CourseList}/>
-          <Route path='/course/:id/students' component={StudentList}/>
+          <Route path='/course/:id/students' component={Attendance}/>
           <Route path='/course/:id' component={CourseEdit}/>
         </Switch>
       </Router>
