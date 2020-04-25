@@ -32,22 +32,18 @@ class Attendance extends Component {
     fetch(`/api/course/${this.props.match.params.id}/lessons`)
         .then(response => response.json())
         .then(data => this.setState({lessons: data, isLoading: false}));
-
-    this.state.item.attendantStudents = this.state.students
-    this.setState({item: this.state.item});
   }
 
   async handleSubmit(event) {    
     event.preventDefault();
-    const {item} = this.state
-
+    this.state.item.attendantStudents = this.state.students
     await fetch('/api/lesson', {
-      method: (item.id) ? 'PUT' : 'POST',
+      method: (this.state.item.id) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(item),
+      body: JSON.stringify(this.state.item),
     });
     // this.props.history.push('/lessons');
   }
