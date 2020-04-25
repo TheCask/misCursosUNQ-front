@@ -51,7 +51,7 @@ class CourseList extends Component {
           <ButtonGroup inline>
             <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(course.courseId)}>Delete</Button>
-            <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/students`}>Take Attendance</Button>
+            <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/lessons`}>Take Attendance</Button>
           </ButtonGroup>
         </td>
       </tr>

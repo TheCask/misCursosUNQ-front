@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, CustomInput, Form } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, CustomInput } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 
-class Attendance extends Component {
+class StudentList extends Component {
 
   emptyItem = {
     course: {
       courseId: this.props.match.params.id
     },
-    attendantStudents: []
+    attendantStudents: [],
   };
 
   constructor(props) {
@@ -19,8 +19,7 @@ class Attendance extends Component {
       lessons: [], 
       item: this.emptyItem,
       isLoading: true};
-    this.toggleAttendance = this.toggleAttendance.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.remove = this.remove.bind(this);
   }
 
   async componentDidMount() {
@@ -32,32 +31,19 @@ class Attendance extends Component {
     fetch(`/api/course/${this.props.match.params.id}/lessons`)
         .then(response => response.json())
         .then(data => this.setState({lessons: data, isLoading: false}));
-
-    this.state.item.attendantStudents = this.state.students
-    this.setState({item: this.state.item});
   }
 
-  async handleSubmit(event) {    
-    event.preventDefault();
-    const {item} = this.state
-
-    await fetch('/api/lesson', {
-      method: (item.id) ? 'PUT' : 'POST',
+  async remove(id) {
+    await fetch(`/api/student/${id}`, {
+      method: 'DELETE',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
+      }
+    }).then(() => {
+      let updatedStudents = [...this.state.students].filter(i => i.fileNumber !== id);
+      this.setState({students: updatedStudents});
     });
-    // this.props.history.push('/lessons');
-  }
-
-  toggleAttendance(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    let item = {...this.state.item};
-    this.setState({item});
   }
 
   render() {
@@ -73,9 +59,16 @@ class Attendance extends Component {
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
         <td>
-          <CustomInput type="switch" name="attendantStudent" id={index} onChange={this.toggleAttendance} 
-            defaultChecked={true}>
+          <CustomInput type="switch" name="attended" id={index} onChange={this.bindSwitch} 
+            defaultChecked={true}> 
+          
           </CustomInput>
+        </td>
+        <td>
+          <ButtonGroup>
+            <Button size="sm" color="primary" tag={Link} to={"/student/" + student.fileNumber}>Edit</Button>
+            <Button size="sm" color="danger" onClick={() => this.remove(student.fileNumber)}>Delete</Button>
+          </ButtonGroup>
         </td>
       </tr>
     });
@@ -85,12 +78,10 @@ class Attendance extends Component {
         <AppNavbar/>
         <Container fluid>
           <div className="float-right">
-          <Form onSubmit={this.handleSubmit}>
             <ButtonGroup>
-                <Button color="primary" type="submit">Save Attendance</Button>{' '}
-                <Button color="secondary" tag={Link} to="/courses">Back To Course</Button>
+                <Button color="success" tag={Link} to="/student/new">Add Student</Button>
+                <Button color="secondary" tag={Link} to="/courses">Back To Courses</Button>
             </ButtonGroup>
-          </Form>
           </div>
           <h3>Students</h3>
           <Table className="mt-4">
@@ -100,6 +91,7 @@ class Attendance extends Component {
               <th width="15%">First Name</th>
               <th width="15%">Last Name</th>
               <th width="15%">Lesson Attended</th>
+              <th width="15%">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -112,4 +104,4 @@ class Attendance extends Component {
   }
 }
 
-export default Attendance;
+export default StudentList;
