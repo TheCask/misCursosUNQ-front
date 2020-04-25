@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route path='/' exact={true} component={Home}/>
+          <Route path='/' exact={true} component={CourseList}/>
           <Route path='/courses' exact={true} component={CourseList}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id' component={CourseEdit}/>
