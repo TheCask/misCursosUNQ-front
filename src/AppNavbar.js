@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import logoUNQ from './logoUNQ.png';
-import logoApp from './logoApp.png';
+import logoApp from './logoAppWhite.png';
 
 export default class AppNavbar extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class AppNavbar extends Component {
   }
 
   render() {
-    return <Navbar color="light" light expand="md">
+    return <Navbar color="dark" dark expand="md">
       <NavbarBrand tag={Link} to="/">
         <img src={logoApp} className="app-logo" alt="applogo" height="48" width="48" align="left" style={{margin: '0px 0px'}}/>
       </NavbarBrand>
