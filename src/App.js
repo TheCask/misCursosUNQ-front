@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Home from './Home';
 import CourseList from './CourseList';
 import Attendance from './Attendance';
 import CourseEdit from './CourseEdit';

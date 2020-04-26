@@ -5,6 +5,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// Add these lines:
+if (process.env.NODE_ENV !== 'production') {
+  localStorage.setItem('debug', 'misCursosUNQ:*');
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

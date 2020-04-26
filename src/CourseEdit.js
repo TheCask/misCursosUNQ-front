@@ -63,7 +63,7 @@ class CourseEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="courseName" hidden>Name</Label>
-            <Input type="text" name="courseName" id="courseName" value={item.courseName || ''}
+            <Input type="text" name="courseName" id="name" value={item.courseName || ''}
                    onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
           </FormGroup>
           <FormGroup>

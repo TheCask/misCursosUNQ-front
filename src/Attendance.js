@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table, CustomInput, Form } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
+import Log from './Log';
 
 class Attendance extends Component {
 
@@ -14,7 +15,8 @@ class Attendance extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
+      attendantStudentsIds: [], 
       students: [], 
       lessons: [], 
       item: this.emptyItem,
@@ -29,48 +31,59 @@ class Attendance extends Component {
         .then(response => response.json())
         .then(data => this.setState({students: data}));
 
+    // Log.info('You toggled ' + target.checked + ' asistance of', fileNumber)
+    // const {students} = this.state;
+    // const studentsIds = students.map((st) => st["fileNumber"])
+
     fetch(`/api/course/${this.props.match.params.id}/lessons`)
         .then(response => response.json())
         .then(data => this.setState({lessons: data, isLoading: false}));
   }
 
-  async handleSubmit(event) {    
+  async handleSubmit(event) {
     event.preventDefault();
-    this.state.item.attendantStudents = this.state.students
+    let item = {...this.state.item};
+    item["attendantStudents"] = this.state.attendantStudentsIds
+    Log.info('Actual attend students ' + item)
+    this.setState({item: item})
     await fetch('/api/lesson', {
-      method: (this.state.item.id) ? 'PUT' : 'POST',
+      method: (item.lessonId) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state.item),
+      body: JSON.stringify(item),
     });
-    // this.props.history.push('/lessons');
+    this.props.history.push('/courses');
   }
 
   toggleAttendance(event) {
     const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    let item = {...this.state.item};
-    this.setState({item});
+    const fileNumber = target.id;
+    let studentsIds = this.state.attendantStudentsIds
+    if (target.checked) {
+      studentsIds = studentsIds.concat({fileNumber})
+    }
+    else {
+      const newStudentsIds = studentsIds.filter(st => st.fileNumber !== fileNumber)
+      studentsIds = newStudentsIds
+    }
+    this.setState({attendantStudentsIds: studentsIds})
   }
 
   render() {
     const {students, isLoading} = this.state;
-
     if (isLoading) {
       return <p>Loading...</p>;
     }
-
-    const studentList = students.map((student, index) => {
+    const studentList = students.map((student) => {
       return <tr key={student.fileNumber}>
         <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
         <td>
-          <CustomInput type="switch" name="attendantStudent" id={index} onChange={this.toggleAttendance} 
-            defaultChecked={true}>
+          <CustomInput type="switch" name="attendantStudents" id={student.fileNumber} 
+            onChange={this.toggleAttendance} defaultChecked={true}>
           </CustomInput>
         </td>
       </tr>
