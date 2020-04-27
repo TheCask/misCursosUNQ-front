@@ -29,22 +29,20 @@ class Attendance extends Component {
     this.setState({isLoading: true});
     fetch(`/api/course/${this.props.match.params.id}/students`)
         .then(response => response.json())
-        .then(data => this.setState({students: data}));
-
-    // Log.info('You toggled ' + target.checked + ' asistance of', fileNumber)
-    // const {students} = this.state;
-    // const studentsIds = students.map((st) => st["fileNumber"])
-
+        .then(data => {
+          this.setState({students: data})
+          this.collectStudentsIds(data)
+        });
     fetch(`/api/course/${this.props.match.params.id}/lessons`)
         .then(response => response.json())
-        .then(data => this.setState({lessons: data, isLoading: false}));
+        .then(data => {this.setState({lessons: data, isLoading: false})});
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     let item = {...this.state.item};
-    item["attendantStudents"] = this.state.attendantStudentsIds
-    Log.info('Actual attend students ' + item)
+    let students = this.state.attendantStudentsIds
+    item["attendantStudents"] = students
     this.setState({item: item})
     await fetch('/api/lesson', {
       method: (item.lessonId) ? 'PUT' : 'POST',
@@ -59,16 +57,21 @@ class Attendance extends Component {
 
   toggleAttendance(event) {
     const target = event.target;
-    const fileNumber = target.id;
-    let studentsIds = this.state.attendantStudentsIds
+    const id = Number(target.id);
+    let student = {fileNumber: id}
+    let studentList = this.state.attendantStudentsIds
+    Log.info('Old attendants are ' + studentList)
     if (target.checked) {
-      studentsIds = studentsIds.concat({fileNumber})
+      Log.info('Toggle attend id ' + id)
+      studentList = studentList.concat(student)
     }
     else {
-      const newStudentsIds = studentsIds.filter(st => st.fileNumber !== fileNumber)
-      studentsIds = newStudentsIds
+      Log.info('Toggle unattend id ' + id)
+      const newStudentList = studentList.filter(st => st.fileNumber !== id)
+      studentList = newStudentList
     }
-    this.setState({attendantStudentsIds: studentsIds})
+    this.setState({attendantStudentsIds: studentList})
+    Log.info('New attendants are ' + studentList)
   }
 
   render() {
@@ -77,13 +80,14 @@ class Attendance extends Component {
       return <p>Loading...</p>;
     }
     const studentList = students.map((student) => {
-      return <tr key={student.fileNumber}>
-        <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
+      let fileNumber = student.fileNumber
+      return <tr key={fileNumber}>
+        <td style={{whiteSpace: 'nowrap'}}>{fileNumber || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
         <td>
-          <CustomInput type="switch" name="attendantStudents" id={student.fileNumber} 
-            onChange={this.toggleAttendance} defaultChecked={true}>
+          <CustomInput type="switch" name="attendantStudents" id={fileNumber} 
+            onClick={this.toggleAttendance} defaultChecked={true}>
           </CustomInput>
         </td>
       </tr>
@@ -118,6 +122,14 @@ class Attendance extends Component {
         </Container>
       </div>
     );
+  }
+
+  // takes the list of students from api and sets the list of student fileNumbers in state
+  collectStudentsIds(students) {
+    const emptyStudent = {fileNumber: ''}
+    let students4JSON = students.map(student => {return emptyStudent.fileNumber=student})
+    Log.info('NEW ' + students4JSON)
+    this.setState({attendantStudentsIds: students4JSON})
   }
 }
 
