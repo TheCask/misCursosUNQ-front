@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, CustomInput, Form, Spinner } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, CustomInput, Form, Spinner, UncontrolledTooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
@@ -102,8 +102,18 @@ class Attendance extends Component {
           <div className="float-right">
           <Form onSubmit={this.handleSubmit}>
             <ButtonGroup>
-                <Button color="primary" type="submit">Save Attendance</Button>{' '}
-                <Button color="secondary" tag={Link} to="/courses">Back To Course</Button>
+                <Button color="primary" type="submit" id="saveAttendance">
+                  <UncontrolledTooltip placement="auto" target="saveAttendance">
+                    Save Attendance
+                  </UncontrolledTooltip>
+                  <FontAwesomeIcon icon={['fas', 'save']} size="1x"/>
+                </Button>{' '}
+                <Button color="secondary" tag={Link} to="/courses" id="backToCourse">
+                  <UncontrolledTooltip placement="auto" target="backToCourse">
+                    Discard and Back to Course
+                  </UncontrolledTooltip>
+                  <FontAwesomeIcon icon={['fas', 'backward']} size="1x"/>
+                </Button>
             </ButtonGroup>
           </Form>
           </div>
