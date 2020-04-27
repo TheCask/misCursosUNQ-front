@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table, CustomInput, Form, Spinner } from 'reactstrap';
-import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import AppNavbar from './AppNavbar';
 import Log from './Log';
+
 
 class Attendance extends Component {
 

@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, Spinner } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import { Button, ButtonGroup, Container, Table, Spinner, UncontrolledTooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import AppNavbar from './AppNavbar';
+import Log from './Log';
 
 class CourseList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {courses: [], isLoading: true};
+    this.state = {courses: [], isLoading: true, tooltipOpen: false};
     this.remove = this.remove.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
@@ -47,9 +50,25 @@ class CourseList extends Component {
         <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
         <td>
           <ButtonGroup inline="true">
-            <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId}>Edit</Button>
-            <Button size="sm" color="danger" onClick={() => this.remove(course.courseId)}>Delete</Button>
-            <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/lessons`}>Take Attendance</Button>
+            <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId} id="editCourse">
+              <UncontrolledTooltip placement="auto" target="editCourse">
+                Edit course
+              </UncontrolledTooltip>
+              <FontAwesomeIcon icon={['fas', 'edit']} size="1x"/>
+            </Button>
+            <Button size="sm" color="danger" onClick={() => this.remove(course.courseId)} id="deleteCourse">
+              <UncontrolledTooltip placement="auto" target="deleteCourse">
+                Delete course
+              </UncontrolledTooltip>
+              <FontAwesomeIcon icon={['fas', 'minus-circle']} size="1x"/>
+            </Button>
+            <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/lessons`} id="attendanceCourse">
+              <UncontrolledTooltip placement="auto" target="attendanceCourse">
+                Take attendance
+              </UncontrolledTooltip>
+              <FontAwesomeIcon icon={['fas', 'user-check']} size="1x"/>
+
+            </Button>
           </ButtonGroup>
         </td>
       </tr>
@@ -60,7 +79,15 @@ class CourseList extends Component {
         <AppNavbar/>
         <Container fluid>
           <div className="float-right">
-            <Button color="success" tag={Link} to="/course/new">Add Course</Button>
+            <Button color="success" tag={Link} to="/course/new" id="addCourseTooltip">
+              <UncontrolledTooltip placement="auto" target="addCourseTooltip">
+                Add a course
+              </UncontrolledTooltip>
+              {/* <Tooltip placement="auto" isOpen={this.tooltipOpen} target="addCourseTooltip" toggle={this.toggle}>
+                Add a course
+              </Tooltip> */}
+              <FontAwesomeIcon icon={['fas', 'plus-circle']} size="2x"/>
+            </Button>
           </div>
           <h3>Courses</h3>
           <Table className="mt-4">
@@ -87,6 +114,11 @@ class CourseList extends Component {
   formatYESoNO(value) {
     return value===false ? 'No' : 'Yes';
   }
+  
+  toggle(e) {
+    this.setState({tooltipOpen: !this.state.tooltipOpen});
+  } 
+
 }
 
 export default CourseList;
