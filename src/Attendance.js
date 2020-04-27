@@ -106,13 +106,13 @@ class Attendance extends Component {
                   <UncontrolledTooltip placement="auto" target="saveAttendance">
                     Save Attendance
                   </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'save']} size="1x"/>
+                  <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
                 </Button>{' '}
                 <Button color="secondary" tag={Link} to="/courses" id="backToCourse">
                   <UncontrolledTooltip placement="auto" target="backToCourse">
                     Discard and Back to Course
                   </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'backward']} size="1x"/>
+                  <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
                 </Button>
             </ButtonGroup>
           </Form>

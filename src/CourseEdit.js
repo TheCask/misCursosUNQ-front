@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label, CustomInput } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import Log from './Log';
 
 class CourseEdit extends Component {
 
-    emptyItem = {
-        courseName: '',
-        courseCode: '',
-        courseShift: 'Mañana',
-        courseIsOpen: true,
-    };
+  emptyItem = {
+    courseName: '',
+    courseCode: '',
+    courseShift: 'Mañana',
+    courseIsOpen: true,
+  };
 
   constructor(props) {
     super(props);
     this.state = {
-      item: this.emptyItem
+      item: this.emptyItem,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggleIsOpen = this.toggleIsOpen.bind(this);
   }
 
   async componentDidMount() {
@@ -40,7 +43,6 @@ class CourseEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-
     await fetch('/api/course', {
       method: (item.id) ? 'PUT' : 'POST',
       headers: {
@@ -55,10 +57,25 @@ class CourseEdit extends Component {
   render() {
     const {item} = this.state;
     const title = <h2>{item.courseId ? 'Edit Course' : 'Add Course'}</h2>;
-
     return <div>
       <AppNavbar/>
-      <Container>
+      <Container fluid>
+      <div className="float-right">
+        <FormGroup>
+          <Button color="primary" type="submit" id="editCourse">
+            <UncontrolledTooltip placement="auto" target="editCourse">
+              {item.courseId ? 'Save Changes' : 'Save New Course'}
+            </UncontrolledTooltip>
+            <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
+          </Button>{' '}
+          <Button color="secondary" tag={Link} to="/courses" id="backToCourse">
+            <UncontrolledTooltip placement="auto" target="backToCourse">
+              Discard and Back to Course
+            </UncontrolledTooltip>
+            <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
+          </Button>
+        </FormGroup>
+      </div>
         {title}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
@@ -72,26 +89,41 @@ class CourseEdit extends Component {
                    onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
           </FormGroup>
           <FormGroup>
-            <Label for="shift">Shift</Label>
+            <Label for="shift" hidden>Shift</Label>
             <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
               onChange={this.handleChange} autoComplete="Course Shift" label="Shift">
                 <option>Mañana</option>
                 <option>Tarde</option>
                 <option>Noche</option>
             </Input>
+            <UncontrolledTooltip placement="auto" target="shift">
+              Select Shift
+            </UncontrolledTooltip>
           </FormGroup>
-          <FormGroup>
-          <Label for="isOpen">Open </Label>
-            <CustomInput type="switch" name="courseIsOpen" id="isOpen" label="Open Course"
-              onClick={this.toggleIsOpen} defaultChecked={true} inline={true}/>
-          </FormGroup>
-          <FormGroup>
-            <Button color="primary" type="submit">Save</Button>{' '}
-            <Button color="secondary" tag={Link} to="/courses">Cancel</Button>
-          </FormGroup>
+          <ButtonGroup>
+            <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
+              <FontAwesomeIcon icon={['fas', 'lock-open']} size="1x" id="lock"/>
+            </Button>
+            <UncontrolledTooltip placement="auto" target="isOpen">
+              Unlock Course
+            </UncontrolledTooltip>
+            <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
+              <FontAwesomeIcon icon={['fas', 'lock']} size="1x" id="unlock"/>
+            </Button>
+            <UncontrolledTooltip placement="auto" target="isClose">
+              Lock Course
+            </UncontrolledTooltip>
+          </ButtonGroup>
         </Form>
       </Container>
     </div>
+  }
+
+  toggleIsOpen() {
+    let item = {...this.state.item};
+    item["courseIsOpen"] = !item["courseIsOpen"];
+    Log.info('Toggle ' + item["courseIsOpen"])
+    this.setState({item});
   }
 }
 
