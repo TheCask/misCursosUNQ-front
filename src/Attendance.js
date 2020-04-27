@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, CustomInput, Form } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, CustomInput, Form, Spinner } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 import Log from './Log';
@@ -77,7 +77,7 @@ class Attendance extends Component {
   render() {
     const {students, isLoading} = this.state;
     if (isLoading) {
-      return <p>Loading...</p>;
+      return <div><Spinner style={{ width: '2rem', height: '2rem', marginLeft: '50%', marginTop: '50%'  }} color="danger" /> </div>
     }
     const studentList = students.map((student) => {
       let fileNumber = student.fileNumber

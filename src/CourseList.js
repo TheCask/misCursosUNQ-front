@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, Spinner } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 
@@ -34,11 +34,9 @@ class CourseList extends Component {
 
   render() {
     const {courses, isLoading} = this.state;
-
     if (isLoading) {
-      return <p>Loading...</p>;
+      return <div><Spinner style={{ width: '2rem', height: '2rem', marginLeft: '50%', marginTop: '50%'  }} color="danger" /> </div>
     }
-
     const courseList = courses.map(course => {
       return <tr key={course.courseId}>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
@@ -48,7 +46,7 @@ class CourseList extends Component {
         <td style={{whiteSpace: 'nowrap'}}>{course.students.length || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
         <td>
-          <ButtonGroup inline>
+          <ButtonGroup inline="true">
             <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(course.courseId)}>Delete</Button>
             <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/lessons`}>Take Attendance</Button>

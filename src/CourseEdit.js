@@ -80,10 +80,11 @@ class CourseEdit extends Component {
                 <option>Noche</option>
             </Input>
           </FormGroup>
-          {/* <FormGroup>
+          <FormGroup>
+          <Label for="isOpen">Open </Label>
             <CustomInput type="switch" name="courseIsOpen" id="isOpen" label="Open Course"
-              value={item.courseIsOpen} onChange={this.handleChange} />
-          </FormGroup> */}
+              onClick={this.toggleIsOpen} defaultChecked={true} inline={true}/>
+          </FormGroup>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/courses">Cancel</Button>

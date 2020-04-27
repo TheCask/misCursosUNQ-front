@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import logoUNQ from './logoUNQ.png';
-import logoApp from './logoAppWhite.png';
+import logoUNQ from './images/logoUNQ.png';
+import logoApp from './images/logoAppWhite.png';
 
 export default class AppNavbar extends Component {
   constructor(props) {
