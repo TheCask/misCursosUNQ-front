@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, Spinner, 
+import { Button, ButtonGroup, Container, Table, 
   UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
+import AppSpinner from './AppSpinner';
 import Log from './Log';
 
 class CourseList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {courses: [], isLoading: true, modal: false};
+    this.state = {courses: [], isLoading: true, modal: false, modalTargetId: ''};
     this.remove = this.remove.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
@@ -37,11 +38,10 @@ class CourseList extends Component {
   }
 
   render() {
-    const {courses, isLoading, modal} = this.state;
-    if (isLoading) {
-      return <div><Spinner style={{ width: '2rem', height: '2rem', marginLeft: '50%', marginTop: '50%'  }} color="danger" /> </div>
-    }
+    const {courses, isLoading, modal, modalTargetId} = this.state;
+    if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const courseList = courses.map(course => {
+      const courseId = course.courseId
       return <tr key={course.courseId}>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
@@ -51,17 +51,17 @@ class CourseList extends Component {
         <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
         <td>
           <ButtonGroup inline="true">
-            <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId} id="editCourse">
-              <UncontrolledTooltip placement="auto" target="editCourse">
+            <Button size="sm" color="primary" tag={Link} to={"/course/" + course.courseId} id={"edit_" + courseId}>
+              <UncontrolledTooltip placement="auto" target={"edit_" + courseId}>
                 Edit Course
               </UncontrolledTooltip>
               <FontAwesomeIcon icon={['fas', 'edit']} size="1x"/>
             </Button>
-            <Button size="sm" color="danger" onClick={this.toggleModal} id="deleteCourse">
-              <UncontrolledTooltip placement="auto" target="deleteCourse">
+            <Button size="sm" color="danger" onClick={() => {this.setState({modalTargetId: courseId}); this.toggleModal()}} id={"delete_" + courseId}>
+              <UncontrolledTooltip placement="auto" target={"delete_" + courseId}>
                 Delete Course
               </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'minus-circle']} size="1x"/>
+              <FontAwesomeIcon icon={['fas', 'trash-alt']} size="1x"/>
             </Button>
 
             <Modal isOpen={modal} toggle={this.toggleModal} size="lg">
@@ -79,11 +79,11 @@ class CourseList extends Component {
                 </ul>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" onClick={() => {this.remove(course.courseId); this.toggleModal()}} id="modalDeleteCourse">
-                  <UncontrolledTooltip placement="auto" target="modalDeleteCourse">
+                <Button color="danger" onClick={() => {this.remove(modalTargetId); this.toggleModal()}} id={"modalDelete"}>
+                  <UncontrolledTooltip placement="auto" target={"modalDelete"}>
                     YES DELETE COURSE (I'm Pretty Sure)
                   </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'minus-circle']} size="2x"/>
+                  <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
                 </Button>
                 <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
                   <UncontrolledTooltip placement="auto" target="modalCancel">
@@ -93,12 +93,11 @@ class CourseList extends Component {
                 </Button>
               </ModalFooter>
             </Modal>
-
-            <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/lessons`} id="attendanceCourse">
-              <UncontrolledTooltip placement="auto" target="attendanceCourse">
+            <Button size="sm" color="success" tag={Link} to={`/course/${course.courseId}/lessons`} id={"attendance_" + courseId}>
+              <UncontrolledTooltip placement="auto" target={"attendance_" + courseId}>
                 Take Attendance
               </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'user-check']} size="1x"/>
+              <FontAwesomeIcon icon={['fas', 'tasks']} size="1x"/>
             </Button>
           </ButtonGroup>
         </td>
@@ -144,7 +143,9 @@ class CourseList extends Component {
   }
   
   toggleModal(e) {
+    // const courseId = e.target.id.split("_")[1]
     const modal = this.state.modal
+    Log.info('modal ' + modal)
     this.setState({modal: !modal});
   } 
 

@@ -3,6 +3,7 @@ import { Button, ButtonGroup, Container, Table, CustomInput, Form, Spinner, Unco
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
+import AppSpinner from './AppSpinner';
 import Log from './Log';
 
 
@@ -78,9 +79,7 @@ class Attendance extends Component {
 
   render() {
     const {students, isLoading} = this.state;
-    if (isLoading) {
-      return <div><Spinner style={{ width: '2rem', height: '2rem', marginLeft: '50%', marginTop: '50%'  }} color="danger" /> </div>
-    }
+    if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const studentList = students.map((student) => {
       let fileNumber = student.fileNumber
       return <tr key={fileNumber}>

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table, CustomInput } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import AppSpinner from './AppSpinner';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class StudentList extends Component {
 
@@ -48,11 +50,7 @@ class StudentList extends Component {
 
   render() {
     const {students, isLoading} = this.state;
-
-    if (isLoading) {
-      return <p>Loading...</p>;
-    }
-
+    if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const studentList = students.map((student, index) => {
       return <tr key={student.fileNumber}>
         <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
@@ -61,7 +59,6 @@ class StudentList extends Component {
         <td>
           <CustomInput type="switch" name="attended" id={index} onChange={this.bindSwitch} 
             defaultChecked={true}> 
-          
           </CustomInput>
         </td>
         <td>

@@ -56,12 +56,13 @@ class CourseEdit extends Component {
 
   render() {
     const {item} = this.state;
-    const title = <h2>{item.courseId ? 'Edit Course' : 'Add Course'}</h2>;
+    const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'}</h2>;
     return <div>
       <AppNavbar/>
       <Container fluid>
-      <div className="float-right">
-        <FormGroup>
+        <Form onSubmit={this.handleSubmit}>
+        {title}
+        <FormGroup className="float-right">
           <Button color="primary" type="submit" id="editCourse">
             <UncontrolledTooltip placement="auto" target="editCourse">
               {item.courseId ? 'Save Changes' : 'Save New Course'}
@@ -75,9 +76,6 @@ class CourseEdit extends Component {
             <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
           </Button>
         </FormGroup>
-      </div>
-        {title}
-        <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="courseName" hidden>Name</Label>
             <Input type="text" name="courseName" id="name" value={item.courseName || ''}
