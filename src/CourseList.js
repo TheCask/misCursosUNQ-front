@@ -14,7 +14,7 @@ class CourseList extends Component {
     this.state = {courses: [], isLoading: true, modal: false, modalTargetId: '', targetId: ''};
     this.remove = this.remove.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
-    this.toggleCourse = this.toggleCourse.bind(this);
+    this.toggleRowColor = this.toggleRowColor.bind(this);
   }
 
   componentDidMount() {
@@ -44,20 +44,22 @@ class CourseList extends Component {
     const courseList = courses.map(course => {
       const courseId = course.courseId
       return (
-      <tr onClick={() => {this.setState({targetId: courseId, modalTargetId: courseId}); this.toggleCourse()}}>
-          <td>{this.getIcon(course.courseName)}</td>
-          <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
-          <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
-          <td style={{whiteSpace: 'nowrap'}}>{course.courseShift || ''}</td>
-          <td style={{whiteSpace: 'nowrap'}}>{this.formatYESoNO(course.courseIsOpen) || ''}</td>
-          <td style={{whiteSpace: 'nowrap'}}>{course.students.length || ''}</td>
-          <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
-        <Button size="sm" color="success" outline block tag={Link} to={`/course/${courseId}/lessons`} id={"attendance_" + courseId}>
-          <UncontrolledTooltip placement="auto" target={"attendance_" + courseId}>
-            Take Attendance
-          </UncontrolledTooltip>         
-          <FontAwesomeIcon icon={['fas', 'tasks']} size="1x"/>
-        </Button>
+      <tr onClick={() => {this.setState({targetId: courseId})}} id={courseId} style={this.toggleRowColor(courseId)}>
+        <td style={{textAlign: 'center'}}> {this.getIcon(course.courseName, courseId)}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.courseShift || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{this.formatYESoNO(course.courseIsOpen) || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.students.length || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
+        <td>
+          <Button size="sm" color="success" outline block tag={Link} to={`/course/${courseId}/lessons`} id={"attendance_" + courseId}>
+            <UncontrolledTooltip placement="auto" target={"attendance_" + courseId}>
+              Take Attendance
+            </UncontrolledTooltip>         
+            <FontAwesomeIcon icon={['fas', 'tasks']} size="1x"/>
+          </Button>
+        </td>
       </tr>)})
       
     return (
@@ -117,17 +119,17 @@ class CourseList extends Component {
           </ButtonGroup>
           </div>
           <h3>Courses</h3>
-          <Table className="mt-4">
+          <Table hover className="mt-4">
             <thead>
             <tr>
-              <th width="1%"></th>
-              <th width="10%">Name</th>
-              <th width="15%">Code</th>
+              <th width="4%"></th>
+              <th width="7%">Name</th>
+              <th width="10%">Code</th>
               <th width="5%">Shift</th>
               <th width="5%">Open</th>
-              <th width="1%">Students</th>
-              <th width="1%">Lessons</th>
-              <th width="5%">Take Attendance</th>
+              <th width="2%">Students</th>
+              <th width="2%">Lessons</th>
+              <th width="3%">Attendance</th>
             </tr>
             </thead>
             <tbody>
@@ -150,25 +152,53 @@ class CourseList extends Component {
     this.setState({modal: !modal});
   }
 
-  toggleCourse(e) {
-
-  }
-
-  getIcon(courseName) {
-    switch(courseName.split("-")[0]) {
-      case "LEA":
-        return <FontAwesomeIcon icon={['fas', 'book']} size="1x"/>
-      case "EPYL":
-        return <FontAwesomeIcon icon={['fas', 'laptop-code']} size="1x"/>
-      case "MATE":
-        return <FontAwesomeIcon icon={['fas', 'calculator']} size="1x"/>
-      case "ICFYQ":
-        return <FontAwesomeIcon icon={['fas', 'flask']} size="1x"/>
-      default:
-        return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="1x"/>
+  toggleRowColor(rowId) {
+    if (rowId === this.state.targetId) {
+      return {backgroundColor:'#F0F8FF'}
     }
   }
 
+  getIcon(courseName, courseSelectedId) {
+    if (courseSelectedId === this.state.targetId) {
+      switch(courseName.split("-")[0]) {
+        case "LEA":
+          return (
+            <span className="fa-layers fa-fw">
+              <FontAwesomeIcon icon='check' size="1x" color="green" transform="left-10 up-10"/>
+              <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="right-10 up-10"/>
+              <FontAwesomeIcon icon='pencil-alt' size="1x" color="darkred" transform="left-10 down-10"/>
+              <FontAwesomeIcon icon='graduation-cap' size="1x" color="darkred" transform="right-10 down-10"/>
+            </span>)
+        case "EPYL":
+          return (
+            <span className="fa-layers fa-fw">
+              <FontAwesomeIcon icon='check' size="1x" color="green" transform="left-10 up-10"/>
+              <FontAwesomeIcon icon='microchip' size="1x" color="black" transform="right-10 up-10"/>
+              <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
+              <FontAwesomeIcon icon='brain' size="1x" color="black" transform="right-10 down-10"/>
+            </span>)
+        case "MATE":
+          return (
+            <span className="fa-layers fa-fw">
+              <FontAwesomeIcon icon='check' size="1x" color="green" transform="left-10 up-10"/>
+              <FontAwesomeIcon icon='shapes' size="1x" color="darkblue" transform="right-10 up-10"/>
+              <FontAwesomeIcon icon='infinity' size="1x" color="darkblue" transform="left-10 down-10"/>
+              <FontAwesomeIcon icon='calculator' size="1x" color="darkblue" transform="right-10 down-10"/>
+            </span>)
+        case "ICFYQ":
+          return (
+            <span className="fa-layers fa-fw">
+              <FontAwesomeIcon icon='check' size="1x" color="green" transform="left-10 up-10"/>
+              <FontAwesomeIcon icon='atom' size="1x" color="darkgreen" transform="right-10 up-10"/>
+              <FontAwesomeIcon icon='flask' size="1x" color="darkgreen" transform="left-10 down-10"/>
+              <FontAwesomeIcon icon='magnet' size="1x" color="darkgreen" transform="right-10 down-10"/>
+            </span>)
+        default:
+          return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="2x" color="gray"/>
+      }  
+    }
+    else { return '' }
+  }
 }
 
 export default CourseList;
