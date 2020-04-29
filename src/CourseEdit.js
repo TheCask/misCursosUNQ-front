@@ -12,6 +12,8 @@ class CourseEdit extends Component {
     courseCode: '',
     courseShift: 'Mañana',
     courseIsOpen: true,
+    courseStudents: null,
+    courseLessons: null
   };
 
   constructor(props) {

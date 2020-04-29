@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, ButtonToggle, ButtonToolbar,
-  UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, UncontrolledTooltip,
+  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
@@ -44,7 +44,7 @@ class CourseList extends Component {
     const courseList = courses.map(course => {
       const courseId = course.courseId
       return (
-      <tr onClick={() => {this.setState({targetId: courseId, modalTargetId: courseId}); this.toggleCourse()}} id={"course_" + courseId}>
+      <tr onClick={() => {this.setState({targetId: courseId, modalTargetId: courseId}); this.toggleCourse()}}>
           <td>{this.getIcon(course.courseName)}</td>
           <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
           <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
@@ -52,9 +52,6 @@ class CourseList extends Component {
           <td style={{whiteSpace: 'nowrap'}}>{this.formatYESoNO(course.courseIsOpen) || ''}</td>
           <td style={{whiteSpace: 'nowrap'}}>{course.students.length || ''}</td>
           <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
-          <UncontrolledTooltip placement="auto" target={"course_" + courseId}>
-            {"Select Course " + course.courseName}
-          </UncontrolledTooltip>
         <Button size="sm" color="success" outline block tag={Link} to={`/course/${courseId}/lessons`} id={"attendance_" + courseId}>
           <UncontrolledTooltip placement="auto" target={"attendance_" + courseId}>
             Take Attendance
