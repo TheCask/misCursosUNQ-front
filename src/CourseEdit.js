@@ -65,18 +65,21 @@ class CourseEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
         {title}
         <FormGroup className="float-right">
-          <Button color="primary" type="submit" id="editCourse">
-            <UncontrolledTooltip placement="auto" target="editCourse">
-              {item.courseId ? 'Save Changes' : 'Save New Course'}
-            </UncontrolledTooltip>
-            <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-          </Button>{' '}
-          <Button color="secondary" tag={Link} to="/courses" id="backToCourse">
-            <UncontrolledTooltip placement="auto" target="backToCourse">
-              Discard and Back to Course
-            </UncontrolledTooltip>
-            <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
+          {this.addStudentButton()}{' '}
+          <ButtonGroup inline="true">
+            <Button size="sm" color="primary" type="submit" id="editCourse">
+              <UncontrolledTooltip placement="auto" target="editCourse">
+                {item.courseId ? 'Save Changes' : 'Save New Course'}
+              </UncontrolledTooltip>
+              <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
+            </Button>{' '}
+            <Button size="sm" color="secondary" tag={Link} to="/courses" id="backToCourse">
+              <UncontrolledTooltip placement="auto" target="backToCourse">
+                Discard and Back to Course
+              </UncontrolledTooltip>
+              <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
           </Button>
+          </ButtonGroup>
         </FormGroup>
           <FormGroup>
             <Label for="courseName" hidden>Name</Label>
@@ -125,6 +128,21 @@ class CourseEdit extends Component {
     Log.info('Toggle ' + item["courseIsOpen"])
     this.setState({item});
   }
+
+  addStudentButton(){
+    if (this.state.item.courseId) {
+      return (
+        <Button color="success" tag={Link} to="/course/new" id="addStudentTooltip">
+          <UncontrolledTooltip placement="auto" target="addStudentTooltip">
+            Add Student
+          </UncontrolledTooltip>
+          <FontAwesomeIcon icon="user-graduate" size="1x"/>
+          <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
+        </Button>
+      )
+    }
+  }
+
 }
 
 export default withRouter(CourseEdit);

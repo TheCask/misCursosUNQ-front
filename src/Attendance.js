@@ -6,7 +6,6 @@ import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
 import Log from './Log';
 
-
 class Attendance extends Component {
 
   emptyItem = {
@@ -23,7 +22,8 @@ class Attendance extends Component {
       students: [], 
       lessons: [], 
       item: this.emptyItem,
-      isLoading: true};
+      isLoading: true,
+      currentStudentId: ''};
     this.toggleAttendance = this.toggleAttendance.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -58,19 +58,17 @@ class Attendance extends Component {
     this.props.history.push('/courses');
   }
 
-  toggleAttendance(event) {
-    const target = event.target;
-    const id = Number(target.id);
-    let student = {fileNumber: id}
+  toggleAttendance(stFileNumber) {
+    let student = {fileNumber: stFileNumber}
     let studentList = this.state.attendantStudentsIds
     Log.info('Old attendants are ' + studentList)
-    if (target.checked) {
-      Log.info('Toggle attend id ' + id)
+    if (studentList.filter(st => st.fileNumber === stFileNumber).length === 0) {
+      Log.info('Toggle attend id ' + stFileNumber)
       studentList = studentList.concat(student)
     }
     else {
-      Log.info('Toggle unattend id ' + id)
-      const newStudentList = studentList.filter(st => st.fileNumber !== id)
+      Log.info('Toggle unattend id ' + stFileNumber)
+      const newStudentList = studentList.filter(st => st.fileNumber !== stFileNumber)
       studentList = newStudentList
     }
     this.setState({attendantStudentsIds: studentList})
@@ -82,16 +80,14 @@ class Attendance extends Component {
     if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const studentList = students.map((student) => {
       let fileNumber = student.fileNumber
-      return <tr key={fileNumber}>
+      return ( <tr onClick={() => {this.toggleAttendance(fileNumber)}} 
+        id={fileNumber} style={this.setRowColor(fileNumber)}>
         <td style={{whiteSpace: 'nowrap'}}>{fileNumber || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
-        <td>
-          <CustomInput type="switch" name="attendantStudents" id={fileNumber} 
-            onClick={this.toggleAttendance} defaultChecked={true}>
-          </CustomInput>
-        </td>
+        <td style={{textAlign: 'center'}}> {this.getIcon(fileNumber)}</td>
       </tr>
+      )
     });
 
     return (
@@ -121,9 +117,9 @@ class Attendance extends Component {
             <thead>
             <tr>
               <th width="10%">File Number</th>
-              <th width="15%">First Name</th>
-              <th width="15%">Last Name</th>
-              <th width="15%">Lesson Attended</th>
+              <th width="20%">First Name</th>
+              <th width="20%">Last Name</th>
+              <th width="3%">Attended</th>
             </tr>
             </thead>
             <tbody>
@@ -138,9 +134,23 @@ class Attendance extends Component {
   // takes the list of students from api and sets the list of student fileNumbers in state
   collectStudentsIds(students) {
     const emptyStudent = {fileNumber: ''}
-    let students4JSON = students.map(student => {return emptyStudent.fileNumber=student})
+    let students4JSON = students.map(student => {return emptyStudent.fileNumber = student})
     Log.info('NEW ' + students4JSON)
     this.setState({attendantStudentsIds: students4JSON})
+  }
+
+  setRowColor(rowId) {
+    if (this.state.attendantStudentsIds.filter(st => st.fileNumber === rowId).length === 0) {
+      return {backgroundColor:'#FFF0F5'}
+    }
+    else { return {backgroundColor:'#F0FFF0'} }
+  }
+
+  getIcon(fileNumber) {
+    if (this.state.attendantStudentsIds.filter(st => st.fileNumber === fileNumber).length === 0) {
+      return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' />
+    }
+    else { return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/> } 
   }
 }
 

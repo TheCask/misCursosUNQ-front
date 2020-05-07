@@ -33,7 +33,7 @@ class CourseList extends Component {
         'Content-Type': 'application/json'
       }
     }).then(() => {
-      let updatedCourses = [...this.state.courses].filter(i => i.courseId !== id);
+      let updatedCourses = [...this.state.courses].filter(course => course.courseId !== id);
       this.setState({courses: updatedCourses});
     });
   }
@@ -69,7 +69,7 @@ class CourseList extends Component {
           <div className="float-right">
             <Button color="success" tag={Link} to="/course/new" id="addCourseTooltip">
               <UncontrolledTooltip placement="auto" target="addCourseTooltip">
-                Add a course
+                Add a Course
               </UncontrolledTooltip>
               <FontAwesomeIcon icon="chalkboard-teacher" size="1x"/>
               <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
@@ -92,13 +92,13 @@ class CourseList extends Component {
               <ModalBody>
                 <h4> This action will have the following consequences:</h4>
                 <ul>
-                  <li>- The course will no longer be alvailable
+                  <li>- The course will no longer be available
                   <br></br>
                   (Students will exit the course)</li>
                   <br></br>
-                  <li>- Course lessons will no longer be alvailable
+                  <li>- Course lessons will no longer be available
                   <br></br>
-                  (Students will lost their attendance to this course)</li>
+                  (Students will lose their attendance to this course)</li>
                 </ul>
               </ModalBody>
               <ModalFooter>
@@ -110,7 +110,7 @@ class CourseList extends Component {
                 </Button>
                 <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
                   <UncontrolledTooltip placement="auto" target="modalCancel">
-                    Cancel and Back to Course
+                    Cancel and Back to Courses
                   </UncontrolledTooltip>
                   <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
                 </Button>
@@ -172,7 +172,7 @@ class CourseList extends Component {
         case "EPYL":
           return (
             <span className="fa-layers fa-fw">
-              <FontAwesomeIcon icon='check' size="1x" color="green" transform="left-10 up-10"/>
+              <FontAwesomeIcon icon='bug' size="1x" color="black" transform="left-10 up-10"/>
               <FontAwesomeIcon icon='microchip' size="1x" color="black" transform="right-10 up-10"/>
               <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
               <FontAwesomeIcon icon='brain' size="1x" color="black" transform="right-10 down-10"/>
