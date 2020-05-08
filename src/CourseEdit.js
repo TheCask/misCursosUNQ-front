@@ -133,9 +133,10 @@ class CourseEdit extends Component {
   }
 
   addStudentButton(){
-    if (this.state.item.courseId) {
+    const courseId = this.state.item.courseId
+    if (courseId) {
       return (
-        <Button color="success" tag={Link} to="/course/new" id="addStudentTooltip">
+        <Button color="success" tag={Link} to={`/students`} id="addStudentTooltip">
           <UncontrolledTooltip placement="auto" target="addStudentTooltip">
             Add Student
           </UncontrolledTooltip>
