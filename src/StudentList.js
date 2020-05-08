@@ -52,14 +52,14 @@ export class StudentList extends Component {
 
   render() {
     const {students, isLoading, modal, targetId, modalTargetId} = this.state;
-    //var studentOnClickFunction; 
+    var studentOnClickFunction;
+
     if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const studentList = students.map(student => {
       const fileNumber = student.fileNumber
       const studentOnClickFunction = () => {this.setState({targetId: fileNumber})}
-      
       return (
-        <StudentListItem student = {student} studentOnClickFunction={studentOnClickFunction} />
+        <StudentListItem student = {student} studentOnClickFunction={studentOnClickFunction} style={this.toggleRowColor(student.fileNumber)} />
       )
     })
       
@@ -151,6 +151,7 @@ export class StudentList extends Component {
   }
 
   toggleRowColor(rowId) {
+    //this.setState({studentListTitle: "rowID: " + rowId + " this.state.targetId:" + this.state.targetId + " sameType: " + (rowId.constructor === this.state.targetId.constructor)});
     if (rowId === this.state.targetId) {
       return {backgroundColor:'#F0F8FF'}
     }
@@ -158,10 +159,12 @@ export class StudentList extends Component {
 }
 
 export class StudentListItem extends Component {
+
+
   render() {
     const student = this.props.student;
     return (
-      <tr onClick={this.props.studentOnClickFunction} id={student.fileNumber}>
+      <tr onClick={this.props.studentOnClickFunction} id={student.fileNumber} style={this.props.style}> 
         <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.dni || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
