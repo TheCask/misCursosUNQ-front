@@ -6,6 +6,7 @@ import CourseList from './CourseList';
 import Attendance from './Attendance';
 import CourseEdit from './CourseEdit';
 import StudentList from './StudentList';
+import StudentEdit from './StudentEdit';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -23,6 +24,7 @@ class App extends Component {
           <Route path='/students' exact={true} component={StudentList}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id' component={CourseEdit}/>
+          <Route path='/student/:id' component={StudentEdit}/>
         </Switch>
       </Router>
     )

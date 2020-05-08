@@ -14,6 +14,7 @@ class StudentList extends Component {
     this.state = {students: [], isLoading: true, modal: false, modalTargetId: '', targetId: ''};
     this.remove = this.remove.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.toggleRowColor = this.toggleRowColor.bind(this);
   }
 
   componentDidMount() {
@@ -43,7 +44,7 @@ class StudentList extends Component {
     const studentList = students.map(student => {
       const fileNumber = student.fileNumber
       return (
-      <tr onClick={() => {this.setState({targetId: fileNumber})}} id={fileNumber}>
+      <tr onClick={() => {this.setState({targetId: fileNumber})}} id={fileNumber} style={this.toggleRowColor(fileNumber)}>
         <td style={{whiteSpace: 'nowrap'}}>{fileNumber || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.dni || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
@@ -88,11 +89,11 @@ class StudentList extends Component {
               <ModalBody>
                 <h4> This action will have the following consequences:</h4>
                 <ul>
-                  <li>- The student will no longer be alvailable</li>
+                  <li>- The student will no longer be available</li>
                   <br></br>
                   <li>- The student will be removed of all taken courses (current and previous)</li>
                   <br></br>
-                  <li>- The student will be set unattend on all lessons (current and previous)</li>
+                  <li>- The student will be removed of all lessons (current and previous)</li>
                 </ul>
               </ModalBody>
               <ModalFooter>
@@ -120,7 +121,7 @@ class StudentList extends Component {
               <th width="10%">DNI</th>
               <th width="5%">First Name</th>
               <th width="5%">Last Name</th>
-              <th width="2%">eMail</th>
+              <th width="2%">e-Mail</th>
               <th width="2%">Cell Phone</th>
             </tr>
             </thead>
@@ -139,6 +140,13 @@ class StudentList extends Component {
     Log.info('modal ' + modal)
     this.setState({modal: !modal});
   }
+
+  toggleRowColor(rowId) {
+    if (rowId === this.state.targetId) {
+      return {backgroundColor:'#F0F8FF'}
+    }
+  }
+
 }
 
 export default StudentList;
