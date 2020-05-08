@@ -23,7 +23,7 @@ export class StudentList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {students: [], isLoading: true, modal: false, modalTargetId: '', targetId: ''};
+    this.state = {students: [], isLoading: true, modal: false, modalTargetId: '', targetId: '', studentListTitle: 'Students'};
     this.remove = this.remove.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.toggleRowColor = this.toggleRowColor.bind(this);
@@ -52,18 +52,16 @@ export class StudentList extends Component {
 
   render() {
     const {students, isLoading, modal, targetId, modalTargetId} = this.state;
+    //var studentOnClickFunction; 
     if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const studentList = students.map(student => {
       const fileNumber = student.fileNumber
+      const studentOnClickFunction = () => {this.setState({targetId: fileNumber})}
+      
       return (
-      <tr onClick={() => {this.setState({targetId: fileNumber})}} id={fileNumber} style={this.toggleRowColor(fileNumber)}>
-        <td style={{whiteSpace: 'nowrap'}}>{fileNumber || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.dni || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.email || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.cellPhone || ''}</td>
-      </tr>)})
+        <StudentListItem student = {student} studentOnClickFunction={studentOnClickFunction} />
+      )
+    })
       
     return (
       <div>
@@ -124,7 +122,7 @@ export class StudentList extends Component {
             </Modal>
           </ButtonGroup>
           </div>
-          <h3>Students</h3>
+          <h3>{this.state.studentListTitle}</h3>
           <Table hover className="mt-4">
             <thead>
             <tr>
@@ -157,7 +155,23 @@ export class StudentList extends Component {
       return {backgroundColor:'#F0F8FF'}
     }
   }
-
 }
+
+export class StudentListItem extends Component {
+  render() {
+    const student = this.props.student;
+    return (
+      <tr onClick={this.props.studentOnClickFunction} id={student.fileNumber}>
+        <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.dni || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.email || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.cellPhone || ''}</td>
+      </tr>
+    )
+  }
+}  
+
 
 export default StudentListContainer;

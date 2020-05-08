@@ -6,7 +6,6 @@ import CourseListContainer from './CourseList';
 import Attendance from './Attendance';
 import CourseEdit from './CourseEdit';
 import StudentListContainer from './StudentList';
-import StudentList from './StudentList';
 import StudentEdit from './StudentEdit';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
