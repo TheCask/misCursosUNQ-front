@@ -7,6 +7,17 @@ import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
 import Log from './Log';
 
+class CourseListContainer extends Component {
+  render() {
+    return(
+    <div>
+        <AppNavbar/>
+        <CourseList/>
+      </div>
+    )
+  }
+}
+
 class CourseList extends Component {
 
   constructor(props) {
@@ -64,7 +75,7 @@ class CourseList extends Component {
       
     return (
       <div>
-        <AppNavbar/>
+        
         <Container fluid>
           <div className="float-right">
             <Button color="success" tag={Link} to="/course/new" id="addCourseTooltip">
@@ -201,4 +212,4 @@ class CourseList extends Component {
   }
 }
 
-export default CourseList;
+export default CourseListContainer;

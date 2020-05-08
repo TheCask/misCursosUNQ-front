@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import Log from './Log';
+import { StudentList } from './StudentList'
 
 class CourseEdit extends Component {
 
@@ -118,7 +119,9 @@ class CourseEdit extends Component {
             </UncontrolledTooltip>
           </ButtonGroup>
         </Form>
+        <StudentList/>
       </Container>
+      
     </div>
   }
 
