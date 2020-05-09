@@ -91,32 +91,26 @@ class StudentEdit extends Component {
           </ButtonGroup>
         </FormGroup>
           <FormGroup>
-            <Label for="fileNumber" hidden>File Number</Label>
             <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''}
                    onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
           </FormGroup>
           <FormGroup>
-            <Label for="dni" hidden>DNI</Label>
             <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
                    onChange={this.handleChange} placeholder="DNI"/>
           </FormGroup>
           <FormGroup>
-            <Label for="firstName" hidden>First Name</Label>
             <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
                    onChange={this.handleChange} placeholder="First Name"/>
           </FormGroup>
           <FormGroup>
-            <Label for="lastName" hidden>Last Name</Label>
             <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
                    onChange={this.handleChange} placeholder="Last Name"/>
           </FormGroup>
           <FormGroup>
-            <Label for="email" hidden>e Mail</Label>
             <Input type="text" name="email" id="email" value={item.personalData.email || ''}
                    onChange={this.handleChange} placeholder="e Mail"/>
           </FormGroup>
           <FormGroup>
-            <Label for="cellPhone" hidden>Cell Phone</Label>
             <Input type="number" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
                    onChange={this.handleChange} placeholder="Cell Phone"/>
           </FormGroup>

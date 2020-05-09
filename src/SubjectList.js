@@ -8,22 +8,22 @@ import AppSpinner from './AppSpinner';
 import Log from './Log';
 
 
-class StudentListContainer extends Component {
+class SubjectListContainer extends Component {
   render() {
     return(
     <div>
         <AppNavbar/>
-        <StudentList/>
+        <SubjectList/>
       </div>
     )
   }
 }
 
-export class StudentList extends Component {
+export class SubjectList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {students: [], isLoading: true, targetId: '', studentListTitle: 'Students'}; //modal: false, modalTargetId: '', 
+    this.state = {subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}; 
     this.remove = this.remove.bind(this);
     this.toggleRowColor = this.toggleRowColor.bind(this);
   }
@@ -31,58 +31,56 @@ export class StudentList extends Component {
   componentDidMount() {
     this.setState({isLoading: true});
 
-    fetch('/api/students/')
+    fetch('/api/subjects/')
       .then(response => response.json())
-      .then(data => this.setState({students: data, isLoading: false}));
+      .then(data => this.setState({subjects: data, isLoading: false}));
   }
 
   async remove(id) {
-    await fetch(`/api/student/${id}`, {
+    await fetch(`/api/subject/${id}`, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     }).then(() => {
-      let updatedStudents = [...this.state.students].filter(student => student.fileNumber !== id);
-      this.setState({students: updatedStudents});
+      let updatedSubjects = [...this.state.subjects].filter(subject => subject.subjectCode !== id);
+      this.setState({subjects: updatedSubjects});
     });
   }
 
   render() {
-    const {students, isLoading} = this.state;
+    const {subjects, isLoading} = this.state;
 
     if (isLoading) { return (<AppSpinner></AppSpinner>) }
-    const studentList = students.map(student => {
-      const fileNumber = student.fileNumber
+    const subjectList = subjects.map(subject => {
+      const subjectCode = subject.subjectCode
       const studentOnClickFunction = () => {this.setState({targetId: fileNumber})}
       return (
-        <StudentListItem student = {student} studentOnClickFunction={studentOnClickFunction} style={this.toggleRowColor(student.fileNumber)} />
+        <SubjectListItem subject = {subject} subjectOnClickFunction={subjectOnClickFunction} style={this.toggleRowColor(subjects.subjectCode)} />
       )
     })
     
-    const deleteStudentFunction = () => {this.remove(this.state.targetId)};
+    const deleteSubjectFunction = () => {this.remove(this.state.targetId)};
 
     return (
       <div>
         <Container fluid>
           
-          <ButtonBar targetId={this.state.targetId} deleteStudentFunction={deleteStudentFunction}/>
+          <ButtonBar targetId={this.state.targetId} deleteSubjectFunction={deleteSubjectFunction}/>
           
-          <h3>{this.state.studentListTitle}</h3>
+          <h3>{this.state.subjectListTitle}</h3>
           <Table hover className="mt-4">
             <thead>
             <tr>
-              <th width="7%">File Number</th>
-              <th width="10%">DNI</th>
-              <th width="5%">First Name</th>
-              <th width="5%">Last Name</th>
-              <th width="2%">e-Mail</th>
-              <th width="2%">Cell Phone</th>
+              <th width="7%">Subject Code</th>
+              <th width="10%">Subject Name</th>
+              <th width="5%">Acronym</th>
+              <th width="5%">Link to Subject Program</th>
             </tr>
             </thead>
             <tbody>
-            {studentList}
+            {subjectList}
             </tbody>
           </Table>
         </Container>
@@ -97,19 +95,17 @@ export class StudentList extends Component {
   }
 }
 
-export class StudentListItem extends Component {
+export class SubjectListItem extends Component {
 
 
   render() {
-    const student = this.props.student;
+    const subject = this.props.subject;
     return (
-      <tr onClick={this.props.studentOnClickFunction} id={student.fileNumber} style={this.props.style}> 
-        <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.dni || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.email || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.cellPhone || ''}</td>
+      <tr onClick={this.props.subjectOnClickFunction} id={subject.fileNumber} style={this.props.style}> 
+        <td style={{whiteSpace: 'nowrap'}}>{subject.code || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{subject.name || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{subject.acronym || ''}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{subject.programURL || ''}</td>
       </tr>
     )
   }
@@ -135,29 +131,29 @@ class ButtonBar extends Component {
     var targetId = this.props.targetId;
     return (
       <div className="float-right">
-        <Button color="success" tag={Link} to="/student/new" id="addStudentTooltip">
-          <UncontrolledTooltip placement="auto" target="addStudentTooltip">
-                      Add a Student
+        <Button color="success" tag={Link} to="/subject/new" id="addSubjectTooltip">
+          <UncontrolledTooltip placement="auto" target="addSubjectTooltip">
+                      Add a Subject
           </UncontrolledTooltip>
           <FontAwesomeIcon icon="user-graduate" size="1x"/>
           <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
         </Button>{' '}
         <ButtonGroup inline="true">
-          <Button size="sm" color="primary" disabled={targetId === ''} tag={Link} to={"/student/" + targetId} id={"edit_" + targetId}>
+          <Button size="sm" color="primary" disabled={targetId === ''} tag={Link} to={"/subject/" + targetId} id={"edit_" + targetId}>
             <UncontrolledTooltip placement="auto" target={"edit_" + targetId}>
-                      Edit Selected Student
+                      Edit Selected Subject
             </UncontrolledTooltip>
             <FontAwesomeIcon icon={['fas', 'edit']} size="2x"/>
           </Button>  
-          <Button size="sm" color="secondary" disabled={targetId === ''} tag={Link} to={`/student/${targetId}/details`} id={"detail_" + targetId}>
+          <Button size="sm" color="secondary" disabled={targetId === ''} tag={Link} to={`/subject/${targetId}/details`} id={"detail_" + targetId}>
             <UncontrolledTooltip placement="auto" target={"detail_" + targetId}>
-                      Selected Student Details
+                      Selected Ssubject Details
             </UncontrolledTooltip>         
             <FontAwesomeIcon icon={['fas', 'info-circle']} size="2x"/>
           </Button>
           <Button size="sm" color="danger" disabled={targetId === ''} onClick={() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} id={"delete_" + targetId}>
             <UncontrolledTooltip placement="auto" target={"delete_" + targetId}>
-                      Delete Selected Student
+                      Delete Selected Subject
             </UncontrolledTooltip>
             <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
           </Button>
@@ -165,28 +161,28 @@ class ButtonBar extends Component {
 
           <Modal isOpen={this.state.modal} toggle={this.toggleModal} size="lg">
             <ModalHeader toggle={this.toggleModal}>
-              <h3>Are you sure you want to delete selected student?</h3>
+              <h3>Are you sure you want to delete selected subject?</h3>
             </ModalHeader>
             <ModalBody>
               <h4> This action will have the following consequences:</h4>
               <ul>
-                <li>- The student will no longer be available</li>
+                <li>- This subject will no longer be available</li>
                 <br/>
-                <li>- The student will be removed of all taken courses (current and previous)</li>
+                <li>- All subject courses and their students, as well as all its lessons and their attendance and grade information will be removed!</li>
                 <br/>
-                <li>- The student will be removed of all lessons (current and previous)</li>
+                <li> If you don't want this subject available anymore, but would like to keep previous courses information, please </li>
               </ul>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" onClick={() => {this.props.deleteStudentFunction(); this.toggleModal()}} id={"modalDelete"}>
+              <Button color="danger" onClick={() => {this.props.deleteSubjectFunction(); this.toggleModal()}} id={"modalDelete"}>
                 <UncontrolledTooltip placement="auto" target={"modalDelete"}>
-                          YES DELETE STUDENT (I'm Pretty Sure)
+                          YES DELETE SUBJECT (I'm Pretty Sure)
                 </UncontrolledTooltip>
                 <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
               </Button>
               <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
                 <UncontrolledTooltip placement="auto" target="modalCancel">
-                          Cancel and Back to Students
+                          Cancel and Back to Subject
                 </UncontrolledTooltip>
                 <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
               </Button>
@@ -200,4 +196,4 @@ class ButtonBar extends Component {
   }
 }
 
-export default StudentListContainer;
+export default SubjectListContainer;

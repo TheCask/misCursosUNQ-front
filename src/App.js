@@ -7,6 +7,8 @@ import Attendance from './Attendance';
 import CourseEdit from './CourseEdit';
 import StudentListContainer from './StudentList';
 import StudentEdit from './StudentEdit';
+import SubjectListContainer from './SubjectList';
+import SubjectEdit from './SubjectEdit';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -21,10 +23,12 @@ class App extends Component {
         <Switch>
           <Route path='/' exact={true} component={CourseListContainer}/>
           <Route path='/courses' exact={true} component={CourseListContainer}/>
-          <Route path='/students' exact={true} component={StudentListContainer}/>
-          <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id' component={CourseEdit}/>
+          <Route path='/course/:id/lessons' component={Attendance}/>
+          <Route path='/students' exact={true} component={StudentListContainer}/>
           <Route path='/student/:id' component={StudentEdit}/>
+          <Route path='/subjects' exact={true} component={SubjectListContainer}/>
+          <Route path='/subject/:id' component={SubjectEdit}/>
         </Switch>
       </Router>
     )
