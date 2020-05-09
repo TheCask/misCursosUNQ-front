@@ -62,7 +62,7 @@ class SubjectEdit extends Component {
         <FormGroup className="float-right">
           <ButtonGroup inline="true">
             <Button size="sm" color="primary" type="submit" id="editSubject">
-              <UncontrolledTooltip placement="auto" target="editSubjectt">
+              <UncontrolledTooltip placement="auto" target="editSubject">
                 {item.fileNumber ? 'Save Changes' : 'Save New Subject'}
               </UncontrolledTooltip>
               <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
