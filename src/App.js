@@ -23,8 +23,8 @@ class App extends Component {
         <Switch>
           <Route path='/' exact={true} component={CourseListContainer}/>
           <Route path='/courses' exact={true} component={CourseListContainer}/>
-          <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
+          <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/students' exact={true} component={StudentListContainer}/>
           <Route path='/student/:id' component={StudentEdit}/>
           <Route path='/subjects' exact={true} component={SubjectListContainer}/>
