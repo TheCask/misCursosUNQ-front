@@ -23,9 +23,9 @@ export class StudentList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {students: [], isLoading: true, modal: false, modalTargetId: '', targetId: '', studentListTitle: 'Students'};
+    this.state = {students: [], isLoading: true, targetId: '', studentListTitle: 'Students'}; //modal: false, modalTargetId: '', 
     this.remove = this.remove.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
+    //this.toggleModal = this.toggleModal.bind(this);
     this.toggleRowColor = this.toggleRowColor.bind(this);
   }
 
@@ -52,7 +52,6 @@ export class StudentList extends Component {
 
   render() {
     const {students, isLoading, modal, targetId, modalTargetId} = this.state;
-    var studentOnClickFunction;
 
     if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const studentList = students.map(student => {
@@ -62,66 +61,15 @@ export class StudentList extends Component {
         <StudentListItem student = {student} studentOnClickFunction={studentOnClickFunction} style={this.toggleRowColor(student.fileNumber)} />
       )
     })
-      
+    
+    const deleteStudentFunction = () => {this.remove(this.state.targetId)};
+
     return (
       <div>
         <Container fluid>
-          <div className="float-right">
-            <Button color="success" tag={Link} to="/student/new" id="addStudentTooltip">
-              <UncontrolledTooltip placement="auto" target="addStudentTooltip">
-                Add a Student
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon="user-graduate" size="1x"/>
-              <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
-            </Button>{' '}
-          <ButtonGroup inline="true">
-            <Button size="sm" color="primary" disabled={targetId === ''} tag={Link} to={"/student/" + targetId} id={"edit_" + targetId}>
-              <UncontrolledTooltip placement="auto" target={"edit_" + targetId}>
-                Edit Selected Student
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'edit']} size="2x"/>
-            </Button>  
-            <Button size="sm" color="secondary" disabled={targetId === ''} tag={Link} to={`/student/${targetId}/details`} id={"detail_" + targetId}>
-              <UncontrolledTooltip placement="auto" target={"detail_" + targetId}>
-                Selected Student Details
-              </UncontrolledTooltip>         
-              <FontAwesomeIcon icon={['fas', 'info-circle']} size="2x"/>
-            </Button>
-            <Button size="sm" color="danger" disabled={targetId === ''} onClick={() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} id={"delete_" + targetId}>
-              <UncontrolledTooltip placement="auto" target={"delete_" + targetId}>
-                Delete Selected Student
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
-            </Button>
-            <Modal isOpen={modal} toggle={this.toggleModal} size="lg">
-              <ModalHeader toggle={this.toggleModal}><h3>Are you sure you want to delete selected student?</h3></ModalHeader>
-              <ModalBody>
-                <h4> This action will have the following consequences:</h4>
-                <ul>
-                  <li>- The student will no longer be available</li>
-                  <br></br>
-                  <li>- The student will be removed of all taken courses (current and previous)</li>
-                  <br></br>
-                  <li>- The student will be removed of all lessons (current and previous)</li>
-                </ul>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onClick={() => {this.remove(modalTargetId); this.toggleModal()}} id={"modalDelete"}>
-                  <UncontrolledTooltip placement="auto" target={"modalDelete"}>
-                    YES DELETE STUDENT (I'm Pretty Sure)
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
-                </Button>
-                <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
-                  <UncontrolledTooltip placement="auto" target="modalCancel">
-                    Cancel and Back to Students
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-                </Button>
-              </ModalFooter>
-            </Modal>
-          </ButtonGroup>
-          </div>
+          
+          <ButtonBar targetId={this.state.targetId} deleteStudentFunction={deleteStudentFunction}/>
+          
           <h3>{this.state.studentListTitle}</h3>
           <Table hover className="mt-4">
             <thead>
@@ -175,6 +123,91 @@ export class StudentListItem extends Component {
     )
   }
 }  
+
+
+class ButtonBar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {modal: false, modalTargetId: ''};
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  toggleModal(e) {
+    // const courseId = e.target.id.split("_")[1]
+    const modal = this.state.modal
+    Log.info('modal ' + modal)
+    this.setState({modal: !modal});
+  }
+
+  render() {
+    var targetId = this.props.targetId;
+    return (
+      <div className="float-right">
+        <Button color="success" tag={Link} to="/student/new" id="addStudentTooltip">
+          <UncontrolledTooltip placement="auto" target="addStudentTooltip">
+                      Add a Student
+          </UncontrolledTooltip>
+          <FontAwesomeIcon icon="user-graduate" size="1x"/>
+          <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
+        </Button>{' '}
+        <ButtonGroup inline="true">
+          <Button size="sm" color="primary" disabled={targetId === ''} tag={Link} to={"/student/" + targetId} id={"edit_" + targetId}>
+            <UncontrolledTooltip placement="auto" target={"edit_" + targetId}>
+                      Edit Selected Student
+            </UncontrolledTooltip>
+            <FontAwesomeIcon icon={['fas', 'edit']} size="2x"/>
+          </Button>  
+          <Button size="sm" color="secondary" disabled={targetId === ''} tag={Link} to={`/student/${targetId}/details`} id={"detail_" + targetId}>
+            <UncontrolledTooltip placement="auto" target={"detail_" + targetId}>
+                      Selected Student Details
+            </UncontrolledTooltip>         
+            <FontAwesomeIcon icon={['fas', 'info-circle']} size="2x"/>
+          </Button>
+          <Button size="sm" color="danger" disabled={targetId === ''} onClick={() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} id={"delete_" + targetId}>
+            <UncontrolledTooltip placement="auto" target={"delete_" + targetId}>
+                      Delete Selected Student
+            </UncontrolledTooltip>
+            <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
+          </Button>
+
+
+          <Modal isOpen={this.state.modal} toggle={this.toggleModal} size="lg">
+            <ModalHeader toggle={this.toggleModal}>
+              <h3>Are you sure you want to delete selected student?</h3>
+            </ModalHeader>
+            <ModalBody>
+              <h4> This action will have the following consequences:</h4>
+              <ul>
+                <li>- The student will no longer be available</li>
+                <br/>
+                <li>- The student will be removed of all taken courses (current and previous)</li>
+                <br/>
+                <li>- The student will be removed of all lessons (current and previous)</li>
+              </ul>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" onClick={() => {this.props.deleteStudentFunction(); this.toggleModal()}} id={"modalDelete"}>
+                <UncontrolledTooltip placement="auto" target={"modalDelete"}>
+                          YES DELETE STUDENT (I'm Pretty Sure)
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
+              </Button>
+              <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
+                <UncontrolledTooltip placement="auto" target="modalCancel">
+                          Cancel and Back to Students
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </ButtonGroup>
+      </div>
+    )
+
+
+  }
+}
 
 
 export default StudentListContainer;
