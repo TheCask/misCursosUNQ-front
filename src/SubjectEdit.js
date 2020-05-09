@@ -32,8 +32,8 @@ class SubjectEdit extends Component {
 
   handleChange(event) {
     const {name, value} = event.target;
-    item[name] = value;
-    this.setState({item});
+    this.state.item[name] = value;
+    this.setState({item: this.state.item});
   }
 
   async handleSubmit(event) {

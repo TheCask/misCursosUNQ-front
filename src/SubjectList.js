@@ -54,10 +54,10 @@ export class SubjectList extends Component {
 
     if (isLoading) { return (<AppSpinner></AppSpinner>) }
     const subjectList = subjects.map(subject => {
-      const subjectCode = subject.subjectCode
-      const studentOnClickFunction = () => {this.setState({targetId: fileNumber})}
+      const subjectCode = subject.code
+      const subjectOnClickFunction = () => {this.setState({targetId: subjectCode})}
       return (
-        <SubjectListItem subject = {subject} subjectOnClickFunction={subjectOnClickFunction} style={this.toggleRowColor(subjects.subjectCode)} />
+        <SubjectListItem subject = {subject} subjectOnClickFunction={subjectOnClickFunction} style={this.toggleRowColor(subjectCode)} />
       )
     })
     
