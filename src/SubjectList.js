@@ -73,10 +73,10 @@ export class SubjectList extends Component {
           <Table hover className="mt-4">
             <thead>
             <tr>
-              <th width="7%">Subject Code</th>
+              <th width="5%">Subject Code</th>
               <th width="10%">Subject Name</th>
-              <th width="5%">Acronym</th>
-              <th width="5%">Link to Subject Program</th>
+              <th width="3%">Acronym</th>
+              <th width="5%">Subject Program</th>
             </tr>
             </thead>
             <tbody>
@@ -147,7 +147,7 @@ class ButtonBar extends Component {
           </Button>  
           <Button size="sm" color="secondary" disabled={targetId === ''} tag={Link} to={`/subject/${targetId}/details`} id={"detail_" + targetId}>
             <UncontrolledTooltip placement="auto" target={"detail_" + targetId}>
-                      Selected Ssubject Details
+                      Selected Subject Details
             </UncontrolledTooltip>         
             <FontAwesomeIcon icon={['fas', 'info-circle']} size="2x"/>
           </Button>

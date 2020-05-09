@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import Log from './Log';
 
@@ -10,8 +10,8 @@ class SubjectEdit extends Component {
   emptyItem = {
     code: '',
     name: '',
-    acronym: [],
-    programURL: []
+    acronym: '',
+    programURL: ''
   };
 
   constructor(props) {
