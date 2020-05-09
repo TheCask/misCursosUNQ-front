@@ -44,7 +44,7 @@ export class SubjectList extends Component {
         'Content-Type': 'application/json'
       }
     }).then(() => {
-      let updatedSubjects = [...this.state.subjects].filter(subject => subject.subjectCode !== id);
+      let updatedSubjects = [...this.state.subjects].filter(subject => subject.code !== id);
       this.setState({subjects: updatedSubjects});
     });
   }
