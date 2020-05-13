@@ -5,6 +5,8 @@ import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, Uncontro
 import AppNavbar from './AppNavbar';
 import Log from './Log';
 import { StudentList } from './StudentList'
+import * as BackAPI from './BackAPI';
+
 
 class CourseEdit extends Component {
 
@@ -56,6 +58,22 @@ class CourseEdit extends Component {
     });
     this.props.history.push('/courses');
   }
+
+  renderStudents(){
+    const contextParams = {
+      studentListTitle: "Course Students",
+      onGetAllFunction : BackAPI.getCourseStudents,
+      onGetAllFixArgs : [this.state.item.courseCode],
+      onDeleteBackAPIFunction : BackAPI.deleteCourseStudent,
+      onDeleteFixArgs:[this.state.item.courseCode],
+      onDeleteConsequenceList : [
+        "The student will no longer be part of this course.", 
+        "Student's attendance and grades info will be removed."
+      ]
+    };
+    return (<StudentList contextParams={contextParams} />)
+  }
+
 
   render() {
     const {item} = this.state;
@@ -119,7 +137,7 @@ class CourseEdit extends Component {
             </UncontrolledTooltip>
           </ButtonGroup>
         </Form>
-        <StudentList/>
+        {this.renderStudents()}
       </Container>
       
     </div>

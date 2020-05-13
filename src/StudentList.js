@@ -10,7 +10,9 @@ class StudentListContainer extends Component {
   render() {
     
     const contextParams = {
+      studentListTitle: 'Students',
       onGetAllFunction : BackAPI.getStudents,
+      onGetAllFixArgs : [],
       onDeleteBackAPIFunction : BackAPI.deleteStudent,
       onDeleteFixArgs:[],
       onDeleteConsequenceList : [
@@ -34,15 +36,17 @@ export class StudentList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {students: [], isLoading: true, targetId: '', studentListTitle: 'Students'};
+    this.title = this.props.contextParams.studentListTitle;
+    this.state = {students: [], isLoading: true, targetId: ''};
     this.remove = this.remove.bind(this);
     this.toggleRowColor = this.toggleRowColor.bind(this);
     this.contextParams = props.contextParams;
   }
 
   componentDidMount() {
+    const onGetAllFixArgs = this.contextParams.onGetAllFixArgs;
     this.setState({isLoading: true});
-    this.contextParams.onGetAllFunction(json => this.setState({students: json, isLoading: false}));
+    this.contextParams.onGetAllFunction(...onGetAllFixArgs, json => this.setState({students: json, isLoading: false}));
   }
 
   remove(studentId) {
@@ -86,7 +90,7 @@ export class StudentList extends Component {
           
           <ButtonBar entityType='student' targetId={this.state.targetId} deleteEntityFunction={deleteStudentFunction} consequenceList={this.contextParams.onDeleteConsequenceList}/>
           
-          <h3>{this.state.studentListTitle}</h3>
+          <h3>{this.title}</h3>
           <Table hover className="mt-4">
             <thead>
             <tr>
