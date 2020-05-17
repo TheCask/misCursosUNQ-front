@@ -63,7 +63,7 @@ export class StudentListContainer extends Component {
     const isLoading = this.state.isLoading;
 
     if (isLoading) { 
-      return (<AppSpinner></AppSpinner>) 
+      return (<AppSpinner />) 
     }
 
     const deleteStudentFunction = () => {this.remove(this.state.targetId)};
@@ -107,10 +107,11 @@ const StudentListHeaders = () =>
   </thead>;
 
 const StudentList = props => {
-  return props.students.map( student => {
+  return props.students.map( (student, index) => {
     const studentOnClickFunction = () => props.studentOnClickFunction(student.fileNumber);
     return (
       <StudentListItem
+        key = {index}
         student = {student} 
         studentOnClickFunction = {studentOnClickFunction} 
         style = {props.styleFunction(student.fileNumber)}

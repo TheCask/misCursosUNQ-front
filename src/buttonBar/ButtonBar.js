@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ButtonGroup } from 'reactstrap';
 import AddButton from './AddButton';
 import EditButton from './EditButton';
 import DetailButton from './DetailButton';
 import DeleteButton from './DeleteButton';
+import { BBModal } from './BBModal';
 
 class ButtonBar extends Component {
 
@@ -51,34 +51,23 @@ class ButtonBar extends Component {
                   targetId = {targetId}
                   onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} />
 
-          <Modal isOpen={this.state.modal} toggle={this.toggleModal} size="lg">
-            <ModalHeader toggle={this.toggleModal}>
-                <h3>{`You are about to delete selected ${entityType}. Are you sure?`}</h3>
-            </ModalHeader>
-            <ModalBody>
+          <BBModal 
+            isOpen = {() => this.state.modal}
+            toggle = {this.toggleModal}
+            title = {`You are about to delete selected ${entityType}. Are you sure?`}
+            onProceed = {() => {this.props.deleteEntityFunction(); this.disableButtonAvailability(); this.toggleModal(); }}
+            proceedTooltip = {"YES, DELETE (I know what I'm doing)"}
+            description = {
+              <div>
                 <h4>This action will have the following consequences:</h4>
                 <ul>
-                {this.props.consequenceList.map(consequence => {
-                    return (<li>{consequence}</li>);
-                })}
+                  {this.props.consequenceList.map( (consequence, index) => {
+                    return (<li key = {index}>{consequence}</li>);
+                  })}
                 </ul>
-            </ModalBody>
-            <ModalFooter>
-                <Button color="danger" onClick={() => {this.props.deleteEntityFunction(); this.disableButtonAvailability(); this.toggleModal(); }} id={"modalDelete"}>
-                <UncontrolledTooltip placement="auto" target={"modalDelete"}>
-                    YES, DELETE (I know what I'm doing)
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
-                </Button>
-                <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
-                <UncontrolledTooltip placement="auto" target="modalCancel">
-                    Cancel
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-                </Button>
-            </ModalFooter>
-          </Modal>
-          
+              </div>
+            }
+          />          
         </ButtonGroup>
       </div>
     )

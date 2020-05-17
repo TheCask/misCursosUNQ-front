@@ -12,7 +12,7 @@ const DeleteButton = (props) =>
             tag={Link}
             to={props.to} 
             onClick={props.onClick} >
-        <UncontrolledTooltip placement="auto" target={`delete_${props.entityTypeCapName}`}>
+        <UncontrolledTooltip placement="auto" target={`delete_${props.entityTypeCapName}`} disabled = {props.targetId === ''} >
                 {`Delete selected ${props.entityTypeCapName}`}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
