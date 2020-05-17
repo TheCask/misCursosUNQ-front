@@ -8,24 +8,21 @@ import * as BackAPI from './BackAPI';
 class StudentListContainer extends Component {
 
   render() {
-    
-    const contextParams = {
-      studentListTitle: 'Students',
-      onGetAllFunction : BackAPI.getStudents,
-      onGetAllFixArgs : [],
-      onDeleteBackAPIFunction : BackAPI.deleteStudent,
-      onDeleteFixArgs:[],
-      onDeleteConsequenceList : [
-        "The student will no longer be available.",
-        "The student will be removed of every current course as well as any previous he ever took.",
-        "The student's attendance to any lesson (current or previous) will be removed."
-      ]
-    }
-
     return(
     <div>
       <AppNavbar/>
-      <StudentList contextParams={contextParams}/>
+      <StudentList 
+        studentListTitle = {'Students'}
+        onGetAllFunction = {BackAPI.getStudents}
+        onGetAllFixArgs = {[]}
+        onDeleteBackAPIFunction = {BackAPI.deleteStudent}
+        onDeleteFixArgs = {[]}
+        onDeleteConsequenceList = {[
+          "The student will no longer be available.",
+          "The student will be removed of every current course as well as any previous he ever took.",
+          "The student's attendance to any lesson (current or previous) will be removed."
+        ]}
+      />
     </div>
     )
   }
@@ -35,11 +32,9 @@ export class StudentList extends Component {
 
   constructor(props) {
     super(props);
-    this.title = this.props.contextParams.studentListTitle;
+    this.title = this.props.studentListTitle;
     this.state = {students: [], isLoading: true, targetId: ''};
-    this.remove = this.remove.bind(this);
-    this.toggleRowColor = this.toggleRowColor.bind(this);
-    this.contextParams = props.contextParams;
+    this.contextParams = props;
   }
 
   componentDidMount() {
@@ -56,7 +51,7 @@ export class StudentList extends Component {
     });
   }
 
-  toggleRowColor(rowId) {
+  setSelectedRowColor(rowId) {
     if (rowId === this.state.targetId) {
       return {backgroundColor:'#F0F8FF'}
     }
@@ -67,7 +62,11 @@ export class StudentList extends Component {
     const studentsJSX = studentsJson.map(student => {
       const studentOnClickFunction = () => {this.setState({targetId: student.fileNumber})}
       return (
-        <StudentListItem student = {student} studentOnClickFunction={studentOnClickFunction} style={this.toggleRowColor(student.fileNumber)} />
+        <StudentListItem 
+          student = {student} 
+          studentOnClickFunction = {studentOnClickFunction} 
+          style = {this.setSelectedRowColor(student.fileNumber)} 
+        />
       )
     });
     return studentsJSX;
@@ -86,21 +85,16 @@ export class StudentList extends Component {
     return (
       <div>
         <Container fluid>     
-          <ButtonBar entityType='student' targetId={this.state.targetId} deleteEntityFunction={deleteStudentFunction} consequenceList={this.contextParams.onDeleteConsequenceList}/>  
+          <ButtonBar 
+            entityType='student' 
+            targetId = {this.state.targetId} 
+            deleteEntityFunction = {deleteStudentFunction} 
+            consequenceList = {this.contextParams.onDeleteConsequenceList} />  
           <h3>{this.title}</h3>
           <Table hover className="mt-4">
-            <thead>
-            <tr>
-              <th width="7%">File Number</th>
-              <th width="10%">DNI</th>
-              <th width="5%">First Name</th>
-              <th width="5%">Last Name</th>
-              <th width="2%">e-Mail</th>
-              <th width="2%">Cell Phone</th>
-            </tr>
-            </thead>
+            <StudentListHeaders />
             <tbody>
-            {this.renderStudents()}
+              {this.renderStudents()}
             </tbody>
           </Table>
         </Container>
@@ -108,22 +102,26 @@ export class StudentList extends Component {
     );
   }
 }
+const StudentListHeaders = () =>
+  <thead>
+    <tr>
+      <th width="7%">File Number</th>
+      <th width="10%">DNI</th>
+      <th width="5%">First Name</th>
+      <th width="5%">Last Name</th>
+      <th width="2%">e-Mail</th>
+      <th width="2%">Cell Phone</th>
+    </tr>
+  </thead>;
 
-export class StudentListItem extends Component {
-
-  render() {
-    const student = this.props.student;
-    return (
-      <tr onClick={this.props.studentOnClickFunction} id={student.fileNumber} style={this.props.style}> 
-        <td style={{whiteSpace: 'nowrap'}}>{student.fileNumber || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.dni || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.email || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.cellPhone || ''}</td>
-      </tr>
-    )
-  }
-}
+const StudentListItem = props => 
+    <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}> 
+      <td style={{whiteSpace: 'nowrap'}}>{props.student.fileNumber || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.dni || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.firstName || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
+    </tr>;
 
 export default StudentListContainer;
