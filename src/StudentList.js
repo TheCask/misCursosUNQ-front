@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Table} from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
-import ButtonBar from './ButtonBar';
+import ButtonBar from './buttonBar/ButtonBar';
 import * as BackAPI from './BackAPI';
 
 class StudentListContainer extends Component {
@@ -16,7 +16,7 @@ class StudentListContainer extends Component {
       onDeleteBackAPIFunction : BackAPI.deleteStudent,
       onDeleteFixArgs:[],
       onDeleteConsequenceList : [
-        "The student will no longer be available.", 
+        "The student will no longer be available.",
         "The student will be removed of every current course as well as any previous he ever took.",
         "The student's attendance to any lesson (current or previous) will be removed."
       ]
@@ -26,7 +26,6 @@ class StudentListContainer extends Component {
     <div>
       <AppNavbar/>
       <StudentList contextParams={contextParams}/>
-
     </div>
     )
   }
@@ -86,10 +85,8 @@ export class StudentList extends Component {
 
     return (
       <div>
-        <Container fluid>
-          
-          <ButtonBar entityType='student' targetId={this.state.targetId} deleteEntityFunction={deleteStudentFunction} consequenceList={this.contextParams.onDeleteConsequenceList}/>
-          
+        <Container fluid>     
+          <ButtonBar entityType='student' targetId={this.state.targetId} deleteEntityFunction={deleteStudentFunction} consequenceList={this.contextParams.onDeleteConsequenceList}/>  
           <h3>{this.title}</h3>
           <Table hover className="mt-4">
             <thead>
@@ -127,7 +124,6 @@ export class StudentListItem extends Component {
       </tr>
     )
   }
-}  
-
+}
 
 export default StudentListContainer;
