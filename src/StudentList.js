@@ -4,19 +4,18 @@ import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as BackAPI from './BackAPI';
+import Log from './Log';
 
-class StudentListContainer extends Component {
+class FullStudentList extends Component {
 
   render() {
     return(
     <div>
       <AppNavbar/>
-      <StudentList 
+      <StudentListContainer 
         studentListTitle = {'Students'}
-        onGetAllFunction = {BackAPI.getStudents}
-        onGetAllFixArgs = {[]}
-        onDeleteBackAPIFunction = {BackAPI.deleteStudent}
-        onDeleteFixArgs = {[]}
+        onGetAll = { (handleSuccess, handleError) => BackAPI.getStudentsAsync(handleSuccess, handleError) }
+        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
         onDeleteConsequenceList = {[
           "The student will no longer be available.",
           "The student will be removed of every current course as well as any previous he ever took.",
@@ -28,7 +27,7 @@ class StudentListContainer extends Component {
   }
 }
 
-export class StudentList extends Component {
+export class StudentListContainer extends Component {
 
   constructor(props) {
     super(props);
@@ -38,38 +37,25 @@ export class StudentList extends Component {
   }
 
   componentDidMount() {
-    const onGetAllFixArgs = this.contextParams.onGetAllFixArgs;
     this.setState({isLoading: true});
-    this.contextParams.onGetAllFunction(...onGetAllFixArgs, json => this.setState({students: json, isLoading: false}));
+    this.contextParams.onGetAll(json => this.setState({students: json, isLoading: false}, null )); // TODO: replace null by error showing code
   }
 
   remove(studentId) {
-    const onDeleteFixArgs = this.contextParams.onDeleteFixArgs;
-    this.contextParams.onDeleteBackAPIFunction(studentId, ...onDeleteFixArgs, () => {
-      let updatedStudents = [...this.state.students].filter(student => student.fileNumber !== studentId);
-      this.setState({students: updatedStudents});
-    });
+    this.contextParams.onDelete(
+      studentId, 
+      () => {
+        let updatedStudents = [...this.state.students].filter(student => student.fileNumber !== studentId);
+        this.setState({students: updatedStudents, targetId: ''});
+      },
+      null // TODO: replace null by error showing code
+    );
   }
 
   setSelectedRowColor(rowId) {
     if (rowId === this.state.targetId) {
       return {backgroundColor:'#F0F8FF'}
     }
-  }
-
-  renderStudents(){
-    const studentsJson = this.state.students;
-    const studentsJSX = studentsJson.map(student => {
-      const studentOnClickFunction = () => {this.setState({targetId: student.fileNumber})}
-      return (
-        <StudentListItem 
-          student = {student} 
-          studentOnClickFunction = {studentOnClickFunction} 
-          style = {this.setSelectedRowColor(student.fileNumber)} 
-        />
-      )
-    });
-    return studentsJSX;
   }
 
   render() {
@@ -81,7 +67,7 @@ export class StudentList extends Component {
     }
 
     const deleteStudentFunction = () => {this.remove(this.state.targetId)};
-
+    
     return (
       <div>
         <Container fluid>     
@@ -94,7 +80,11 @@ export class StudentList extends Component {
           <Table hover className="mt-4">
             <StudentListHeaders />
             <tbody>
-              {this.renderStudents()}
+              <StudentList 
+                students = {this.state.students}
+                studentOnClickFunction = {(studentId) =>  {this.setState({targetId: studentId})}}
+                styleFunction = {(studentId) => this.setSelectedRowColor(studentId)} 
+              />
             </tbody>
           </Table>
         </Container>
@@ -102,26 +92,41 @@ export class StudentList extends Component {
     );
   }
 }
+
+
 const StudentListHeaders = () =>
-  <thead>
+<thead>
     <tr>
-      <th width="7%">File Number</th>
+      <th width="7%" >File Number</th>
       <th width="10%">DNI</th>
-      <th width="5%">First Name</th>
-      <th width="5%">Last Name</th>
-      <th width="2%">e-Mail</th>
-      <th width="2%">Cell Phone</th>
+      <th width="5%" >First Name</th>
+      <th width="5%" >Last Name</th>
+      <th width="2%" >e-Mail</th>
+      <th width="2%" >Cell Phone</th>
     </tr>
   </thead>;
 
-const StudentListItem = props => 
-    <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}> 
-      <td style={{whiteSpace: 'nowrap'}}>{props.student.fileNumber || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.dni || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.firstName || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
-    </tr>;
+const StudentList = props => {
+  return props.students.map( student => {
+    const studentOnClickFunction = () => props.studentOnClickFunction(student.fileNumber);
+    return (
+      <StudentListItem
+        student = {student} 
+        studentOnClickFunction = {studentOnClickFunction} 
+        style = {props.styleFunction(student.fileNumber)}
+      />
+    )
+  });
+}
 
-export default StudentListContainer;
+const StudentListItem = props => 
+  <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}> 
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.fileNumber || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.dni || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.firstName || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
+  </tr>;
+
+export default FullStudentList;

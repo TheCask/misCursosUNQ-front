@@ -1,35 +1,55 @@
-export function getStudents(callbackFunction){
-    fetch('/api/students/')
-        .then(response => response.json())
-        .then(callbackFunction);
+export async function getStudentsAsync(handleSuccess, handleError){
+    const response = await fetch('/api/students/');
+    if (response.status >= 200 && response.status <= 299) {
+        handleSuccess(await response.json())
+    } else {
+        handleError(response.status, response.statusText)
+    }
 }
 
-export async function deleteStudent(studentId, callbackFunction){
+export async function deleteStudentAsync(studentId, handleSuccess, handleError){
     
-    await fetch(`/api/student/${studentId}`, {
+    const response = await fetch(`/api/student/${studentId}`, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-    }).then(callbackFunction);  
+    })
+    if (response.status >= 200 && response.status <= 299) {
+        handleSuccess()
+    } else {
+        handleError(response.status, response.statusText)
+    }    
 }
 
-export function getCourseStudents(courseId, callbackFunction){
-    fetch('/api/students/')               // TODO: CHANGE URL to course/id/students
-        .then(response => response.json())
-        .then(callbackFunction);
+export async function getCourseStudentsAsync(courseId, handleSuccess, handleError){
+    const response = await fetch('/api/students/');         // TODO: CHANGE URL
+    if (response.status >= 200 && response.status <= 299) {
+        handleSuccess(await response.json())
+    } else {
+        handleError(response.status, response.statusText)
+    }
 }
 
-export async function deleteCourseStudent(studentId, courseId, callbackFunction){
-    await fetch(`/api/student/${studentId}`, { // TODO: CHANGE URL
+export async function deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError){
+    
+    const response = await fetch(`/api/student/${studentId}`, {     // TODO: CHANGE URL
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-    }).then(callbackFunction); 
+    })
+    if (response.status >= 200 && response.status <= 299) {
+        handleSuccess()
+    } else {
+        handleError(response.status, response.statusText)
+    }    
 }
 
 
-export default getStudents;
+
+export default getStudentsAsync;
+
+

@@ -10,8 +10,7 @@ const AddButton = (props) =>
             tag={Link} 
             to={props.to} 
             onClick={props.onClick} >
-        <UncontrolledTooltip placement="auto" 
-            target={`add_${props.entityTypeCapName}`}>
+        <UncontrolledTooltip placement="auto" target={`add_${props.entityTypeCapName}`}>
                 {`Add a ${props.entityTypeCapName}`}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="user-graduate" size="1x"/>

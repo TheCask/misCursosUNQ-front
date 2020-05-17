@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import Log from './Log';
-import { StudentList } from './StudentList'
+import { StudentListContainer } from './StudentList'
 import * as BackAPI from './BackAPI';
 
 
@@ -60,18 +60,17 @@ class CourseEdit extends Component {
   }
 
   renderStudents(){
-    const contextParams = {
-      studentListTitle: "Course Students",
-      onGetAllFunction : BackAPI.getCourseStudents,
-      onGetAllFixArgs : [this.state.item.courseCode],
-      onDeleteBackAPIFunction : BackAPI.deleteCourseStudent,
-      onDeleteFixArgs:[this.state.item.courseCode],
-      onDeleteConsequenceList : [
-        "The student will no longer be part of this course.", 
-        "Student's attendance and grades info will be removed."
-      ]
-    };
-    return (<StudentList contextParams={contextParams} />)
+    return (
+      <StudentListContainer 
+        studentListTitle = {'Course Students'}
+        onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(this.state.item.courseCode, handleSuccess, handleError) }
+        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, this.state.item.courseCode, handleSuccess, handleError)}
+        onDeleteConsequenceList = {[
+          "The student will no longer be part of this course.", 
+          "Student's attendance and grades info will be removed."
+        ]}
+      />
+    );
   }
 
 

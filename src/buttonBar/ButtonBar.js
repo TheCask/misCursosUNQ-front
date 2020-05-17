@@ -12,12 +12,17 @@ class ButtonBar extends Component {
     super(props);
     this.state = {modal: false, modalTargetId: ''};
     this.toggleModal = this.toggleModal.bind(this);
+    this.disableButtonAvailability = this.disableButtonAvailability.bind(this);
     this.entityType = props.entityType;
   }
 
   toggleModal(e) {
     const modal = this.state.modal
     this.setState({modal: !modal});
+  }
+
+  disableButtonAvailability(){
+    this.setState({modalTargetId: ''});
   }
 
   render() {
@@ -59,7 +64,7 @@ class ButtonBar extends Component {
                 </ul>
             </ModalBody>
             <ModalFooter>
-                <Button color="danger" onClick={() => {this.props.deleteEntityFunction(); this.toggleModal()}} id={"modalDelete"}>
+                <Button color="danger" onClick={() => {this.props.deleteEntityFunction(); this.disableButtonAvailability(); this.toggleModal(); }} id={"modalDelete"}>
                 <UncontrolledTooltip placement="auto" target={"modalDelete"}>
                     YES, DELETE (I know what I'm doing)
                 </UncontrolledTooltip>

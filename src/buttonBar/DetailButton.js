@@ -12,7 +12,7 @@ const EditButton = (props) =>
             tag={Link}
             to={props.to} 
             onClick={props.onClick} >
-        <UncontrolledTooltip placement="auto" target={`detail_${props.entityTypeCapName}`}>
+        <UncontrolledTooltip placement="auto" target={`detail_${props.entityTypeCapName}`} disabled = {props.targetId === ''} >
                 {`Details on selected ${props.entityTypeCapName}`}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon={['fas', 'info-circle']} size="2x"/>
