@@ -56,7 +56,7 @@ class CourseList extends Component {
       const courseId = course.courseId
       return (
       <tr onClick={() => {this.setState({targetId: courseId})}} id={courseId} style={this.toggleRowColor(courseId)}>
-        <td style={{textAlign: 'center'}}> {this.getIcon(course.courseName, courseId)}</td>
+        <td style={{textAlign: 'center'}}> {this.getIcon(course.courseCode, courseId)}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseShift || ''}</td>
@@ -169,10 +169,10 @@ class CourseList extends Component {
     }
   }
 
-  getIcon(courseName, courseSelectedId) {
+  getIcon(courseCode, courseSelectedId) {
     if (courseSelectedId === this.state.targetId) {
-      switch(courseName.split("-")[0]) {
-        case "LEA":
+      switch(courseCode.split("-")[0]) {
+        case "80000":
           return (
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="left-10 up-10"/>
@@ -180,7 +180,7 @@ class CourseList extends Component {
               <FontAwesomeIcon icon='pencil-alt' size="1x" color="darkred" transform="left-10 down-10"/>
               <FontAwesomeIcon icon='graduation-cap' size="1x" color="darkred" transform="right-10 down-10"/>
             </span>)
-        case "EPYL":
+        case "80005":
           return (
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon icon='bug' size="1x" color="black" transform="left-10 up-10"/>
@@ -188,7 +188,7 @@ class CourseList extends Component {
               <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
               <FontAwesomeIcon icon='project-diagram' size="1x" color="black" transform="right-10 down-10"/>
             </span>)
-        case "MATE":
+        case "80003":
           return (
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon icon='brain' size="1x" color="darkblue" transform="left-10 up-10"/>
@@ -196,7 +196,7 @@ class CourseList extends Component {
               <FontAwesomeIcon icon='infinity' size="1x" color="darkblue" transform="left-10 down-10"/>
               <FontAwesomeIcon icon='calculator' size="1x" color="darkblue" transform="right-10 down-10"/>
             </span>)
-        case "ICFYQ":
+        case "80004":
           return (
             <span className="fa-layers fa-fw">
               <FontAwesomeIcon icon='thermometer-half' size="1x" color="darkgreen" transform="left-10 up-10"/>

@@ -135,7 +135,7 @@ class ButtonBar extends Component {
           <UncontrolledTooltip placement="auto" target="addSubjectTooltip">
                       Add a Subject
           </UncontrolledTooltip>
-          <FontAwesomeIcon icon="user-graduate" size="1x"/>
+          <FontAwesomeIcon icon="university" size="1x"/>
           <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
         </Button>{' '}
         <ButtonGroup inline="true">
