@@ -81,7 +81,6 @@ class CourseEdit extends Component {
     );
   }
 
-
   render() {
     const {item} = this.state;
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
@@ -118,22 +117,20 @@ class CourseEdit extends Component {
             <Input type="text" name="courseName" id="name" value={item.courseName || ''} required
                    onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
           </FormGroup>
-        
           <FormGroup>
             <Label for="subject" hidden>Subject Code</Label>
             <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
-                   onChange={this.handleChange} label="Subject Code">
+                   onChange={this.handleChange} label="Subject Code" required>
                 {this.subjectOptions()}
             </Input>
             <UncontrolledTooltip placement="auto" target="subject">
               Select Subject
             </UncontrolledTooltip>
           </FormGroup>
-
           <FormGroup>
             <Label for="shift" hidden>Shift</Label>
             <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
-              onChange={this.handleChange} label="Shift">
+              onChange={this.handleChange} label="Shift" required>
                 <option>Mañana</option>
                 <option>Tarde</option>
                 <option>Noche</option>

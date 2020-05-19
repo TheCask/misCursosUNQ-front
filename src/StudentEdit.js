@@ -84,20 +84,20 @@ class StudentEdit extends Component {
           </ButtonGroup>
         </FormGroup>
           <FormGroup>
-            <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''}
+            <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''} required
                    onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
           </FormGroup>
           <FormGroup>
             <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
-                   onChange={this.handleChange} placeholder="DNI"/>
+                   onChange={this.handleChange} placeholder="DNI" required/>
           </FormGroup>
           <FormGroup>
             <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
-                   onChange={this.handleChange} placeholder="First Name"/>
+                   onChange={this.handleChange} placeholder="First Name" required/>
           </FormGroup>
           <FormGroup>
             <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
-                   onChange={this.handleChange} placeholder="Last Name"/>
+                   onChange={this.handleChange} placeholder="Last Name" required/>
           </FormGroup>
           <FormGroup>
             <Input type="text" name="email" id="email" value={item.personalData.email || ''}

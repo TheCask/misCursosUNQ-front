@@ -76,15 +76,15 @@ class SubjectEdit extends Component {
           </ButtonGroup>
         </FormGroup>
           <FormGroup>
-            <Input type="text" name="code" id="code" value={item.code || ''}
+            <Input type="text" name="code" id="code" value={item.code || ''} required
                    onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
           </FormGroup>
           <FormGroup>
-            <Input type="text" name="name" id="name" value={item.name || ''}
+            <Input type="text" name="name" id="name" value={item.name || ''} required
                    onChange={this.handleChange} placeholder="Subject Name"/>
           </FormGroup>
           <FormGroup>
-            <Input type="text" name="acronym" id="acronym" value={item.acronym || ''}
+            <Input type="text" name="acronym" id="acronym" value={item.acronym || ''} required
                    onChange={this.handleChange} placeholder="Subject Acronym"/>
           </FormGroup>
           <FormGroup>
