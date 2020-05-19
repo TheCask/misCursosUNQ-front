@@ -5,6 +5,7 @@ import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, Uncontro
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
+import * as BackAPI from './BackAPI';
 
 class StudentEdit extends Component {
 
@@ -32,8 +33,7 @@ class StudentEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const student = await (await fetch(`/api/student/${this.props.match.params.id}`)).json();
-      this.setState({item: student});
+      const student = BackAPI.getStudentAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
     }
   }
 
@@ -49,15 +49,7 @@ class StudentEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    await fetch('/api/student', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/students');
+    BackAPI.postStudentAsync(item, () => this.props.history.push('/students'), null); // TODO: replace null by error showing code
   }
 
   render() {
