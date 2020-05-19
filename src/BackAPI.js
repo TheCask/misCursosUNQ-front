@@ -1,3 +1,7 @@
+
+// STUDENT
+
+// getAll
 export async function getStudentsAsync(handleSuccess, handleError){
     const response = await fetch('/api/students/');
     if (response.status >= 200 && response.status <= 299) {
@@ -7,7 +11,8 @@ export async function getStudentsAsync(handleSuccess, handleError){
     }
 }
 
-export async function getStudentAsync(studentId, handleSuccess, handleError){
+// getById
+export async function getStudentByIdAsync(studentId, handleSuccess, handleError){
     const response = await fetch(`/api/student/${studentId}`);
     if (response.status >= 200 && response.status <= 299) {
         handleSuccess(await response.json())
@@ -16,6 +21,7 @@ export async function getStudentAsync(studentId, handleSuccess, handleError){
     }
 }
 
+// post
 export async function postStudentAsync(studentJson, handleSuccess, handleError){
     const response = await fetch('/api/student', {
         method: 'POST',
@@ -32,6 +38,7 @@ export async function postStudentAsync(studentJson, handleSuccess, handleError){
     }
 }
 
+// delete
 export async function deleteStudentAsync(studentId, handleSuccess, handleError){
     
     const response = await fetch(`/api/student/${studentId}`, {
@@ -47,6 +54,8 @@ export async function deleteStudentAsync(studentId, handleSuccess, handleError){
         handleError(response.status, response.statusText)
     }    
 }
+
+// COURSE STUDENT
 
 export async function getCourseStudentsAsync(courseId, handleSuccess, handleError){
     const response = await fetch('/api/students/');         // TODO: CHANGE URL

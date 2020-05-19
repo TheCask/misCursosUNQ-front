@@ -33,7 +33,7 @@ class StudentEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const student = BackAPI.getStudentAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
+      const student = BackAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
     }
   }
 
