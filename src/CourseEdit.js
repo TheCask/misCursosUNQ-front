@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip, Col } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import Log from './Log';
 import { StudentListContainer } from './StudentList'
@@ -13,16 +13,21 @@ class CourseEdit extends Component {
   emptyItem = {
     courseName: '',
     courseCode: '',
-    courseShift: 'Mañana',
+    courseShift: '',
     courseIsOpen: true,
-    courseStudents: null,
-    courseLessons: null
+    subject: {
+      code: ''
+    },
+    students: [],
+    lessons: [],
+    teachers: []
   };
 
   constructor(props) {
     super(props);
     this.state = {
       item: this.emptyItem,
+      subjectList: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,16 +37,19 @@ class CourseEdit extends Component {
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
       const course = await (await fetch(`/api/course/${this.props.match.params.id}`)).json();
-      this.setState({item: course});
+      const subjects = await (await fetch(`/api/subjects/`)).json();
+      this.setState({item: course, subjectList: subjects});
     }
   }
 
   handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const {name, value} = event.target;
+    const names = name.split(".")
     let item = {...this.state.item};
-    item[name] = value;
+    if (names[2]) { item[names[0]][names[1]][names[2]] = value }
+    else if (names[1]) { item[names[0]][names[1]] = value }
+    else { item[name] = value; }
+    item['lessons'] = []
     this.setState({item});
   }
 
@@ -76,13 +84,13 @@ class CourseEdit extends Component {
 
   render() {
     const {item} = this.state;
-    const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'}</h2>;
+    const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
     return <div>
       <AppNavbar/>
       <Container fluid>
         <Form onSubmit={this.handleSubmit}>
-        {title}
-        <FormGroup className="float-right">
+          {title}
+          <FormGroup className="float-right">
           {this.addStudentButton()}{' '}
           <ButtonGroup inline="true">
             <Button size="sm" color="primary" type="submit" id="editCourse">
@@ -98,21 +106,34 @@ class CourseEdit extends Component {
               <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
             </Button>
           </ButtonGroup>
-        </FormGroup>
+          </FormGroup>
+          <FormGroup row>
+            <Col sm={3}>
+            <Label for="code" hidden>Course Code</Label>
+            <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
+            </Col>
+          </FormGroup>
           <FormGroup>
             <Label for="courseName" hidden>Name</Label>
-            <Input type="text" name="courseName" id="name" value={item.courseName || ''}
+            <Input type="text" name="courseName" id="name" value={item.courseName || ''} required
                    onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
           </FormGroup>
+        
           <FormGroup>
-            <Label for="code" hidden>Code</Label>
-            <Input type="text" name="courseCode" id="code" value={item.courseCode || ''}
-                   onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
+            <Label for="subject" hidden>Subject Code</Label>
+            <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
+                   onChange={this.handleChange} label="Subject Code">
+                {this.subjectOptions()}
+            </Input>
+            <UncontrolledTooltip placement="auto" target="subject">
+              Select Subject
+            </UncontrolledTooltip>
           </FormGroup>
+
           <FormGroup>
             <Label for="shift" hidden>Shift</Label>
             <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
-              onChange={this.handleChange} autoComplete="Course Shift" label="Shift">
+              onChange={this.handleChange} label="Shift">
                 <option>Mañana</option>
                 <option>Tarde</option>
                 <option>Noche</option>
@@ -162,6 +183,15 @@ class CourseEdit extends Component {
         </Button>
       )
     }
+  }
+
+  subjectOptions() {
+    const subjectList = this.state.subjectList
+    return ( subjectList.map(sj => {
+      Log.info('Subject Code ' + sj.code)
+      return (<option>{sj.code}</option>) 
+      })
+    )
   }
 
 }

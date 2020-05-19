@@ -38,16 +38,10 @@ class StudentEdit extends Component {
   }
 
   handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const {name, value} = event.target;
     let item = {...this.state.item};
-    if (name === "fileNumber") {
-      item[name] = value;
-    }
-    else {
-      item['personalData'][name] = value
-    }
+    if (name === "fileNumber") { item[name] = value; }
+    else { item['personalData'][name] = value }
     item['attendedLessons'] = []
     this.setState({item});
   }
