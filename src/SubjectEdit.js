@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
+import { withRouter } from 'react-router-dom';
+import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import SaveButton from './buttonBar/SaveButton'
+import CancelButton from './buttonBar/CancelButton'
 import Log from './Log';
+
 
 class SubjectEdit extends Component {
 
@@ -58,23 +60,19 @@ class SubjectEdit extends Component {
       <AppNavbar/>
       <Container fluid>
         <Form onSubmit={this.handleSubmit}>
-        {title}
-        <FormGroup className="float-right">
-          <ButtonGroup inline="true">
-            <Button size="sm" color="primary" type="submit" id="editSubject">
-              <UncontrolledTooltip placement="auto" target="editSubject">
-                {item.fileNumber ? 'Save Changes' : 'Save New Subject'}
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-            </Button>{' '}
-            <Button size="sm" color="secondary" tag={Link} to="/subjects" id="backToSubjects">
-              <UncontrolledTooltip placement="auto" target="backToSubjects">
-                Discard and Back to Subject
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-            </Button>
-          </ButtonGroup>
-        </FormGroup>
+          {title}
+          <FormGroup className="float-right">
+              <SaveButton
+                entityId = {item.fileNumber}
+                entityTypeCapName = "Subject"
+              />
+              {' '}
+              <CancelButton
+                to = {"/subjects"}
+                entityTypeCapName = "Subject"
+              />
+              
+          </FormGroup>
           <FormGroup>
             <Input type="text" name="code" id="code" value={item.code || ''} required
                    onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
@@ -89,7 +87,7 @@ class SubjectEdit extends Component {
           </FormGroup>
           <FormGroup>
             <Input type="text" name="programURL" id="programURL" value={item.programURL || ''}
-                   onChange={this.handleChange} placeholder="URL to Subject's Program"/>
+              onChange={this.handleChange} placeholder="URL to Subject's Program"/>
           </FormGroup>
         </Form>
       </Container>

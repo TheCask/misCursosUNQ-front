@@ -3,6 +3,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import SaveButton from './buttonBar/SaveButton'
+import CancelButton from './buttonBar/CancelButton'
+import * as BackAPI from './BackAPI';
 
 class StudentEdit extends Component {
 
@@ -30,8 +33,7 @@ class StudentEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const student = await (await fetch(`/api/student/${this.props.match.params.id}`)).json();
-      this.setState({item: student});
+      const student = BackAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
     }
   }
 
@@ -47,15 +49,7 @@ class StudentEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    await fetch('/api/student', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/students');
+    BackAPI.postStudentAsync(item, () => this.props.history.push('/students'), null); // TODO: replace null by error showing code
   }
 
   render() {
@@ -68,26 +62,23 @@ class StudentEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
         {title}
         <FormGroup className="float-right">
-          <ButtonGroup inline="true">
-            <Button size="sm" color="primary" type="submit" id="editStudent">
-              <UncontrolledTooltip placement="auto" target="editStudent">
-                {item.fileNumber ? 'Save Changes' : 'Save New Student'}
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-            </Button>{' '}
-            <Button size="sm" color="secondary" tag={Link} to="/students" id="backToStudent">
-              <UncontrolledTooltip placement="auto" target="backToStudent">
-                Discard and Back to Student
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-            </Button>
+          <ButtonGroup>
+            <SaveButton
+              entityId = {item.fileNumber}
+              entityTypeCapName = "Student"
+            />
+            {' '}
+            <CancelButton
+              to = {"/students"}
+              entityTypeCapName = "Student"
+            />
           </ButtonGroup>
         </FormGroup>
           <FormGroup>
             <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''} required
                    onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
-          </FormGroup>
-          <FormGroup>
+        </FormGroup>
+        <FormGroup>
             <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
                    onChange={this.handleChange} placeholder="DNI" required/>
           </FormGroup>
@@ -102,11 +93,12 @@ class StudentEdit extends Component {
           <FormGroup>
             <Input type="text" name="email" id="email" value={item.personalData.email || ''}
                    onChange={this.handleChange} placeholder="e Mail"/>
-          </FormGroup>
-          <FormGroup>
+        </FormGroup>
+        <FormGroup>
             <Input type="number" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
                    onChange={this.handleChange} placeholder="Cell Phone"/>
-          </FormGroup>
+        </FormGroup>
+
         </Form>
       </Container>
     </div>

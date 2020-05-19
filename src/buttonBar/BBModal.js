@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const BBModal = props => 
     <Modal isOpen={props.isOpen()} 
            toggle={props.toggle} size="lg">
-        <ModalHeader> {/* toggle={this.toggleModal}> */}
+        <ModalHeader>
             <h3>{props.title}</h3>
         </ModalHeader>
         <ModalBody>

@@ -3,6 +3,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import SaveButton from './buttonBar/SaveButton'
+import CancelButton from './buttonBar/CancelButton'
+import * as BackAPI from './BackAPI';
 
 class UserEdit extends Component {
 
@@ -43,8 +46,7 @@ class UserEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const user = await (await fetch(`/api/user/${this.props.match.params.id}`)).json();
-      this.setState({item: user});
+      const user = BackAPI.getUserAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
     }
   }
 
@@ -63,15 +65,7 @@ class UserEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    await fetch('/api/user', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/users');
+    BackAPI.postUserAsync(item, () => this.props.history.push('/users'), null); // TODO: replace null by error showing code
   }
 
   render() {
@@ -84,7 +78,21 @@ class UserEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
         {title}
         <FormGroup className="float-right">
-          <ButtonGroup inline="true">
+          
+          <ButtonGroup>
+            <SaveButton
+              entityId = {item.userId}
+              entityTypeCapName = "User"
+            />
+            {' '}
+            <CancelButton
+              to = {"/users"}
+              entityTypeCapName = "User"
+            />
+          </ButtonGroup>
+
+          
+          {/* <ButtonGroup inline="true">
             <Button size="sm" color="primary" type="submit" id="editUser">
               <UncontrolledTooltip placement="auto" target="editUser">
                 {item.userId ? 'Save Changes' : 'Save New User'}
@@ -97,7 +105,9 @@ class UserEdit extends Component {
               </UncontrolledTooltip>
               <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
             </Button>
-          </ButtonGroup>
+          </ButtonGroup> */}
+        
+        
         </FormGroup>
           <FormGroup>
             <Input type="number" name="personalData.dni" id="dni" value={item.personalData.dni || ''}
