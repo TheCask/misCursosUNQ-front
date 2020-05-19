@@ -96,7 +96,7 @@ class CourseEdit extends Component {
                 Discard and Back to Course
               </UncontrolledTooltip>
               <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-          </Button>
+            </Button>
           </ButtonGroup>
         </FormGroup>
           <FormGroup>

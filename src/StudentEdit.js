@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import SaveButton from './buttonBar/SaveButton'
+import CancelButton from './buttonBar/CancelButton'
 
 class StudentEdit extends Component {
 
@@ -74,45 +76,43 @@ class StudentEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
         {title}
         <FormGroup className="float-right">
-          <ButtonGroup inline="true">
-            <Button size="sm" color="primary" type="submit" id="editStudent">
-              <UncontrolledTooltip placement="auto" target="editStudent">
-                {item.fileNumber ? 'Save Changes' : 'Save New Student'}
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-            </Button>{' '}
-            <Button size="sm" color="secondary" tag={Link} to="/students" id="backToStudent">
-              <UncontrolledTooltip placement="auto" target="backToStudent">
-                Discard and Back to Student
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-            </Button>
+          <ButtonGroup>
+            <SaveButton
+              entityId = {item.fileNumber}
+              entityTypeCapName = "Student"
+            />
+            {' '}
+            <CancelButton
+              to = {"/students"}
+              entityTypeCapName = "Student"
+            />
           </ButtonGroup>
         </FormGroup>
-          <FormGroup>
+        <FormGroup>
             <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''}
                    onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
-          </FormGroup>
-          <FormGroup>
+        </FormGroup>
+        <FormGroup>
             <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
                    onChange={this.handleChange} placeholder="DNI"/>
-          </FormGroup>
-          <FormGroup>
+        </FormGroup>
+        <FormGroup>
             <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
                    onChange={this.handleChange} placeholder="First Name"/>
-          </FormGroup>
-          <FormGroup>
+                           </FormGroup>
+        <FormGroup>
             <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
                    onChange={this.handleChange} placeholder="Last Name"/>
-          </FormGroup>
-          <FormGroup>
+        </FormGroup>
+        <FormGroup>
             <Input type="text" name="email" id="email" value={item.personalData.email || ''}
                    onChange={this.handleChange} placeholder="e Mail"/>
-          </FormGroup>
-          <FormGroup>
+        </FormGroup>
+        <FormGroup>
             <Input type="number" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
                    onChange={this.handleChange} placeholder="Cell Phone"/>
-          </FormGroup>
+        </FormGroup>
+
         </Form>
       </Container>
     </div>

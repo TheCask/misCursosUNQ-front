@@ -77,7 +77,7 @@ export class StudentListContainer extends Component {
             deleteEntityFunction = {deleteStudentFunction} 
             consequenceList = {this.contextParams.onDeleteConsequenceList} />  
           <h3>{this.title}</h3>
-          <Table hover className="mt-4">
+          <Table hover className="mt-4"> 
             <StudentListHeaders />
             <tbody>
               <StudentList 
@@ -92,7 +92,6 @@ export class StudentListContainer extends Component {
     );
   }
 }
-
 
 const StudentListHeaders = () =>
 <thead>
