@@ -18,8 +18,8 @@ class FullUserList extends Component {
         onDelete = { (userId, handleSuccess, handleError) => BackAPI.deleteUserAsync(userId, handleSuccess, handleError)}
         onDeleteConsequenceList = {[
           "The user will no longer be available.",
-          "The user will be removed of every current course as well as any previous he ever took.",
-          "The user's attendance to any lesson (current or previous) will be removed."
+          "If the user has taught courses or coordinated subjects, deleting is not allowed.",
+          "Please remove courses or subjects from user before trying to delete."
         ]}
       />
     </div>
@@ -45,7 +45,7 @@ export class UserListContainer extends Component {
     this.contextParams.onDelete(
       userId, 
       () => {
-        let updatedUsers = [...this.state.users].filter(user => user.fileNumber !== userId);
+        let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
         this.setState({users: updatedUsers, targetId: ''});
       },
       null // TODO: replace null by error showing code
@@ -59,12 +59,8 @@ export class UserListContainer extends Component {
   }
 
   render() {
-
     const isLoading = this.state.isLoading;
-
-    if (isLoading) { 
-      return (<AppSpinner />) 
-    }
+    if (isLoading) { return (<AppSpinner/>) }
 
     const deleteUserFunction = () => {this.remove(this.state.targetId)};
     
@@ -78,7 +74,7 @@ export class UserListContainer extends Component {
             consequenceList = {this.contextParams.onDeleteConsequenceList} />  
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
-            <UserListHeaders />
+            <UserListHeaders/>
             <tbody>
               <UserList 
                 users = {this.state.users}
@@ -96,12 +92,13 @@ export class UserListContainer extends Component {
 const UserListHeaders = () =>
 <thead>
     <tr>
-      <th width="7%" >File Number</th>
-      <th width="10%">DNI</th>
-      <th width="5%" >First Name</th>
-      <th width="5%" >Last Name</th>
-      <th width="2%" >e-Mail</th>
-      <th width="2%" >Cell Phone</th>
+      <th width="3%">DNI</th>
+      <th width="7%" >First Name</th>
+      <th width="7%" >Last Name</th>
+      <th width="7%" >e-Mail</th>
+      <th width="4%" >Cell Phone</th>
+      <th width="2%" >Dedication</th>
+      <th width="1%" >Aditional Hours</th>
     </tr>
   </thead>;
 
@@ -119,14 +116,15 @@ const UserList = props => {
   });
 }
 
-const UserListItem = props => 
-  <tr onClick={props.userOnClickFunction} id={props.user.fileNumber} style={props.style}> 
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.fileNumber || ''}</td>
+const UserListItem = props =>
+  <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style} key={props.user.userId}>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.lastName || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.email || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.cellPhone || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.dedication || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.aditionalHours || ''}</td>
   </tr>;
 
 export default FullUserList;

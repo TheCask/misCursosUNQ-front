@@ -33,12 +33,9 @@ class ButtonBar extends Component {
     return (
       <div className="float-right">
         <ButtonGroup inline="true">
-        <AddButton
+          <AddButton
                 entityTypeCapName = {entityTypeCap}
                 to = {`/${entityType}/new`} />
-        {' '}
-        <ButtonGroup inline="true">
-
           <EditButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
@@ -51,8 +48,6 @@ class ButtonBar extends Component {
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
                   onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} />
-          </ButtonGroup>
-        
           <BBModal 
             isOpen = {() => this.state.modal}
             toggle = {this.toggleModal}
