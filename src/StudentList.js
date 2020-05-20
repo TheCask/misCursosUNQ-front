@@ -4,7 +4,6 @@ import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as BackAPI from './BackAPI';
-import Log from './Log';
 
 class FullStudentList extends Component {
 

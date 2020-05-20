@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
+import { withRouter } from 'react-router-dom';
+import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
@@ -33,7 +32,7 @@ class StudentEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const student = BackAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
+      BackAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
     }
   }
 

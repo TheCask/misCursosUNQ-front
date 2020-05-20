@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
+import { Container, Form, FormGroup, Input } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
-import Log from './Log';
-
 
 class SubjectEdit extends Component {
 
@@ -34,7 +32,8 @@ class SubjectEdit extends Component {
 
   handleChange(event) {
     const {name, value} = event.target;
-    this.state.item[name] = value;
+    let item = this.state.item
+    item[name] = value;
     this.setState({item: this.state.item});
   }
 

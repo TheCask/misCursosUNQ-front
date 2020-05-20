@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, CustomInput, Form, UncontrolledTooltip } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, Form, UncontrolledTooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';

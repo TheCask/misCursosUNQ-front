@@ -57,7 +57,8 @@ export class SubjectList extends Component {
       const subjectCode = subject.code
       const subjectOnClickFunction = () => {this.setState({targetId: subjectCode})}
       return (
-        <SubjectListItem subject = {subject} subjectOnClickFunction={subjectOnClickFunction} style={this.toggleRowColor(subjectCode)} />
+        <SubjectListItem subject = {subject} subjectOnClickFunction={subjectOnClickFunction} 
+          style={this.toggleRowColor(subjectCode)} key={subjectCode}/>
       )
     })
     

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
+import {withRouter } from 'react-router-dom';
+import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
@@ -46,7 +45,7 @@ class UserEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const user = BackAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
+      BackAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
     }
   }
 
