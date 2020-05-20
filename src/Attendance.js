@@ -81,7 +81,7 @@ class Attendance extends Component {
     const studentList = students.map((student) => {
       let fileNumber = student.fileNumber
       return ( <tr onClick={() => {this.toggleAttendance(fileNumber)}} 
-        id={fileNumber} style={this.setRowColor(fileNumber)}>
+        id={fileNumber} style={this.setRowColor(fileNumber)} key={fileNumber}>
         <td style={{whiteSpace: 'nowrap'}}>{fileNumber || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>

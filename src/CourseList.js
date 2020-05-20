@@ -55,7 +55,7 @@ class CourseList extends Component {
     const courseList = courses.map(course => {
       const courseId = course.courseId
       return (
-      <tr onClick={() => {this.setState({targetId: courseId})}} id={courseId} style={this.toggleRowColor(courseId)}>
+      <tr onClick={() => {this.setState({targetId: courseId})}} id={courseId} style={this.toggleRowColor(courseId)} key={courseId}>
         <td style={{textAlign: 'center'}}> {this.getIcon(course.courseCode, courseId)}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
         <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>

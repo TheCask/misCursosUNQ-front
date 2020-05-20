@@ -170,7 +170,7 @@ class CourseEdit extends Component {
     const subjectList = this.state.subjectList
     return ( subjectList.map(sj => {
       Log.info('Subject Code ' + sj.code)
-      return (<option>{sj.code}</option>) 
+      return (<option key={sj.code}>{sj.code}</option>) 
       })
     )
   }
