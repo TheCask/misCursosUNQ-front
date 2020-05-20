@@ -52,16 +52,23 @@ class UserEdit extends Component {
 
   handleChange(event) {
     const {name, value} = event.target;
-    const names = name.split(".")
     let item = {...this.state.item};
-    if (names[2]) { item[names[0]][names[1]][names[2]] = value }
-    else if (names[1]) { item[names[0]][names[1]] = value }
-    else { item[name] = value; }
+    this.setInnerPropValue(item, name, value);
     item['coordinatedSubjects'] = []
     item['taughtCourses'] = []
     this.setState({item});
   }
-
+  
+  setInnerPropValue(baseObj, subPropString, value){
+    const subProps = subPropString.split(".");
+    const lastPropName = subProps.pop(); // elimina del array y retorna el ultimo 
+    let propRef = baseObj
+    subProps.forEach(subprop => {
+      propRef = propRef[subprop];
+    });
+    propRef[lastPropName] = value;
+  }
+  
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
