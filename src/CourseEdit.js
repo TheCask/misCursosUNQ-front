@@ -27,7 +27,7 @@ class CourseEdit extends Component {
     super(props);
     this.state = {
       item: this.emptyItem,
-      subjectList: []
+      subjectList: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -71,8 +71,8 @@ class CourseEdit extends Component {
     return (
       <StudentListContainer 
         studentListTitle = {'Course Students'}
-        onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(this.state.item.courseCode, handleSuccess, handleError) }
-        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, this.state.item.courseCode, handleSuccess, handleError)}
+        onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(this.props.match.params.id, handleSuccess, handleError) }
+        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, this.props.match.params.id, handleSuccess, handleError)}
         onDeleteConsequenceList = {[
           "The student will no longer be part of this course.", 
           "Student's attendance and grades info will be removed."

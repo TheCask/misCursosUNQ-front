@@ -46,7 +46,7 @@ class UserEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const user = BackAPI.getUserAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
+      const user = BackAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
     }
   }
 

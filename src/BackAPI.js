@@ -58,7 +58,7 @@ export async function deleteStudentAsync(studentId, handleSuccess, handleError){
 // COURSE STUDENT
 
 export async function getCourseStudentsAsync(courseId, handleSuccess, handleError){
-    const response = await fetch('/api/students/');         // TODO: CHANGE URL
+    const response = await fetch(`/api/course/${courseId}/students/`);         // TODO: CHANGE URL
     if (response.status >= 200 && response.status <= 299) {
         handleSuccess(await response.json())
     } else {
@@ -82,8 +82,19 @@ export async function deleteCourseStudentAsync(studentId, courseId, handleSucces
     }    
 }
 
+// USER
 export async function getUsersAsync(handleSuccess, handleError){
     const response = await fetch('/api/users/');
+    if (response.status >= 200 && response.status <= 299) {
+        handleSuccess(await response.json())
+    } else {
+        handleError(response.status, response.statusText)
+    }
+}
+
+// getById
+export async function getUserByIdAsync(userId, handleSuccess, handleError){
+    const response = await fetch(`/api/user/${userId}`);
     if (response.status >= 200 && response.status <= 299) {
         handleSuccess(await response.json())
     } else {
@@ -105,6 +116,22 @@ export async function deleteUserAsync(userId, handleSuccess, handleError){
     } else {
         handleError(response.status, response.statusText)
     }    
+}
+
+export async function postUserAsync(userJson, handleSuccess, handleError){
+    const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userJson),
+      });
+    if (response.status >= 200 && response.status <= 299) {
+        handleSuccess()
+    } else {
+        handleError(response.status, response.statusText)
+    }
 }
 
 export default getStudentsAsync;
