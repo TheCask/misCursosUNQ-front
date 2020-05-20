@@ -26,6 +26,10 @@ function icon(entityTypeCapName) {
             <FontAwesomeIcon icon="user-graduate" size="1x"/>
             <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
         </span> )
+        case 'Subject': return ( <span>
+            <FontAwesomeIcon icon="university" size="1x"/>
+            <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
+        </span> )
         default: return (<FontAwesomeIcon icon='plus' size="1x"/>)
     }
 }

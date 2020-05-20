@@ -60,6 +60,20 @@ export async function postUserAsync(userJson, handleSuccess, handleError){
       handlePostOrDelete(response, handleSuccess, handleError)
 }
 
+// SUBJECT
+
+export async function getSubjectsAsync(handleSuccess, handleError){
+    const response = await fetch('/api/subjects/');
+    handleGet(response, handleSuccess, handleError)
+}
+
+export async function deleteSubjectAsync(subjectCode, handleSuccess, handleError){
+    const response = await fetch(`/api/subject/${subjectCode}`, deleteInit())
+    handlePostOrDelete(response, handleSuccess, handleError)    
+}
+
+// AUXILIAR
+
 async function handleGet(response, handleSuccess, handleError) {
     if (response.status >= 200 && response.status <= 299) { handleSuccess(await response.json()) } 
     else { handleError(response.status, response.statusText) }

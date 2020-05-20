@@ -6,7 +6,6 @@ import ButtonBar from './buttonBar/ButtonBar';
 import * as BackAPI from './BackAPI';
 
 class FullUserList extends Component {
-
   render() {
     return(
     <div>
@@ -106,8 +105,8 @@ const UserListHeaders = () =>
       <th width="4%" >Cell Phone</th>
       <th width="2%" >Dedication</th>
       <th width="1%" >Aditional Hours</th>
-    </tr>
-  </thead>;
+  </tr>
+</thead>;
 
 const UserList = props => {
   return props.users.map( (user, index) => {
