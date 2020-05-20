@@ -90,7 +90,6 @@ class CourseEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
           {title}
           <FormGroup className="float-right">
-          {this.addStudentButton()}{' '}
           <ButtonGroup inline="true">
             <Button size="sm" color="primary" type="submit" id="editCourse">
               <UncontrolledTooltip placement="auto" target="editCourse">
@@ -165,21 +164,6 @@ class CourseEdit extends Component {
     item["courseIsOpen"] = !item["courseIsOpen"];
     Log.info('Toggle ' + item["courseIsOpen"])
     this.setState({item});
-  }
-
-  addStudentButton(){
-    const courseId = this.state.item.courseId
-    if (courseId) {
-      return (
-        <Button color="success" tag={Link} to={`/students`} id="addStudentTooltip">
-          <UncontrolledTooltip placement="auto" target="addStudentTooltip">
-            Add Student
-          </UncontrolledTooltip>
-          <FontAwesomeIcon icon="user-graduate" size="1x"/>
-          <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
-        </Button>
-      )
-    }
   }
 
   subjectOptions() {

@@ -58,7 +58,7 @@ export async function deleteStudentAsync(studentId, handleSuccess, handleError){
 // COURSE STUDENT
 
 export async function getCourseStudentsAsync(courseId, handleSuccess, handleError){
-    const response = await fetch(`/api/course/${courseId}/students/`);         // TODO: CHANGE URL
+    const response = await fetch(`/api/course/${courseId}/students/`);
     if (response.status >= 200 && response.status <= 299) {
         handleSuccess(await response.json())
     } else {
@@ -68,7 +68,7 @@ export async function getCourseStudentsAsync(courseId, handleSuccess, handleErro
 
 export async function deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError){
     
-    const response = await fetch(`/api/student/${studentId}`, {     // TODO: CHANGE URL
+    const response = await fetch(`/api/course/${courseId}/${studentId}/`, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',

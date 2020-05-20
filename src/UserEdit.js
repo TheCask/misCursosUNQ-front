@@ -78,7 +78,6 @@ class UserEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
         {title}
         <FormGroup className="float-right">
-          
           <ButtonGroup>
             <SaveButton
               entityId = {item.userId}
@@ -90,24 +89,6 @@ class UserEdit extends Component {
               entityTypeCapName = "User"
             />
           </ButtonGroup>
-
-          
-          {/* <ButtonGroup inline="true">
-            <Button size="sm" color="primary" type="submit" id="editUser">
-              <UncontrolledTooltip placement="auto" target="editUser">
-                {item.userId ? 'Save Changes' : 'Save New User'}
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-            </Button>{' '}
-            <Button size="sm" color="secondary" tag={Link} to="/users" id="backToUser">
-              <UncontrolledTooltip placement="auto" target="backToUser">
-                Discard and Back to User
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-            </Button>
-          </ButtonGroup> */}
-        
-        
         </FormGroup>
           <FormGroup>
             <Input type="number" name="personalData.dni" id="dni" value={item.personalData.dni || ''}
