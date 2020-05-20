@@ -52,6 +52,15 @@ export class UserListContainer extends Component {
     );
   }
 
+  disallowsDelete(userId) {
+    const targetUser = this.state.users.find(user => user.userId === userId)
+    if (targetUser) {
+      return (targetUser.taughtCourses.length > 0 || 
+        targetUser.taughtCourses.length > 0) 
+    }
+    return false
+  }
+
   setSelectedRowColor(rowId) {
     if (rowId === this.state.targetId) {
       return {backgroundColor:'#F0F8FF'}
@@ -61,16 +70,15 @@ export class UserListContainer extends Component {
   render() {
     const isLoading = this.state.isLoading;
     if (isLoading) { return (<AppSpinner/>) }
-
     const deleteUserFunction = () => {this.remove(this.state.targetId)};
-    
     return (
       <div>
         <Container fluid>     
           <ButtonBar 
-            entityType='user' 
+            entityType = 'user' 
             targetId = {this.state.targetId} 
-            deleteEntityFunction = {deleteUserFunction} 
+            deleteEntityFunction = {deleteUserFunction}
+            disallowDelete = {this.disallowsDelete(this.state.targetId)}
             consequenceList = {this.contextParams.onDeleteConsequenceList} />  
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
@@ -104,13 +112,13 @@ const UserListHeaders = () =>
 
 const UserList = props => {
   return props.users.map( (user, index) => {
-    const userOnClickFunction = () => props.userOnClickFunction(user.fileNumber);
+    const userOnClickFunction = () => props.userOnClickFunction(user.userId);
     return (
       <UserListItem
         key = {index}
         user = {user} 
         userOnClickFunction = {userOnClickFunction} 
-        style = {props.styleFunction(user.fileNumber)}
+        style = {props.styleFunction(user.userId)}
       />
     )
   });

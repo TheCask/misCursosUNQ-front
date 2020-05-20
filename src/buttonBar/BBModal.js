@@ -12,7 +12,7 @@ export const BBModal = props =>
             {props.description}
         </ModalBody>
         <ModalFooter>
-            <Button color="danger" onClick={props.onProceed} id={"modalProceed"}>
+            <Button color="danger" onClick={props.onProceed} id={"modalProceed"} disabled={props.disallowDelete}>
             <UncontrolledTooltip placement="auto" target={"modalProceed"}>
                 {props.proceedTooltip}
             </UncontrolledTooltip>

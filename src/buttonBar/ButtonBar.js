@@ -54,6 +54,7 @@ class ButtonBar extends Component {
             title = {`You are about to delete selected ${entityType}. Are you sure?`}
             onProceed = {() => {this.props.deleteEntityFunction(); this.disableButtonAvailability(); this.toggleModal(); }}
             proceedTooltip = {"YES, DELETE (I know what I'm doing)"}
+            disallowDelete = {this.props.disallowDelete}
             description = {
               <div>
                 <h4>This action will have the following consequences:</h4>
