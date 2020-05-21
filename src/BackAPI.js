@@ -72,9 +72,22 @@ export async function getSubjectsAsync(handleSuccess, handleError){
     handleGet(response, handleSuccess, handleError)
 }
 
+// getById
+export async function getSubjectByIdAsync(subjectId, handleSuccess, handleError){
+    const response = await fetch(`/api/subject/${subjectId}`);
+    handleGet(response, handleSuccess, handleError)
+}
+
+// delete
 export async function deleteSubjectAsync(subjectCode, handleSuccess, handleError){
     const response = await fetch(`/api/subject/${subjectCode}`, deleteInit())
     handlePostOrDelete(response, handleSuccess, handleError)    
+}
+
+// post
+export async function postSubjectAsync(subjectJson, handleSuccess, handleError){
+    const response = await fetch('/api/subject', postInit(subjectJson));
+      handlePostOrDelete(response, handleSuccess, handleError)
 }
 
 // COURSE
@@ -85,10 +98,22 @@ export async function getCoursesAsync(handleSuccess, handleError){
     handleGet(response, handleSuccess, handleError)
 }
 
+// getById
+export async function getCourseByIdAsync(courseId, handleSuccess, handleError){
+    const response = await fetch(`/api/course/${courseId}`);
+    handleGet(response, handleSuccess, handleError)
+}
+
 // delete
 export async function deleteCourseAsync(courseId, handleSuccess, handleError){
     const response = await fetch(`/api/course/${courseId}`, deleteInit())
     handlePostOrDelete(response, handleSuccess, handleError)    
+}
+
+// post
+export async function postCourseAsync(courseJson, handleSuccess, handleError){
+    const response = await fetch('/api/course', postInit(courseJson));
+      handlePostOrDelete(response, handleSuccess, handleError)
 }
 
 // AUXILIARES

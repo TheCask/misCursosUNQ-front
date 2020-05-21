@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input } from 'reactstrap';
+import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
+import * as BackAPI from './BackAPI';
 
 class SubjectEdit extends Component {
 
@@ -25,30 +26,22 @@ class SubjectEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const subject = await (await fetch(`/api/subject/${this.props.match.params.id}`)).json();
-      this.setState({item: subject});
+      BackAPI.getSubjectByIdAsync(this.props.match.params.id, subject => this.setState({item: subject}), null) // TODO: replace null by error showing code
     }
   }
 
   handleChange(event) {
     const {name, value} = event.target;
-    let item = this.state.item
+    let item = {...this.state.item};
     item[name] = value;
-    this.setState({item: this.state.item});
+    this.setState({item});
   }
+
 
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    await fetch('/api/subject', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/subjects');
+    BackAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), null); // TODO: replace null by error showing code
   }
 
   render() {
@@ -61,6 +54,7 @@ class SubjectEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
           {title}
           <FormGroup className="float-right">
+            <ButtonGroup>
               <SaveButton
                 entityId = {item.fileNumber}
                 entityTypeCapName = "Subject"
@@ -70,7 +64,7 @@ class SubjectEdit extends Component {
                 to = {"/subjects"}
                 entityTypeCapName = "Subject"
               />
-              
+            </ButtonGroup>
           </FormGroup>
           <FormGroup>
             <Input type="text" name="code" id="code" value={item.code || ''} required

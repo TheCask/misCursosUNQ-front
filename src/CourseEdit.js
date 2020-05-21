@@ -5,6 +5,8 @@ import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, Uncontro
 import AppNavbar from './AppNavbar';
 import Log from './Log';
 import { StudentListContainer } from './StudentList'
+import SaveButton from './buttonBar/SaveButton'
+import CancelButton from './buttonBar/CancelButton'
 import * as BackAPI from './BackAPI';
 
 
@@ -36,35 +38,33 @@ class CourseEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const course = await (await fetch(`/api/course/${this.props.match.params.id}`)).json();
-      const subjects = await (await fetch(`/api/subjects/`)).json();
-      this.setState({item: course, subjectList: subjects});
+      BackAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), null) // TODO: replace null by error showing code
+      BackAPI.getSubjectsAsync(json => this.setState({subjectList: json}), null); // TODO: replace null by error showing code
     }
   }
 
   handleChange(event) {
     const {name, value} = event.target;
-    const names = name.split(".")
     let item = {...this.state.item};
-    if (names[2]) { item[names[0]][names[1]][names[2]] = value }
-    else if (names[1]) { item[names[0]][names[1]] = value }
-    else { item[name] = value; }
+    this.setInnerPropValue(item, name, value);
     item['lessons'] = []
     this.setState({item});
+  }
+
+  setInnerPropValue(baseObj, subPropString, value){
+    const subProps = subPropString.split(".");
+    const lastPropName = subProps.pop(); // elimina del array y retorna el ultimo 
+    let propRef = baseObj
+    subProps.forEach(subprop => {
+      propRef = propRef[subprop];
+    });
+    propRef[lastPropName] = value;
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    await fetch('/api/course', {
-      method: (item.id) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/courses');
+    BackAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
   renderStudents(){
@@ -90,34 +90,28 @@ class CourseEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
           {title}
           <FormGroup className="float-right">
-          <ButtonGroup inline="true">
-            <Button size="sm" color="primary" type="submit" id="editCourse">
-              <UncontrolledTooltip placement="auto" target="editCourse">
-                {item.courseId ? 'Save Changes' : 'Save New Course'}
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-            </Button>{' '}
-            <Button size="sm" color="secondary" tag={Link} to="/courses" id="backToCourse">
-              <UncontrolledTooltip placement="auto" target="backToCourse">
-                Discard and Back to Course
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-            </Button>
+          <ButtonGroup>
+            <SaveButton
+              entityId = {item.courseId}
+              entityTypeCapName = "Course"
+            />
+            {' '}
+            <CancelButton
+              to = {"/courses"}
+              entityTypeCapName = "Course"
+            />
           </ButtonGroup>
           </FormGroup>
           <FormGroup row>
             <Col sm={3}>
-            <Label for="code" hidden>Course Code</Label>
             <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
             </Col>
           </FormGroup>
           <FormGroup>
-            <Label for="courseName" hidden>Name</Label>
             <Input type="text" name="courseName" id="name" value={item.courseName || ''} required
                    onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
           </FormGroup>
           <FormGroup>
-            <Label for="subject" hidden>Subject Code</Label>
             <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
                    onChange={this.handleChange} label="Subject Code" required>
                 {this.subjectOptions()}
@@ -138,15 +132,15 @@ class CourseEdit extends Component {
               Select Shift
             </UncontrolledTooltip>
           </FormGroup>
-          <ButtonGroup>
+          <ButtonGroup size="sm">
             <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
-              <FontAwesomeIcon icon={['fas', 'lock-open']} size="1x" id="lock"/>
+              <FontAwesomeIcon icon='lock-open' size="1X" id="lock"/>
             </Button>
             <UncontrolledTooltip placement="auto" target="isOpen">
               Unlock Course
             </UncontrolledTooltip>
             <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
-              <FontAwesomeIcon icon={['fas', 'lock']} size="1x" id="unlock"/>
+              <FontAwesomeIcon icon='lock' size="1x" id="unlock"/>
             </Button>
             <UncontrolledTooltip placement="auto" target="isClose">
               Lock Course
@@ -155,7 +149,6 @@ class CourseEdit extends Component {
         </Form>
         {this.renderStudents()}
       </Container>
-      
     </div>
   }
 
@@ -174,7 +167,6 @@ class CourseEdit extends Component {
       })
     )
   }
-
 }
 
 export default withRouter(CourseEdit);
