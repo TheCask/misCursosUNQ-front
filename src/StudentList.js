@@ -6,7 +6,6 @@ import ButtonBar from './buttonBar/ButtonBar';
 import * as BackAPI from './BackAPI';
 
 class FullStudentList extends Component {
-
   render() {
     return(
     <div>
@@ -58,15 +57,9 @@ export class StudentListContainer extends Component {
   }
 
   render() {
-
     const isLoading = this.state.isLoading;
-
-    if (isLoading) { 
-      return (<AppSpinner />) 
-    }
-
+    if (isLoading) { return (<AppSpinner />) }
     const deleteStudentFunction = () => {this.remove(this.state.targetId)};
-    
     return (
       <div>
         <Container fluid>     
@@ -93,7 +86,7 @@ export class StudentListContainer extends Component {
 }
 
 const StudentListHeaders = () =>
-<thead>
+  <thead>
     <tr>
       <th width="7%" >File Number</th>
       <th width="10%">DNI</th>

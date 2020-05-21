@@ -27,11 +27,13 @@ export async function deleteStudentAsync(studentId, handleSuccess, handleError){
 
 // COURSE STUDENT
 
+// getAllByCourseId
 export async function getCourseStudentsAsync(courseId, handleSuccess, handleError){
     const response = await fetch(`/api/course/${courseId}/students/`);
     handleGet(response, handleSuccess, handleError)
 }
 
+// delete
 export async function deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError){
     const response = await fetch(`/api/course/${courseId}/${studentId}/`, deleteInit())
     handlePostOrDelete(response, handleSuccess, handleError) 
@@ -39,6 +41,7 @@ export async function deleteCourseStudentAsync(studentId, courseId, handleSucces
 
 // USER
 
+// getAll
 export async function getUsersAsync(handleSuccess, handleError){
     const response = await fetch('/api/users/');
     handleGet(response, handleSuccess, handleError)
@@ -50,11 +53,13 @@ export async function getUserByIdAsync(userId, handleSuccess, handleError){
     handleGet(response, handleSuccess, handleError)
 }
 
+// delete
 export async function deleteUserAsync(userId, handleSuccess, handleError){
     const response = await fetch(`/api/user/${userId}`, deleteInit())
     handlePostOrDelete(response, handleSuccess, handleError)    
 }
 
+// post
 export async function postUserAsync(userJson, handleSuccess, handleError){
     const response = await fetch('/api/user', postInit(userJson));
       handlePostOrDelete(response, handleSuccess, handleError)
@@ -72,7 +77,21 @@ export async function deleteSubjectAsync(subjectCode, handleSuccess, handleError
     handlePostOrDelete(response, handleSuccess, handleError)    
 }
 
-// AUXILIAR
+// COURSE
+
+// getAll
+export async function getCoursesAsync(handleSuccess, handleError){
+    const response = await fetch('/api/courses/');
+    handleGet(response, handleSuccess, handleError)
+}
+
+// delete
+export async function deleteCourseAsync(courseId, handleSuccess, handleError){
+    const response = await fetch(`/api/course/${courseId}`, deleteInit())
+    handlePostOrDelete(response, handleSuccess, handleError)    
+}
+
+// AUXILIARES
 
 async function handleGet(response, handleSuccess, handleError) {
     if (response.status >= 200 && response.status <= 299) { handleSuccess(await response.json()) } 

@@ -1,150 +1,89 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, UncontrolledTooltip,
-  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Container, Table, Button, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import AppNavbar from './AppNavbar';
-import AppSpinner from './AppSpinner';
-import Log from './Log';
+import AppSpinner from './AppSpinner'
+import AppNavbar from './AppNavbar'
+import ButtonBar from './buttonBar/ButtonBar';
+import Log from './Log'
+import * as BackAPI from './BackAPI';
 
-class CourseListContainer extends Component {
+class FullCourseList extends Component {
   render() {
     return(
     <div>
         <AppNavbar/>
-        <CourseList/>
+        <CourseListContainer
+          courseListTitle = {'Courses'}
+          onGetAll = { (handleSuccess, handleError) => BackAPI.getCoursesAsync(handleSuccess, handleError) }
+          onDelete = { (courseId, handleSuccess, handleError) => BackAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
+          onDeleteConsequenceList = {[
+            'The course will no longer be available',
+            'Students will exit the course',
+            'Course lessons will no longer be available',
+            'Students will lose their attendance to this course'
+          ]}
+        />
       </div>
     )
   }
 }
 
-class CourseList extends Component {
+export class CourseListContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {courses: [], isLoading: true, modal: false, modalTargetId: '', targetId: ''};
-    this.remove = this.remove.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
-    this.toggleRowColor = this.toggleRowColor.bind(this);
+    this.title = this.props.courseListTitle;
+    this.getIcon = this.props.getIcon
+    this.state = {courses: [], isLoading: true, targetId: ''};
+    this.contextParams = props;
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
-
-    fetch('/api/courses')
-      .then(response => response.json())
-      .then(data => this.setState({courses: data, isLoading: false}));
+    this.contextParams.onGetAll(json => this.setState({courses: json, isLoading: false}, null )); // TODO: replace null by error showing code
   }
 
-  async remove(id) {
-    await fetch(`/api/course/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(() => {
-      let updatedCourses = [...this.state.courses].filter(course => course.courseId !== id);
-      this.setState({courses: updatedCourses});
-    });
+  remove(courseId) {
+    this.contextParams.onDelete(
+      courseId, 
+      () => {
+        let updatedCourses = [...this.state.courses].filter(course => course.courseId !== courseId);
+        this.setState({courses: updatedCourses, targetId: ''});
+      },
+      null // TODO: replace null by error showing code
+    );
+  }
+
+  setSelectedRowColor(rowId) {
+    if (rowId === this.state.targetId) {
+      return {backgroundColor:'#F0F8FF'}
+    }
   }
 
   render() {
-    const {courses, isLoading, modal, targetId, modalTargetId} = this.state;
-    if (isLoading) { return (<AppSpinner></AppSpinner>) }
-    const courseList = courses.map(course => {
-      const courseId = course.courseId
-      return (
-      <tr onClick={() => {this.setState({targetId: courseId})}} id={courseId} style={this.toggleRowColor(courseId)} key={courseId}>
-        <td style={{textAlign: 'center'}}> {this.getIcon(course.courseCode, courseId)}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{course.courseName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{course.courseCode || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{course.courseShift || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{this.formatYESoNO(course.courseIsOpen) || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{course.students.length || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{course.lessons.length || ''}</td>
-        <td>
-          <Button size="sm" color="success" outline block tag={Link} to={`/course/${courseId}/lessons`} id={"attendance_" + courseId}>
-            <UncontrolledTooltip placement="auto" target={"attendance_" + courseId}>
-              Take Attendance
-            </UncontrolledTooltip>         
-            <FontAwesomeIcon icon={['fas', 'tasks']} size="1x"/>
-          </Button>
-        </td>
-      </tr>)})
-      
+    const isLoading = this.state.isLoading;
+    if (isLoading) { return (<AppSpinner />) }
+    const deleteCourseFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
-        
-        <Container fluid>
-          <div className="float-right">
-            <Button color="success" tag={Link} to="/course/new" id="addCourseTooltip">
-              <UncontrolledTooltip placement="auto" target="addCourseTooltip">
-                Add a Course
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon="chalkboard-teacher" size="1x"/>
-              <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
-            </Button>{' '}
-          <ButtonGroup inline="true">
-            <Button size="sm" color="primary" disabled={targetId === ''} tag={Link} to={"/course/" + targetId} id={"edit_" + targetId}>
-              <UncontrolledTooltip placement="auto" target={"edit_" + targetId}>
-                Edit Selected Course
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'edit']} size="2x"/>
-            </Button>
-            <Button size="sm" color="danger" disabled={targetId === ''} onClick={() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} id={"delete_" + targetId}>
-              <UncontrolledTooltip placement="auto" target={"delete_" + targetId}>
-                Delete Selected Course
-              </UncontrolledTooltip>
-              <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
-            </Button>
-            <Modal isOpen={modal} toggle={this.toggleModal} size="lg">
-              <ModalHeader toggle={this.toggleModal}><h3>Are you sure you want to delete entire course?</h3></ModalHeader>
-              <ModalBody>
-                <h4> This action will have the following consequences:</h4>
-                <ul>
-                  <li>- The course will no longer be available
-                  <br></br>
-                  (Students will exit the course)</li>
-                  <br></br>
-                  <li>- Course lessons will no longer be available
-                  <br></br>
-                  (Students will lose their attendance to this course)</li>
-                </ul>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onClick={() => {this.remove(modalTargetId); this.toggleModal()}} id={"modalDelete"}>
-                  <UncontrolledTooltip placement="auto" target={"modalDelete"}>
-                    YES DELETE COURSE (I'm Pretty Sure)
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'trash-alt']} size="2x"/>
-                </Button>
-                <Button color="secondary" onClick={this.toggleModal} id="modalCancel">
-                  <UncontrolledTooltip placement="auto" target="modalCancel">
-                    Cancel and Back to Courses
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-                </Button>
-              </ModalFooter>
-            </Modal>
-          </ButtonGroup>
-          </div>
-          <h3>Courses</h3>
-          <Table hover className="mt-4">
-            <thead>
-            <tr>
-              <th width="4%"></th>
-              <th width="7%">Name</th>
-              <th width="10%">Code</th>
-              <th width="5%">Shift</th>
-              <th width="5%">Open</th>
-              <th width="2%">Students</th>
-              <th width="2%">Lessons</th>
-              <th width="3%">Attendance</th>
-            </tr>
-            </thead>
+        <Container fluid>     
+          <ButtonBar 
+            entityType='course' 
+            targetId = {this.state.targetId} 
+            deleteEntityFunction = {deleteCourseFunction} 
+            consequenceList = {this.contextParams.onDeleteConsequenceList} />  
+          <h3>{this.title}</h3>
+          <Table hover className="mt-4"> 
+            <CourseListHeaders />
             <tbody>
-            {courseList}
+              <CourseList 
+                courses = {this.state.courses}
+                courseOnClickFunction = {(courseId) =>  {this.setState({targetId: courseId})}}
+                styleFunction = {(courseId) => this.setSelectedRowColor(courseId)}
+                getIconFunction = {(courseCode, courseId) => this.getCourseIcon(courseCode, courseId)}
+                booleanFormatterFunction = {(boolean) => this.formatYESoNO(boolean)}
+              />
             </tbody>
           </Table>
         </Container>
@@ -152,25 +91,10 @@ class CourseList extends Component {
     );
   }
 
-  formatYESoNO(value) {
-    return value===false ? 'No' : 'Yes';
-  }
-  
-  toggleModal(e) {
-    // const courseId = e.target.id.split("_")[1]
-    const modal = this.state.modal
-    Log.info('modal ' + modal)
-    this.setState({modal: !modal});
-  }
+  formatYESoNO(boolean) { return boolean===false ? 'No' : 'Yes'; }
 
-  toggleRowColor(rowId) {
-    if (rowId === this.state.targetId) {
-      return {backgroundColor:'#F0F8FF'}
-    }
-  }
-
-  getIcon(courseCode, courseSelectedId) {
-    if (courseSelectedId === this.state.targetId) {
+  getCourseIcon(courseCode, courseId) {
+    if(courseId === this.state.targetId) {
       switch(courseCode.split("-")[0]) {
         case "80000":
           return (
@@ -206,10 +130,64 @@ class CourseList extends Component {
             </span>)
         default:
           return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="2x" color="gray"/>
-      }  
+      }
     }
-    else { return '' }
+    else { return ''}  
   }
 }
+    
+const CourseListHeaders = () =>
+  <thead>
+    <tr>
+      <th width="4%"></th>
+      <th width="7%">Name</th>
+      <th width="10%">Code</th>
+      <th width="5%">Shift</th>
+      <th width="5%">Open</th>
+      <th width="2%">Students</th>
+      <th width="2%">Lessons</th>
+      <th width="3%">Attendance</th>
+    </tr>
+  </thead>
+  
+const CourseList = props => {
+  return props.courses.map( (course, index) => {
+    const courseOnClickFunction = () => props.courseOnClickFunction(course.courseId);
+    const getIconFunction = (courseCode, courseId) => props.getIconFunction(courseCode, courseId);
+    const booleanFormatterFunction = (boolean) => props.booleanFormatterFunction(boolean); 
+    return (
+      <CourseListItem
+        key = {index}
+        course = {course} 
+        courseOnClickFunction = {courseOnClickFunction} 
+        style = {props.styleFunction(course.courseId)}
+        getIconFunction = {getIconFunction}
+        booleanFormatter = {booleanFormatterFunction}
+      />
+    )
+  });
+}
+    
+const CourseListItem = props => {
+  return (
+    <tr onClick={props.courseOnClickFunction} id={props.course.courseId} style={props.style}> 
+      <td style={{textAlign: 'center'}}> {props.getIconFunction(props.course.courseCode, props.course.courseId) || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.courseName || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.courseCode || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.courseShift || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.students.length || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.lessons.length || ''}</td>
+      <td>
+        <Button size="sm" color="success" outline block tag={Link} to={`/course/${props.course.courseId}/lessons`} id={"attendance_" + props.course.courseId}>
+          <UncontrolledTooltip placement="auto" target={"attendance_" + props.course.courseId}>
+            Take Attendance
+          </UncontrolledTooltip>         
+          <FontAwesomeIcon icon={['fas', 'tasks']} size="1x"/>
+        </Button>
+      </td>
+    </tr>
+  )
+}
 
-export default CourseListContainer;
+export default FullCourseList;

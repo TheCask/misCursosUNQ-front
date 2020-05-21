@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // LOCAL
 import './App.css';
-import CourseListContainer from './CourseList';
+import FullCourseList from './CourseList';
 import CourseEdit from './CourseEdit';
 import Attendance from './Attendance';
 import FullStudentList from './StudentList';
@@ -16,6 +16,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
+
 library.add(fab, fas, faCheckSquare, faCoffee)
 
 class App extends Component {
@@ -23,8 +24,8 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route path='/' exact={true} component={CourseListContainer}/>
-          <Route path='/courses' exact={true} component={CourseListContainer}/>
+          <Route path='/' exact={true} component={FullCourseList}/>
+          <Route path='/courses' exact={true} component={FullCourseList}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/students' exact={true} component={FullStudentList}/>
