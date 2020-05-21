@@ -90,7 +90,7 @@ class StudentEdit extends Component {
                    onChange={this.handleChange} placeholder="Last Name" required/>
           </FormGroup>
           <FormGroup>
-            <Input type="text" name="email" id="email" value={item.personalData.email || ''}
+            <Input type="email" name="email" id="email" value={item.personalData.email || ''}
                    onChange={this.handleChange} placeholder="e Mail"/>
         </FormGroup>
         <FormGroup>

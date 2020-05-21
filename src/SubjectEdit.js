@@ -85,7 +85,7 @@ class SubjectEdit extends Component {
                    onChange={this.handleChange} placeholder="Subject Acronym"/>
           </FormGroup>
           <FormGroup>
-            <Input type="text" name="programURL" id="programURL" value={item.programURL || ''}
+            <Input type="url" name="programURL" id="programURL" value={item.programURL || ''}
               onChange={this.handleChange} placeholder="URL to Subject's Program"/>
           </FormGroup>
         </Form>

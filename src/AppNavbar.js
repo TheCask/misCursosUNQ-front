@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink,
+  Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
@@ -28,6 +29,20 @@ export default class AppNavbar extends Component {
         </a>
       <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="ml-auto" navbar>
+          <Dropdown nav isOpen={this.state.isOpen} toggle={this.toggle}>
+            <DropdownToggle nav caret> Menu </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Where to go now?</DropdownItem>
+              <DropdownItem divider/>
+              <DropdownItem ><a href="/users"> Users </a></DropdownItem>
+              <DropdownItem divider/>
+              <DropdownItem ><a href="/subjects"> Subjects </a></DropdownItem>
+              <DropdownItem divider/>
+              <DropdownItem ><a href="/courses"> Courses </a></DropdownItem>
+              <DropdownItem divider/>
+              <DropdownItem ><a href="/students"> Students </a></DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
           <NavItem>
             <NavLink 
                 href="https://github.com/TheCask/misCursosUNQ-front.git">GitHub

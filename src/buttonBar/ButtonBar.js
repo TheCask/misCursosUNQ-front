@@ -48,7 +48,8 @@ class ButtonBar extends Component {
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
                   onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} />
-          <BBModal 
+          <BBModal
+            fade={false}
             isOpen = {() => this.state.modal}
             toggle = {this.toggleModal}
             title = {`You are about to delete selected ${entityType}. Are you sure?`}

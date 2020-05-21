@@ -109,7 +109,7 @@ class UserEdit extends Component {
                    onChange={this.handleChange} placeholder="Last Name" required/>
           </FormGroup>
           <FormGroup>
-            <Input type="text" name="personalData.email" id="email" value={item.personalData.email || ''}
+            <Input type="email" name="personalData.email" id="email" value={item.personalData.email || ''}
                    onChange={this.handleChange} placeholder="e Mail" required/>
           </FormGroup>
           <FormGroup>
@@ -141,7 +141,7 @@ class UserEdit extends Component {
                    onChange={this.handleChange} placeholder="Aditional Hours"/>
           </FormGroup>
           <FormGroup>
-            <Input type="text" name="jobDetail.cvURL" id="cvUrl" value={item.jobDetail.cvURL || ''}
+            <Input type="url" name="jobDetail.cvURL" id="cvUrl" value={item.jobDetail.cvURL || ''}
                    onChange={this.handleChange} placeholder="CV URL"/>
           </FormGroup>
           <FormGroup>
