@@ -3,7 +3,7 @@ import { Container, Table} from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
-import * as BackAPI from './BackAPI';
+import * as StudentAPI from './services/StudentAPI';
 
 class FullStudentList extends Component {
   render() {
@@ -12,8 +12,8 @@ class FullStudentList extends Component {
       <AppNavbar/>
       <StudentListContainer 
         studentListTitle = {'Students'}
-        onGetAll = { (handleSuccess, handleError) => BackAPI.getStudentsAsync(handleSuccess, handleError) }
-        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
+        onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
+        onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
         onDeleteConsequenceList = {[
           "The student will no longer be available.",
           "The student will be removed of every current course as well as any previous he ever took.",

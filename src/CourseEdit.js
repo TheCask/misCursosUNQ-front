@@ -6,8 +6,8 @@ import AppNavbar from './AppNavbar';
 import { StudentListContainer } from './StudentList'
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
-import * as BackAPI from './BackAPI';
-
+import * as CourseAPI from './services/CourseAPI';
+import * as SubjectAPI from './services/SubjectAPI';
 
 class CourseEdit extends Component {
 
@@ -37,9 +37,9 @@ class CourseEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      BackAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), null) // TODO: replace null by error showing code
+      CourseAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), null) // TODO: replace null by error showing code
     }
-    BackAPI.getSubjectsAsync(json => this.setState({subjectList: json}), null); // TODO: replace null by error showing code
+    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json}), null); // TODO: replace null by error showing code
   }
 
   handleChange(event) {
@@ -63,7 +63,7 @@ class CourseEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    BackAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
+    CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
   render() {
@@ -127,8 +127,8 @@ class CourseEdit extends Component {
       return (
         <StudentListContainer 
           studentListTitle = {'Course Students'}
-          onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(courseId, handleSuccess, handleError) }
-          onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError)}
+          onGetAll = { (handleSuccess, handleError) => CourseAPI.getCourseStudentsAsync(courseId, handleSuccess, handleError) }
+          onDelete = { (studentId, handleSuccess, handleError) => CourseAPI.deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError)}
           onDeleteConsequenceList = {[
             "The student will no longer be part of this course.", 
             "Student's attendance and grades info will be removed."

@@ -14,12 +14,12 @@ export async function getStudentByIdAsync(studentId, handleSuccess, handleError)
 
 // post
 export async function postStudentAsync(studentJson, handleSuccess, handleError){
-    const response = await fetch('/api/student', postInit(studentJson));
+    const response = await fetch('/api/student', BackAPI.postInit(studentJson));
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
 }
 
 // delete
 export async function deleteStudentAsync(studentId, handleSuccess, handleError){
-    const response = await fetch(`/api/student/${studentId}`, deleteInit())
+    const response = await fetch(`/api/student/${studentId}`, BackAPI.deleteInit())
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)   
 }

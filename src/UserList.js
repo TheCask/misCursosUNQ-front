@@ -3,7 +3,7 @@ import { Container, Table} from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
-import * as BackAPI from './BackAPI';
+import * as UserAPI from './services/UserAPI';
 
 class FullUserList extends Component {
   render() {
@@ -12,8 +12,8 @@ class FullUserList extends Component {
       <AppNavbar/>
       <UserListContainer 
         userListTitle = {'Users'}
-        onGetAll = { (handleSuccess, handleError) => BackAPI.getUsersAsync(handleSuccess, handleError) }
-        onDelete = { (userId, handleSuccess, handleError) => BackAPI.deleteUserAsync(userId, handleSuccess, handleError)}
+        onGetAll = { (handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError) }
+        onDelete = { (userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
         onDeleteConsequenceList = {[
           "The user will no longer be available.",
           "If the user has taught courses or coordinated subjects, deleting is not allowed.",

@@ -4,7 +4,7 @@ import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
-import * as BackAPI from './BackAPI';
+import * as SubjectAPI from './services/SubjectAPI';
 
 class SubjectEdit extends Component {
 
@@ -26,7 +26,7 @@ class SubjectEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      BackAPI.getSubjectByIdAsync(this.props.match.params.id, subject => this.setState({item: subject}), null) // TODO: replace null by error showing code
+      SubjectAPI.getSubjectByIdAsync(this.props.match.params.id, subject => this.setState({item: subject}), null) // TODO: replace null by error showing code
     }
   }
 
@@ -41,7 +41,7 @@ class SubjectEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    BackAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), null); // TODO: replace null by error showing code
+    SubjectAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), null); // TODO: replace null by error showing code
   }
 
   render() {

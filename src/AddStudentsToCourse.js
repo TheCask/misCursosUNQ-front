@@ -5,8 +5,8 @@ import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 import DetailButton from './buttonBar/DetailButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as BackAPI from './BackAPI';
-import Log from './Log';
+import * as CourseAPI from './services/CourseAPI';
+import * as StudentAPI from './services/StudentAPI';
 
 class AddStudentsToCourse extends Component {
 
@@ -35,8 +35,8 @@ class AddStudentsToCourse extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    BackAPI.getCourseByIdAsync(this.props.match.params.id, json => this.setState({item: json}), null);
-    BackAPI.getStudentsAsync(json => {
+    CourseAPI.getCourseByIdAsync(this.props.match.params.id, json => this.setState({item: json}), null);
+    StudentAPI.getStudentsAsync(json => {
       this.collectStudentsIds(this.state.item.students);
       this.setState({allStudents: json, isLoading: false})
       },
@@ -51,7 +51,7 @@ class AddStudentsToCourse extends Component {
     item['students'] = students
     item['lessons'] = []
     this.setState({item: item})
-    BackAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
+    CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
   // TODO disable togle inscripted

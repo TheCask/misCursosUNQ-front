@@ -5,8 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from './AppSpinner'
 import AppNavbar from './AppNavbar'
 import ButtonBar from './buttonBar/ButtonBar';
-import Log from './Log'
-import * as BackAPI from './BackAPI';
+import * as CourseAPI from './services/CourseAPI';
 
 class FullCourseList extends Component {
   render() {
@@ -15,8 +14,8 @@ class FullCourseList extends Component {
         <AppNavbar/>
         <CourseListContainer
           courseListTitle = {'Courses'}
-          onGetAll = { (handleSuccess, handleError) => BackAPI.getCoursesAsync(handleSuccess, handleError) }
-          onDelete = { (courseId, handleSuccess, handleError) => BackAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
+          onGetAll = { (handleSuccess, handleError) => CourseAPI.getCoursesAsync(handleSuccess, handleError) }
+          onDelete = { (courseId, handleSuccess, handleError) => CourseAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
           onDeleteConsequenceList = {[
             'The course will no longer be available',
             'Students will exit the course',

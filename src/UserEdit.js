@@ -4,7 +4,7 @@ import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
-import * as BackAPI from './BackAPI';
+import * as UserAPI from './services/UserAPI';
 
 class UserEdit extends Component {
 
@@ -45,7 +45,7 @@ class UserEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      BackAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
+      UserAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
     }
   }
 
@@ -71,7 +71,7 @@ class UserEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    BackAPI.postUserAsync(item, () => this.props.history.push('/users'), null); // TODO: replace null by error showing code
+    UserAPI.postUserAsync(item, () => this.props.history.push('/users'), null); // TODO: replace null by error showing code
   }
 
   render() {

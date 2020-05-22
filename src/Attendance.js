@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
 import Log from './Log';
-import * as BackAPI from './BackAPI';
+import * as CourseAPI from './services/CourseAPI';
+import * as LessonAPI from './services/LessonAPI';
 
 class Attendance extends Component {
 
@@ -32,11 +33,11 @@ class Attendance extends Component {
   componentDidMount() {
     this.setState({isLoading: true});
     let courseId = this.props.match.params.id
-    BackAPI.getCourseStudentsAsync(courseId, json => { 
+    CourseAPI.getCourseStudentsAsync(courseId, json => { 
       this.setState({students: json}) 
       this.collectStudentsIds(json)}, 
       null); // TODO: replace null by error showing code
-    BackAPI.getCourseLessonsAsync(courseId, json => this.setState({lessons: json, isLoading:false }), null) // TODO: replace null by error showing code
+    CourseAPI.getCourseLessonsAsync(courseId, json => this.setState({lessons: json, isLoading:false }), null) // TODO: replace null by error showing code
   }
 
   async handleSubmit(event) {
@@ -45,7 +46,7 @@ class Attendance extends Component {
     let students = this.state.attendantStudentsIds
     item['attendantStudents'] = students
     this.setState({item: item})
-    BackAPI.postLessonAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
+    LessonAPI.postLessonAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
   toggleAttendance(stFileNumber) {

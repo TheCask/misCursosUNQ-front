@@ -1,16 +1,16 @@
 // AUXILIAR
 
-async function handleGet(response, handleSuccess, handleError) {
+export async function handleGet(response, handleSuccess, handleError) {
     if (response.status >= 200 && response.status <= 299) { handleSuccess(await response.json()) } 
     else { handleError(response.status, response.statusText) }
 }
 
-function handlePostOrDelete(response, handleSuccess, handleError) {
+export function handlePostOrDelete(response, handleSuccess, handleError) {
     if (response.status >= 200 && response.status <= 299) { handleSuccess() } 
     else { handleError(response.status, response.statusText) }
 }
 
-function postInit(json) {
+export function postInit(json) {
     return ({
         method: 'POST',
         headers: {
@@ -21,7 +21,7 @@ function postInit(json) {
     })
 }
 
-function deleteInit() {
+export function deleteInit() {
     return ({
         method: 'DELETE',
         headers: {
@@ -30,5 +30,3 @@ function deleteInit() {
         }
     })
 }
-
-export default handleGet;

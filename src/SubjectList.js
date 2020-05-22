@@ -3,7 +3,7 @@ import { Container, Table } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
-import * as BackAPI from './BackAPI';
+import * as SubjectAPI from './services/SubjectAPI';
 
 class FullSubjectList extends Component {
   render() {
@@ -12,8 +12,8 @@ class FullSubjectList extends Component {
         <AppNavbar/>
         <SubjectListContainer 
           subjectListTitle = {'Subjects'}
-          onGetAll = { (handleSuccess, handleError) => BackAPI.getSubjectsAsync(handleSuccess, handleError) }
-          onDelete = { (subjectCode, handleSuccess, handleError) => BackAPI.deleteSubjectAsync(subjectCode, handleSuccess, handleError)}
+          onGetAll = { (handleSuccess, handleError) => SubjectAPI.getSubjectsAsync(handleSuccess, handleError) }
+          onDelete = { (subjectCode, handleSuccess, handleError) => SubjectAPI.deleteSubjectAsync(subjectCode, handleSuccess, handleError)}
           onDeleteConsequenceList = {[
           "The subject will no longer be available.",
           "If the subject has courses associated, deleting is not allowed.",
