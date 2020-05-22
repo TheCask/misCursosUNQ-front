@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import FullCourseList from './CourseList';
 import CourseEdit from './CourseEdit';
+import AddStudentsToCourse from './AddStudentsToCourse';
 import Attendance from './Attendance';
 import FullStudentList from './StudentList';
 import StudentEdit from './StudentEdit';
@@ -27,6 +28,7 @@ class App extends Component {
           <Route path='/' exact={true} component={FullCourseList}/>
           <Route path='/courses' exact={true} component={FullCourseList}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
+          <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>
           <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/students' exact={true} component={FullStudentList}/>
           <Route path='/student/:id' component={StudentEdit}/>

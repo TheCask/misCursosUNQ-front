@@ -19,6 +19,7 @@ class FullStudentList extends Component {
           "The student will be removed of every current course as well as any previous he ever took.",
           "The student's attendance to any lesson (current or previous) will be removed."
         ]}
+        addButtonTo = {`/student/new`}
       />
     </div>
     )
@@ -31,6 +32,7 @@ export class StudentListContainer extends Component {
     super(props);
     this.title = this.props.studentListTitle;
     this.state = {students: [], isLoading: true, targetId: ''};
+    this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
   }
 
@@ -62,12 +64,14 @@ export class StudentListContainer extends Component {
     const deleteStudentFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
-        <Container fluid>     
-          <ButtonBar 
+        <Container fluid> 
+          <ButtonBar
             entityType='student' 
             targetId = {this.state.targetId} 
             deleteEntityFunction = {deleteStudentFunction} 
-            consequenceList = {this.contextParams.onDeleteConsequenceList} />  
+            consequenceList = {this.contextParams.onDeleteConsequenceList}
+            addButtonTo = {this.addButtonTo}
+          />
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
             <StudentListHeaders />

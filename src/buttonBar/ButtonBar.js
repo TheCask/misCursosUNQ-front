@@ -14,6 +14,7 @@ class ButtonBar extends Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.disableButtonAvailability = this.disableButtonAvailability.bind(this);
     this.entityType = props.entityType;
+    this.addButtonTo = props.addButtonTo;
   }
 
   toggleModal(e) {
@@ -29,13 +30,10 @@ class ButtonBar extends Component {
     const targetId = this.props.targetId;
     const entityType =  this.entityType;
     const entityTypeCap = entityType.charAt(0).toUpperCase() + entityType.slice(1);
-
     return (
       <div className="float-right">
         <ButtonGroup inline="true">
-          <AddButton
-                entityTypeCapName = {entityTypeCap}
-                to = {`/${entityType}/new`} />
+          <AddButton entityTypeCapName = {entityTypeCap} to = {this.addButtonTo} />
           <EditButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}

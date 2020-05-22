@@ -39,6 +39,22 @@ export async function deleteCourseStudentAsync(studentId, courseId, handleSucces
     handlePostOrDelete(response, handleSuccess, handleError) 
 }
 
+// COURSE LESSONS
+
+// getByCourseId
+export async function getCourseLessonsAsync(courseId, handleSuccess, handleError){
+    const response = await fetch(`/api/course/${courseId}/lessons`);
+    handleGet(response, handleSuccess, handleError)
+}
+
+// LESSON
+
+// post
+export async function postLessonAsync(lessonJson, handleSuccess, handleError){
+    const response = await fetch('/api/lesson', postInit(lessonJson));
+      handlePostOrDelete(response, handleSuccess, handleError)
+}
+
 // USER
 
 // getAll

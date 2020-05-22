@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup, UncontrolledTooltip, Col } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, Col } from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import Log from './Log';
 import { StudentListContainer } from './StudentList'
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
@@ -67,20 +66,6 @@ class CourseEdit extends Component {
     BackAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
-  renderStudents(){
-    return (
-      <StudentListContainer 
-        studentListTitle = {'Course Students'}
-        onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(this.props.match.params.id, handleSuccess, handleError) }
-        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, this.props.match.params.id, handleSuccess, handleError)}
-        onDeleteConsequenceList = {[
-          "The student will no longer be part of this course.", 
-          "Student's attendance and grades info will be removed."
-        ]}
-      />
-    );
-  }
-
   render() {
     const {item} = this.state;
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
@@ -91,20 +76,13 @@ class CourseEdit extends Component {
           {title}
           <FormGroup className="float-right">
           <ButtonGroup>
-            <SaveButton
-              entityId = {item.courseId}
-              entityTypeCapName = "Course"
-            />
-            {' '}
-            <CancelButton
-              to = {"/courses"}
-              entityTypeCapName = "Course"
-            />
+            <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" />
+            <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
           </ButtonGroup>
           </FormGroup>
           <FormGroup row>
             <Col sm={3}>
-            <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
+              <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
             </Col>
           </FormGroup>
           <FormGroup>
@@ -114,37 +92,28 @@ class CourseEdit extends Component {
           <FormGroup>
             <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
                    onChange={this.handleChange} label="Subject Code" required>
-                {this.subjectOptions()}
+              {this.subjectOptions()}
             </Input>
-            <UncontrolledTooltip placement="auto" target="subject">
-              Select Subject
-            </UncontrolledTooltip>
+            <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
           </FormGroup>
           <FormGroup>
-            <Label for="shift" hidden>Shift</Label>
             <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
               onChange={this.handleChange} label="Shift" required>
                 <option>Mañana</option>
                 <option>Tarde</option>
                 <option>Noche</option>
             </Input>
-            <UncontrolledTooltip placement="auto" target="shift">
-              Select Shift
-            </UncontrolledTooltip>
+            <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
           </FormGroup>
           <ButtonGroup size="sm">
             <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
-              <FontAwesomeIcon icon='lock-open' size="1X" id="lock"/>
+              <FontAwesomeIcon icon='lock-open' size="1x" id="lock"/>
             </Button>
-            <UncontrolledTooltip placement="auto" target="isOpen">
-              Unlock Course
-            </UncontrolledTooltip>
+            <UncontrolledTooltip placement="auto" target="isOpen"> Unlock Course </UncontrolledTooltip>
             <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
               <FontAwesomeIcon icon='lock' size="1x" id="unlock"/>
             </Button>
-            <UncontrolledTooltip placement="auto" target="isClose">
-              Lock Course
-            </UncontrolledTooltip>
+            <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
           </ButtonGroup>
         </Form>
         {this.renderStudents()}
@@ -152,19 +121,33 @@ class CourseEdit extends Component {
     </div>
   }
 
+  renderStudents() {
+    const courseId = this.props.match.params.id;
+    return (
+      <StudentListContainer 
+        studentListTitle = {'Course Students'}
+        onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(courseId, handleSuccess, handleError) }
+        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError)}
+        onDeleteConsequenceList = {[
+          "The student will no longer be part of this course.", 
+          "Student's attendance and grades info will be removed."
+        ]}
+        addButtonTo = {`/course/${courseId}/addStudents`}
+      />
+    );
+  }
+
   toggleIsOpen() {
     let item = {...this.state.item};
     item["courseIsOpen"] = !item["courseIsOpen"];
-    Log.info('Toggle ' + item["courseIsOpen"])
     this.setState({item});
   }
 
   subjectOptions() {
     const subjectList = this.state.subjectList
     return ( subjectList.map(sj => {
-      Log.info('Subject Code ' + sj.code)
       return (<option key={sj.code}>{sj.code}</option>) 
-      })
+    })
     )
   }
 }

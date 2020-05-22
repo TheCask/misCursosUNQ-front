@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
 import Log from './Log';
+import * as BackAPI from './BackAPI';
 
 class Attendance extends Component {
 
@@ -30,15 +31,12 @@ class Attendance extends Component {
 
   async componentDidMount() {
     this.setState({isLoading: true});
-    fetch(`/api/course/${this.props.match.params.id}/students`)
-        .then(response => response.json())
-        .then(data => {
-          this.setState({students: data})
-          this.collectStudentsIds(data)
-        });
-    fetch(`/api/course/${this.props.match.params.id}/lessons`)
-        .then(response => response.json())
-        .then(data => {this.setState({lessons: data, isLoading: false})});
+    let courseId = this.props.match.params.id
+    BackAPI.getCourseStudentsAsync(courseId, json => { 
+      this.setState({students: json}) 
+      this.collectStudentsIds(json)}, 
+      null); // TODO: replace null by error showing code
+    BackAPI.getCourseLessonsAsync(courseId, json => this.setState({lessons: json, isLoading:false }), null) // TODO: replace null by error showing code
   }
 
   async handleSubmit(event) {
@@ -47,32 +45,20 @@ class Attendance extends Component {
     let students = this.state.attendantStudentsIds
     item["attendantStudents"] = students
     this.setState({item: item})
-    await fetch('/api/lesson', {
-      method: (item.lessonId) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/courses');
+    BackAPI.postLessonAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
   toggleAttendance(stFileNumber) {
     let student = {fileNumber: stFileNumber}
     let studentList = this.state.attendantStudentsIds
-    Log.info('Old attendants are ' + studentList)
     if (studentList.filter(st => st.fileNumber === stFileNumber).length === 0) {
-      Log.info('Toggle attend id ' + stFileNumber)
       studentList = studentList.concat(student)
     }
     else {
-      Log.info('Toggle unattend id ' + stFileNumber)
       const newStudentList = studentList.filter(st => st.fileNumber !== stFileNumber)
       studentList = newStudentList
     }
     this.setState({attendantStudentsIds: studentList})
-    Log.info('New attendants are ' + studentList)
   }
 
   render() {
