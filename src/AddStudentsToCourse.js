@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Table, ButtonGroup, Button, UncontrolledTooltip } from 'reactstrap';
+import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
+import { Link } from 'react-router-dom';
 import DetailButton from './buttonBar/DetailButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as BackAPI from './BackAPI';
@@ -9,8 +10,12 @@ import * as BackAPI from './BackAPI';
 class AddStudentsToCourse extends Component {
 
   emptyItem = {
-    course: {
-      courseId: this.props.match.params.id
+    courseName: '',
+    courseCode: '',
+    courseShift: '',
+    courseIsOpen: '',
+    subject: {
+        code: ''
     },
     students: []
   };
@@ -29,7 +34,11 @@ class AddStudentsToCourse extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    BackAPI.getStudentsAsync(json => this.setState({students: json, isLoading: false}), null); // TODO: replace null by error showing code
+    BackAPI.getCourseByIdAsync(this.props.match.params.id, json => this.setState({item: json}), null);
+    BackAPI.getStudentsAsync(json => {
+      this.setState({students: json, isLoading: false})
+      this.collectStudentsIds(json)},
+      null); // TODO: replace null by error showing code
   }
 
   async handleSubmit(event) {
@@ -37,7 +46,7 @@ class AddStudentsToCourse extends Component {
     // const {item} = this.state;
     let item = {...this.state.item};
     let students = this.state.courseStudentsIds
-    item["students"] = students
+    item['students'] = students
     this.setState({item: item})
     BackAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
@@ -55,58 +64,67 @@ class AddStudentsToCourse extends Component {
     this.setState({courseStudentsIds: studentList})
   }
 
-  setSelectedRowColor(rowId) {
-    if (rowId === this.state.currentStudentId) {
-      return {backgroundColor:'#F0F8FF'}
-    }
-  }
-
-  handleAddStudent(event) {
-    const {name, value} = event.target;
-    let item = {...this.state.item};
-    this.setInnerPropValue(item, name, value);
-    item['lessons'] = []
-    this.setState({item});
+  // takes the list of students from api and sets the list of student fileNumbers in state
+  collectStudentsIds(students) {
+    const emptyStudent = {fileNumber: ''}
+    let students4JSON = students.map(student => {return emptyStudent.fileNumber = student})
+    this.setState({courseStudentsIds: students4JSON})
   }
 
   render() {
-    const isLoading = this.state.isLoading;
-    if (isLoading) { return (<AppSpinner />) }
-    const targetId = this.props.currentStudentId;
+    const {isLoading} = this.state;
+    if (isLoading) { return <AppSpinner /> }
+    const targetId = this.state.currentStudentId
     return (
       <div>
         <AppNavbar/>
         <Container fluid> 
-          <ButtonGroup className="float-right" inline="true">
-          <Button 
-            id='addStudentToCourse'
-            color="success" 
-            onClick={this.handleAddStudent} >
-            <UncontrolledTooltip placement="auto" target='addStudentToCourse'>
-                Add selected Student to Course
-            </UncontrolledTooltip>
-              <FontAwesomeIcon icon="user-graduate" size="1x"/>
-              <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
-          </Button>
-          <DetailButton
-                  entityTypeCapName = {'Student'}
-                  targetId = {targetId}
-                  to = {`/student/${targetId}/detail`}/>
-          </ButtonGroup>
+          <Form onSubmit={this.handleSubmit}>
+            <ButtonGroup className="float-right" inline="true">
+              <Button size="sm" color="primary" type="submit" id='addStudentToCourse'>
+                <UncontrolledTooltip placement="auto" target='addStudentToCourse'>
+                  Save Course Adding Selected Students
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon="save" size="2x"/>
+              </Button>
+              <DetailButton entityTypeCapName = {'Student'} targetId = {targetId} to = {`/student/${targetId}/detail`}/>
+              <Button  size="sm" color="secondary" tag={Link} to="/courses" id="backToCourse">
+                <UncontrolledTooltip placement="auto" target="backToCourse">
+                  Discard and Back to Course
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon='backward' size="2x"/>
+              </Button>
+              </ButtonGroup>
+          </Form>
           <h3>Add Students to Course</h3>
-          <Table hover className="mt-4"> 
+          <Table className="mt-4"> 
             <StudentListHeaders />
             <tbody>
               <StudentList 
                 students = {this.state.students}
-                studentOnClickFunction = {(studentId) =>  {this.setState({currentStudentId: studentId})}}
-                styleFunction = {(studentId) => this.setSelectedRowColor(studentId)} 
+                studentOnClickFunction = {(fileNumber) => {this.toggleInscription(fileNumber)}}
+                styleFunction = {(fileNumber) => this.setRowColor(fileNumber)}
+                getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
               />
             </tbody>
           </Table>
         </Container>
       </div>
     );
+  }
+
+  getCourseIcon(fileNumber) {
+    if (this.state.courseStudentsIds.filter(st => st.fileNumber === fileNumber).length === 0) {
+      return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' />
+    }
+    else { return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/> } 
+  }
+
+  setRowColor(rowId) {
+    if (this.state.courseStudentsIds.filter(st => st.fileNumber === rowId).length === 0) {
+      return {backgroundColor:'#FFF0F5'}
+    }
+    else { return {backgroundColor:'#F0FFF0'} }
   }
 }
 
@@ -119,18 +137,21 @@ const StudentListHeaders = () =>
       <th width="5%" >Last Name</th>
       <th width="2%" >e-Mail</th>
       <th width="2%" >Cell Phone</th>
+      <th width="3%">Selected</th>
     </tr>
   </thead>;
 
 const StudentList = props => {
   return props.students.map( (student, index) => {
     const studentOnClickFunction = () => props.studentOnClickFunction(student.fileNumber);
+    const getIconFunction = (fileNumber) => props.getIconFunction(fileNumber);
     return (
       <StudentListItem
         key = {index}
         student = {student} 
         studentOnClickFunction = {studentOnClickFunction} 
         style = {props.styleFunction(student.fileNumber)}
+        getIconFunction = {getIconFunction}
       />
     )
   });
@@ -144,6 +165,7 @@ const StudentListItem = props =>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
+    <td style={{textAlign: 'center'}}> {props.getIconFunction(props.student.fileNumber)}</td>
   </tr>;
 
 export default AddStudentsToCourse;

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
-import Log from './Log';
 import * as BackAPI from './BackAPI';
 
 class Attendance extends Component {
@@ -29,7 +28,7 @@ class Attendance extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.setState({isLoading: true});
     let courseId = this.props.match.params.id
     BackAPI.getCourseStudentsAsync(courseId, json => { 
@@ -43,7 +42,7 @@ class Attendance extends Component {
     event.preventDefault();
     let item = {...this.state.item};
     let students = this.state.attendantStudentsIds
-    item["attendantStudents"] = students
+    item['attendantStudents'] = students
     this.setState({item: item})
     BackAPI.postLessonAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
@@ -61,55 +60,46 @@ class Attendance extends Component {
     this.setState({attendantStudentsIds: studentList})
   }
 
-  render() {
-    const {students, isLoading} = this.state;
-    if (isLoading) { return (<AppSpinner></AppSpinner>) }
-    const studentList = students.map((student) => {
-      let fileNumber = student.fileNumber
-      return ( <tr onClick={() => {this.toggleAttendance(fileNumber)}} 
-        id={fileNumber} style={this.setRowColor(fileNumber)} key={fileNumber}>
-        <td style={{whiteSpace: 'nowrap'}}>{fileNumber || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.firstName || ''}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{student.personalData.lastName || ''}</td>
-        <td style={{textAlign: 'center'}}> {this.getIcon(fileNumber)}</td>
-      </tr>
-      )
-    });
+  // takes the list of students from api and sets the list of student fileNumbers in state
+  collectStudentsIds(students) {
+    const emptyStudent = {fileNumber: ''}
+    let students4JSON = students.map(student => {return emptyStudent.fileNumber = student})
+    this.setState({attendantStudentsIds: students4JSON})
+  }
 
+  render() {
+    const {isLoading} = this.state;
+    if (isLoading) { return <AppSpinner/> }
     return (
       <div>
         <AppNavbar/>
         <Container fluid>
-          <div className="float-right">
           <Form onSubmit={this.handleSubmit}>
-            <ButtonGroup>
-                <Button color="primary" type="submit" id="saveAttendance">
-                  <UncontrolledTooltip placement="auto" target="saveAttendance">
-                    Save Attendance
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'save']} size="2x"/>
-                </Button>{' '}
-                <Button color="secondary" tag={Link} to="/courses" id="backToCourse">
-                  <UncontrolledTooltip placement="auto" target="backToCourse">
-                    Discard and Back to Course
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
-                </Button>
+            <ButtonGroup className="float-right" inline="true">
+              <Button size="sm" color="primary" type="submit" id="saveAttendance">
+                <UncontrolledTooltip placement="auto" target="saveAttendance">
+                  Save Attendance
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon='save' size="2x"/>
+              </Button>
+              <Button size="sm"  color="secondary" tag={Link} to="/courses" id="backToCourse">
+                <UncontrolledTooltip placement="auto" target="backToCourse">
+                  Discard and Back to Course
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon='backward' size="2x"/>
+              </Button>
             </ButtonGroup>
           </Form>
-          </div>
           <h3>Students</h3>
           <Table className="mt-4">
-            <thead>
-            <tr>
-              <th width="10%">File Number</th>
-              <th width="20%">First Name</th>
-              <th width="20%">Last Name</th>
-              <th width="3%">Attended</th>
-            </tr>
-            </thead>
+            <StudentListHeaders />
             <tbody>
-            {studentList}
+              <StudentList
+                students = {this.state.students}
+                studentOnClickFunction = {(fileNumber) =>  {this.toggleAttendance(fileNumber)}}
+                styleFunction = {(fileNumber) => this.setRowColor(fileNumber)} 
+                getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
+              />
             </tbody>
           </Table>
         </Container>
@@ -117,12 +107,11 @@ class Attendance extends Component {
     );
   }
 
-  // takes the list of students from api and sets the list of student fileNumbers in state
-  collectStudentsIds(students) {
-    const emptyStudent = {fileNumber: ''}
-    let students4JSON = students.map(student => {return emptyStudent.fileNumber = student})
-    Log.info('NEW ' + students4JSON)
-    this.setState({attendantStudentsIds: students4JSON})
+  getCourseIcon(fileNumber) {
+    if (this.state.attendantStudentsIds.filter(st => st.fileNumber === fileNumber).length === 0) {
+      return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' />
+    }
+    else { return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/> } 
   }
 
   setRowColor(rowId) {
@@ -131,13 +120,40 @@ class Attendance extends Component {
     }
     else { return {backgroundColor:'#F0FFF0'} }
   }
-
-  getIcon(fileNumber) {
-    if (this.state.attendantStudentsIds.filter(st => st.fileNumber === fileNumber).length === 0) {
-      return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' />
-    }
-    else { return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/> } 
-  }
 }
+
+const StudentListHeaders = () =>
+  <thead>
+    <tr>
+      <th width="10%">File Number</th>
+      <th width="20%">First Name</th>
+      <th width="20%">Last Name</th>
+      <th width="3%">Attended</th>
+    </tr>
+  </thead>;
+
+const StudentList = props => {
+  return props.students.map( (student, index) => {
+    const studentOnClickFunction = () => props.studentOnClickFunction(student.fileNumber);
+    const getIconFunction = (fileNumber) => props.getIconFunction(fileNumber);
+    return (
+      <StudentListItem
+        key = {index}
+        student = {student} 
+        studentOnClickFunction = {studentOnClickFunction} 
+        style = {props.styleFunction(student.fileNumber)}
+        getIconFunction = {getIconFunction}
+      />
+    )
+  });
+}
+
+const StudentListItem = props =>
+  <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.fileNumber || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.firstName || ''}</td>
+    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
+    <td style={{textAlign: 'center'}}> {props.getIconFunction(props.student.fileNumber)}</td>
+  </tr>;
 
 export default Attendance;

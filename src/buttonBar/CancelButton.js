@@ -8,7 +8,7 @@ export const CancelButton = (props) =>
         <UncontrolledTooltip placement="auto" target = {`backTo${props.entityTypeCapName}s`}>
             {`Discard and Back to ${props.entityTypeCapName}s`}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon={['fas', 'backward']} size="2x"/>
+        <FontAwesomeIcon icon='backward' size="2x"/>
     </Button>
 
 export default CancelButton;

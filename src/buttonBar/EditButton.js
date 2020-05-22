@@ -15,7 +15,7 @@ const EditButton = (props) =>
         <UncontrolledTooltip placement="auto" target={`edit_${props.entityTypeCapName}`} disabled = {props.targetId === ''} >
                 {`Edit select ${props.entityTypeCapName}`}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon={['fas', 'edit']} size="2x"/>
+        <FontAwesomeIcon icon='edit' size="2x"/>
     </Button>;
 
 export default EditButton;

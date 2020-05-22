@@ -7,7 +7,7 @@ export const SaveButton = (props) =>
         <UncontrolledTooltip placement="auto" target="saveEntity">
             {props.entityId ? 'Save Changes' : `Save New ${props.entityTypeCapName}`}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon={['fas', 'save']} size="2x" />
+        <FontAwesomeIcon icon='save' size="2x" />
     </Button>;
 
 export default SaveButton;
