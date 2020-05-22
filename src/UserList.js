@@ -19,6 +19,7 @@ class FullUserList extends Component {
           "If the user has taught courses or coordinated subjects, deleting is not allowed.",
           "Please remove courses or subjects from user before trying to delete."
         ]}
+        addButtonTo = {`/user/new`}
       />
     </div>
     )
@@ -31,6 +32,7 @@ export class UserListContainer extends Component {
     super(props);
     this.title = this.props.userListTitle;
     this.state = {users: [], isLoading: true, targetId: ''};
+    this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
   }
 
@@ -77,7 +79,9 @@ export class UserListContainer extends Component {
             targetId = {this.state.targetId} 
             deleteEntityFunction = {deleteUserFunction}
             disallowDelete = {this.disallowsDelete(this.state.targetId)}
-            consequenceList = {this.contextParams.onDeleteConsequenceList} />  
+            consequenceList = {this.contextParams.onDeleteConsequenceList}
+            addButtonTo = {this.addButtonTo} 
+          />
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
             <UserListHeaders/>

@@ -19,6 +19,7 @@ class FullSubjectList extends Component {
           "If the subject has courses associated, deleting is not allowed.",
           "Please change subject from courses before trying to delete."
         ]}
+        addButtonTo = {`/subject/new`}
         />
       </div>
     )
@@ -31,6 +32,7 @@ export class SubjectListContainer extends Component {
     super(props);
     this.title = this.props.subjectListTitle;
     this.state = {subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}; 
+    this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
   }
 
@@ -67,7 +69,9 @@ export class SubjectListContainer extends Component {
             entityType = 'subject'
             targetId={this.state.targetId} 
             deleteEntityFunction={deleteSubjectFunction}
-            consequenceList = {this.contextParams.onDeleteConsequenceList} />
+            consequenceList = {this.contextParams.onDeleteConsequenceList}
+            addButtonTo = {this.addButtonTo}
+          />
           <h3>{this.title}</h3>
           <Table hover className="mt-4">
             <SubjectListHeaders/>

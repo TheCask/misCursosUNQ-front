@@ -23,6 +23,7 @@ class FullCourseList extends Component {
             'Course lessons will no longer be available',
             'Students will lose their attendance to this course'
           ]}
+          addButtonTo = {`/course/new`}
         />
       </div>
     )
@@ -36,6 +37,7 @@ export class CourseListContainer extends Component {
     this.title = this.props.courseListTitle;
     this.getIcon = this.props.getIcon
     this.state = {courses: [], isLoading: true, targetId: ''};
+    this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
   }
 
@@ -72,7 +74,9 @@ export class CourseListContainer extends Component {
             entityType='course' 
             targetId = {this.state.targetId} 
             deleteEntityFunction = {deleteCourseFunction} 
-            consequenceList = {this.contextParams.onDeleteConsequenceList} />  
+            consequenceList = {this.contextParams.onDeleteConsequenceList} 
+            addButtonTo = {this.addButtonTo}
+          />  
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
             <CourseListHeaders />

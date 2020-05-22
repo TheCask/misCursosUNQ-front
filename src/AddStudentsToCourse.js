@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import DetailButton from './buttonBar/DetailButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as BackAPI from './BackAPI';
+import Log from './Log';
 
 class AddStudentsToCourse extends Component {
 
@@ -24,7 +25,7 @@ class AddStudentsToCourse extends Component {
     super(props);
     this.state = {
       courseStudentsIds: [], 
-      students: [],
+      allStudents: [],
       item: this.emptyItem,
       isLoading: true,
       currentStudentId: ''};
@@ -36,8 +37,9 @@ class AddStudentsToCourse extends Component {
     this.setState({isLoading: true});
     BackAPI.getCourseByIdAsync(this.props.match.params.id, json => this.setState({item: json}), null);
     BackAPI.getStudentsAsync(json => {
-      this.setState({students: json, isLoading: false})
-      this.collectStudentsIds(json)},
+      this.collectStudentsIds(this.state.item.students);
+      this.setState({allStudents: json, isLoading: false})
+      },
       null); // TODO: replace null by error showing code
   }
 
@@ -47,27 +49,33 @@ class AddStudentsToCourse extends Component {
     let item = {...this.state.item};
     let students = this.state.courseStudentsIds
     item['students'] = students
+    item['lessons'] = []
     this.setState({item: item})
     BackAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
+  // TODO disable togle inscripted
   toggleInscription(stFileNumber) {
-    let student = {fileNumber: stFileNumber}
-    let studentList = this.state.courseStudentsIds
-    if (studentList.filter(st => st.fileNumber === stFileNumber).length === 0) {
-      studentList = studentList.concat(student)
-    }
-    else {
-      const newStudentList = studentList.filter(st => st.fileNumber !== stFileNumber)
-      studentList = newStudentList
-    }
-    this.setState({courseStudentsIds: studentList})
+    let courseStudents = this.state.item.students
+    if (!courseStudents.find(st => st.fileNumber === stFileNumber)) {
+      let studentList = this.state.courseStudentsIds
+      let student = {fileNumber: stFileNumber}
+      if (studentList.find(st => st.fileNumber === stFileNumber)) {
+        const newStudentList = studentList.filter(st => st.fileNumber !== stFileNumber)
+        studentList = newStudentList
+      }
+      else { studentList = studentList.concat(student) }
+      this.setState({courseStudentsIds: studentList})
+    }    
+    //if (studentsNotInscripted.find(st => st.fileNumber === stFileNumber))
+    //let studentsNotInscripted = this.props.allStudents.filter(st => !this.props.courseStudentsIds.find(id => st.fileNumber === id.fileNumber))
   }
 
-  // takes the list of students from api and sets the list of student fileNumbers in state
+  // takes the list of course students from api and sets the list of student fileNumbers in state
   collectStudentsIds(students) {
-    const emptyStudent = {fileNumber: ''}
-    let students4JSON = students.map(student => {return emptyStudent.fileNumber = student})
+    let students4JSON = students.map(student => {
+      return {fileNumber: student['fileNumber']}
+      })
     this.setState({courseStudentsIds: students4JSON})
   }
 
@@ -83,7 +91,7 @@ class AddStudentsToCourse extends Component {
             <ButtonGroup className="float-right" inline="true">
               <Button size="sm" color="primary" type="submit" id='addStudentToCourse'>
                 <UncontrolledTooltip placement="auto" target='addStudentToCourse'>
-                  Save Course Adding Selected Students
+                  Add Selected Students to Course
                 </UncontrolledTooltip>
                 <FontAwesomeIcon icon="save" size="2x"/>
               </Button>
@@ -100,8 +108,9 @@ class AddStudentsToCourse extends Component {
           <Table className="mt-4"> 
             <StudentListHeaders />
             <tbody>
-              <StudentList 
-                students = {this.state.students}
+              <StudentList
+                courseStudentsIds = {this.state.courseStudentsIds}
+                allStudents = {this.state.allStudents}
                 studentOnClickFunction = {(fileNumber) => {this.toggleInscription(fileNumber)}}
                 styleFunction = {(fileNumber) => this.setRowColor(fileNumber)}
                 getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
@@ -114,17 +123,17 @@ class AddStudentsToCourse extends Component {
   }
 
   getCourseIcon(fileNumber) {
-    if (this.state.courseStudentsIds.filter(st => st.fileNumber === fileNumber).length === 0) {
-      return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' />
+    if (this.state.courseStudentsIds.find(st => st.fileNumber === fileNumber)) {
+      return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/>
     }
-    else { return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/> } 
+    else { return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' /> } 
   }
 
   setRowColor(rowId) {
-    if (this.state.courseStudentsIds.filter(st => st.fileNumber === rowId).length === 0) {
-      return {backgroundColor:'#FFF0F5'}
+    if (this.state.courseStudentsIds.find(st => st.fileNumber === rowId)) {
+      return {backgroundColor:'#F0FFF0'}
     }
-    else { return {backgroundColor:'#F0FFF0'} }
+    else { return {backgroundColor:'#FFF0F5'} }
   }
 }
 
@@ -142,7 +151,7 @@ const StudentListHeaders = () =>
   </thead>;
 
 const StudentList = props => {
-  return props.students.map( (student, index) => {
+  return props.allStudents.map( (student, index) => {
     const studentOnClickFunction = () => props.studentOnClickFunction(student.fileNumber);
     const getIconFunction = (fileNumber) => props.getIconFunction(fileNumber);
     return (

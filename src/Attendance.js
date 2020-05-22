@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
+import Log from './Log';
 import * as BackAPI from './BackAPI';
 
 class Attendance extends Component {
@@ -50,20 +51,21 @@ class Attendance extends Component {
   toggleAttendance(stFileNumber) {
     let student = {fileNumber: stFileNumber}
     let studentList = this.state.attendantStudentsIds
-    if (studentList.filter(st => st.fileNumber === stFileNumber).length === 0) {
-      studentList = studentList.concat(student)
-    }
-    else {
+    Log.info("list of students", studentList)
+    if (studentList.find(st => st.fileNumber === stFileNumber)) {
       const newStudentList = studentList.filter(st => st.fileNumber !== stFileNumber)
       studentList = newStudentList
     }
+    else { studentList = studentList.concat(student) }
+    Log.info("list of students", studentList)
     this.setState({attendantStudentsIds: studentList})
   }
 
   // takes the list of students from api and sets the list of student fileNumbers in state
   collectStudentsIds(students) {
-    const emptyStudent = {fileNumber: ''}
-    let students4JSON = students.map(student => {return emptyStudent.fileNumber = student})
+    let students4JSON = students.map(student => {
+      return {fileNumber: student['fileNumber']}
+      })
     this.setState({attendantStudentsIds: students4JSON})
   }
 
@@ -108,17 +110,17 @@ class Attendance extends Component {
   }
 
   getCourseIcon(fileNumber) {
-    if (this.state.attendantStudentsIds.filter(st => st.fileNumber === fileNumber).length === 0) {
-      return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' />
+    if (this.state.attendantStudentsIds.find(st => st.fileNumber === fileNumber)) {
+      return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/>
     }
-    else { return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/> } 
+    else { return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' /> } 
   }
 
   setRowColor(rowId) {
-    if (this.state.attendantStudentsIds.filter(st => st.fileNumber === rowId).length === 0) {
-      return {backgroundColor:'#FFF0F5'}
+    if (this.state.attendantStudentsIds.find(st => st.fileNumber === rowId)) {
+      return {backgroundColor:'#F0FFF0'}
     }
-    else { return {backgroundColor:'#F0FFF0'} }
+    else { return {backgroundColor:'#FFF0F5'} }
   }
 }
 

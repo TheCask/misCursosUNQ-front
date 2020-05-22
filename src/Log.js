@@ -17,7 +17,7 @@ class Log {
     // Set the colour of the message based on the level
     createDebug.color = COLOURS[level];
     
-    if(source) { createDebug(source, message); }
+    if(source) { createDebug(JSON.stringify(source), message); }
     else { createDebug(message); }
   }
   

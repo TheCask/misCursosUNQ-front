@@ -38,8 +38,8 @@ class CourseEdit extends Component {
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
       BackAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), null) // TODO: replace null by error showing code
-      BackAPI.getSubjectsAsync(json => this.setState({subjectList: json}), null); // TODO: replace null by error showing code
     }
+    BackAPI.getSubjectsAsync(json => this.setState({subjectList: json}), null); // TODO: replace null by error showing code
   }
 
   handleChange(event) {
@@ -123,19 +123,22 @@ class CourseEdit extends Component {
 
   renderStudents() {
     const courseId = this.props.match.params.id;
-    return (
-      <StudentListContainer 
-        studentListTitle = {'Course Students'}
-        onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(courseId, handleSuccess, handleError) }
-        onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError)}
-        onDeleteConsequenceList = {[
-          "The student will no longer be part of this course.", 
-          "Student's attendance and grades info will be removed."
-        ]}
-        addButtonTo = {`/course/${courseId}/addStudents`}
-      />
-    );
+    if (courseId !== 'new') {
+      return (
+        <StudentListContainer 
+          studentListTitle = {'Course Students'}
+          onGetAll = { (handleSuccess, handleError) => BackAPI.getCourseStudentsAsync(courseId, handleSuccess, handleError) }
+          onDelete = { (studentId, handleSuccess, handleError) => BackAPI.deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError)}
+          onDeleteConsequenceList = {[
+            "The student will no longer be part of this course.", 
+            "Student's attendance and grades info will be removed."
+          ]}
+          addButtonTo = {`/course/${courseId}/addStudents`}
+        />
+      );
+    }
   }
+
 
   toggleIsOpen() {
     let item = {...this.state.item};
