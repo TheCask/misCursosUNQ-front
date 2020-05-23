@@ -66,9 +66,7 @@ class AddStudentsToCourse extends Component {
       }
       else { studentList = studentList.concat(student) }
       this.setState({courseStudentsIds: studentList})
-    }    
-    //if (studentsNotInscripted.find(st => st.fileNumber === stFileNumber))
-    //let studentsNotInscripted = this.props.allStudents.filter(st => !this.props.courseStudentsIds.find(id => st.fileNumber === id.fileNumber))
+    }
   }
 
   // takes the list of course students from api and sets the list of student fileNumbers in state

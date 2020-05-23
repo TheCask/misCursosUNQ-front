@@ -8,6 +8,7 @@ import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
+import Log from './Log';
 
 class CourseEdit extends Component {
 
@@ -17,7 +18,8 @@ class CourseEdit extends Component {
     courseShift: '',
     courseIsOpen: true,
     subject: {
-      code: ''
+      code: '',
+      name: ''
     },
     students: [],
     lessons: [],
@@ -45,9 +47,20 @@ class CourseEdit extends Component {
   handleChange(event) {
     const {name, value} = event.target;
     let item = {...this.state.item};
-    this.setInnerPropValue(item, name, value);
+    // to save the code of the selected name subject
+    if (name === 'subject.code') {
+      let code = this.subjectName2Code(value)
+      this.setInnerPropValue(item, name, code);
+      this.setInnerPropValue(item, 'subject.name', value);
+    }
+    else { item[name] = value}
     item['lessons'] = []
     this.setState({item});
+  }
+
+  subjectName2Code(subjectName) {
+    let subject = this.state.subjectList.find(sb => sb.name === subjectName)
+    return subject.code
   }
 
   setInnerPropValue(baseObj, subPropString, value){
@@ -91,7 +104,7 @@ class CourseEdit extends Component {
                     onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
             </FormGroup>
             <FormGroup>
-              <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
+              <Input type="select" name="subject.code" id="subject" value={item.subject.name || ''}
                     onChange={this.handleChange} label="Subject Code" required>
                 {this.subjectOptions()}
               </Input>
@@ -141,7 +154,6 @@ class CourseEdit extends Component {
     }
   }
 
-
   toggleIsOpen() {
     let item = {...this.state.item};
     item["courseIsOpen"] = !item["courseIsOpen"];
@@ -151,7 +163,7 @@ class CourseEdit extends Component {
   subjectOptions() {
     const subjectList = this.state.subjectList
     return ( subjectList.map(sj => {
-      return (<option key={sj.code}>{sj.code}</option>) 
+      return (<option key={sj.code}>{sj.name}</option>) 
     })
     )
   }
