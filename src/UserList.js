@@ -9,18 +9,19 @@ class FullUserList extends Component {
   render() {
     return(
     <div>
-      <AppNavbar/>
-      <UserListContainer 
-        userListTitle = {'Users'}
-        onGetAll = { (handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError) }
-        onDelete = { (userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
-        onDeleteConsequenceList = {[
-          "The user will no longer be available.",
-          "If the user has taught courses or coordinated subjects, deleting is not allowed.",
-          "Please remove courses or subjects from user before trying to delete."
-        ]}
-        addButtonTo = {`/user/new`}
-      />
+      <AppNavbar>
+        <UserListContainer 
+          userListTitle = {'Users'}
+          onGetAll = { (handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError) }
+          onDelete = { (userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
+          onDeleteConsequenceList = {[
+            "The user will no longer be available.",
+            "If the user has taught courses or coordinated subjects, deleting is not allowed.",
+            "Please remove courses or subjects from user before trying to delete."
+          ]}
+          addButtonTo = {`/user/new`}
+        />
+      </AppNavbar>
     </div>
     )
   }

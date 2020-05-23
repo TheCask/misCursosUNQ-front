@@ -70,54 +70,56 @@ class CourseEdit extends Component {
     const {item} = this.state;
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
     return <div>
-      <AppNavbar/>
-      <Container fluid>
-        <Form onSubmit={this.handleSubmit}>
-          {title}
-          <FormGroup className="float-right">
-          <ButtonGroup>
-            <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" />
-            <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
-          </ButtonGroup>
-          </FormGroup>
-          <FormGroup row>
-            <Col sm={3}>
-              <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Input type="text" name="courseName" id="name" value={item.courseName || ''} required
-                   onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
-                   onChange={this.handleChange} label="Subject Code" required>
-              {this.subjectOptions()}
-            </Input>
-            <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
-          </FormGroup>
-          <FormGroup>
-            <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
-              onChange={this.handleChange} label="Shift" required>
-                <option>Mañana</option>
-                <option>Tarde</option>
-                <option>Noche</option>
-            </Input>
-            <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
-          </FormGroup>
-          <ButtonGroup size="sm">
-            <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
-              <FontAwesomeIcon icon='lock-open' size="1x" id="lock"/>
-            </Button>
-            <UncontrolledTooltip placement="auto" target="isOpen"> Unlock Course </UncontrolledTooltip>
-            <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
-              <FontAwesomeIcon icon='lock' size="1x" id="unlock"/>
-            </Button>
-            <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
-          </ButtonGroup>
-        </Form>
-        {this.renderStudents()}
-      </Container>
+      <AppNavbar>
+
+        <Container fluid>
+          <Form onSubmit={this.handleSubmit}>
+            {title}
+            <FormGroup className="float-right">
+            <ButtonGroup>
+              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" />
+              <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
+            </ButtonGroup>
+            </FormGroup>
+            <FormGroup row>
+              <Col sm={3}>
+                <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Input type="text" name="courseName" id="name" value={item.courseName || ''} required
+                    onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="select" name="subject.code" id="subject" value={item.subject.code || ''}
+                    onChange={this.handleChange} label="Subject Code" required>
+                {this.subjectOptions()}
+              </Input>
+              <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
+            </FormGroup>
+            <FormGroup>
+              <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
+                onChange={this.handleChange} label="Shift" required>
+                  <option>Mañana</option>
+                  <option>Tarde</option>
+                  <option>Noche</option>
+              </Input>
+              <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
+            </FormGroup>
+            <ButtonGroup size="sm">
+              <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
+                <FontAwesomeIcon icon='lock-open' size="1x" id="lock"/>
+              </Button>
+              <UncontrolledTooltip placement="auto" target="isOpen"> Unlock Course </UncontrolledTooltip>
+              <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
+                <FontAwesomeIcon icon='lock' size="1x" id="unlock"/>
+              </Button>
+              <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
+            </ButtonGroup>
+          </Form>
+          {this.renderStudents()}
+        </Container>
+      </AppNavbar>
     </div>
   }
 

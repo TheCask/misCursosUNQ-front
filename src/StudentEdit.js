@@ -56,50 +56,52 @@ class StudentEdit extends Component {
     let newStudent = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
     return <div>
-      <AppNavbar/>
-      <Container fluid>
-        <Form onSubmit={this.handleSubmit}>
-        {title}
-        <FormGroup className="float-right">
-          <ButtonGroup>
-            <SaveButton
-              entityId = {item.fileNumber}
-              entityTypeCapName = "Student"
-            />
-            {' '}
-            <CancelButton
-              to = {"/students"}
-              entityTypeCapName = "Student"
-            />
-          </ButtonGroup>
-        </FormGroup>
-          <FormGroup>
-            <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''} required
-                   onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
-        </FormGroup>
-        <FormGroup>
-            <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
-                   onChange={this.handleChange} placeholder="DNI" required/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
-                   onChange={this.handleChange} placeholder="First Name" required/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
-                   onChange={this.handleChange} placeholder="Last Name" required/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="email" name="email" id="email" value={item.personalData.email || ''}
-                   onChange={this.handleChange} placeholder="e Mail"/>
-        </FormGroup>
-        <FormGroup>
-            <Input type="number" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
-                   onChange={this.handleChange} placeholder="Cell Phone"/>
-        </FormGroup>
+      <AppNavbar>
 
-        </Form>
-      </Container>
+        <Container fluid>
+          <Form onSubmit={this.handleSubmit}>
+          {title}
+          <FormGroup className="float-right">
+            <ButtonGroup>
+              <SaveButton
+                entityId = {item.fileNumber}
+                entityTypeCapName = "Student"
+              />
+              {' '}
+              <CancelButton
+                to = {"/students"}
+                entityTypeCapName = "Student"
+              />
+            </ButtonGroup>
+          </FormGroup>
+            <FormGroup>
+              <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''} required
+                    onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
+          </FormGroup>
+          <FormGroup>
+              <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
+                    onChange={this.handleChange} placeholder="DNI" required/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
+                    onChange={this.handleChange} placeholder="First Name" required/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
+                    onChange={this.handleChange} placeholder="Last Name" required/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="email" name="email" id="email" value={item.personalData.email || ''}
+                    onChange={this.handleChange} placeholder="e Mail"/>
+          </FormGroup>
+          <FormGroup>
+              <Input type="number" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
+                    onChange={this.handleChange} placeholder="Cell Phone"/>
+          </FormGroup>
+
+          </Form>
+        </Container>
+      </AppNavbar>
     </div>
   }
 }
