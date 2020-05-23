@@ -11,20 +11,21 @@ class FullCourseList extends Component {
   render() {
     return(
     <div>
-        <AppNavbar/>
-        <CourseListContainer
-          courseListTitle = {'Courses'}
-          onGetAll = { (handleSuccess, handleError) => CourseAPI.getCoursesAsync(handleSuccess, handleError) }
-          onDelete = { (courseId, handleSuccess, handleError) => CourseAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
-          onDeleteConsequenceList = {[
-            'The course will no longer be available',
-            'Students will exit the course',
-            'Course lessons will no longer be available',
-            'Students will lose their attendance to this course'
-          ]}
-          addButtonTo = {`/course/new`}
-          deleteButtonTo = {'./'} //required by delete button
-        />
+        <AppNavbar>
+          <CourseListContainer
+            courseListTitle = {'Courses'}
+            onGetAll = { (handleSuccess, handleError) => CourseAPI.getCoursesAsync(handleSuccess, handleError) }
+            onDelete = { (courseId, handleSuccess, handleError) => CourseAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
+            onDeleteConsequenceList = {[
+              'The course will no longer be available',
+              'Students will exit the course',
+              'Course lessons will no longer be available',
+              'Students will lose their attendance to this course'
+            ]}
+            addButtonTo = {`/course/new`}
+            deleteButtonTo = {'./'} //required by delete button
+          />
+        </AppNavbar>
       </div>
     )
   }

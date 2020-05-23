@@ -23,10 +23,10 @@ export default class AppNavbar extends Component {
   render() {
     return (
       <div>
-        <Navbar style={{backgroundColor:"rgba(0, 0, 0, 0.72)", boxShadow: 'rgba(0, 0, 0, 0.42) 0px 3px 8px'}}> 
+        <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.80)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
           <NavbarBrand href="http://ciclointroductoriocyt.web.unq.edu.ar" >
             <img className="app-logo" alt="applogo" src={logoApp}
-              height="48" width="48" align="left" style={{margin: '0px 0px'}}/>
+              height="48" width="48" align="left" style={{margin: '0px 15px'}}/>
           </NavbarBrand>
           <NavLink href="https://www.unq.edu.ar">
             <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
@@ -38,7 +38,7 @@ export default class AppNavbar extends Component {
             <Col md='auto' style={{ padding: '0px', height: 'inherit'}}>
               <SideBar />
             </Col>
-            <Col >
+            <Col className='bla'>
               {this.props.children}
             </Col>
           </Row>
