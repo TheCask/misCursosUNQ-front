@@ -8,10 +8,11 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <AppNavbar/>
-        <Container fluid>
-          <Button color="link"><Link to="/courses">misCursosUNQ</Link></Button>
-        </Container>
+        <AppNavbar>
+          <Container fluid>
+            <Button color="link"><Link to="/courses">misCursosUNQ</Link></Button>
+          </Container>
+        </AppNavbar>
       </div>
     );
   }

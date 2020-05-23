@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  
 }
 
 .App-logo {
@@ -43,4 +44,8 @@
 
 .logo {
   border:5px solid black;
+}
+
+.bla {
+  background: rgb(238, 238, 238);
 }

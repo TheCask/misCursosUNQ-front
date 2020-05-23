@@ -85,39 +85,40 @@ class AddStudentsToCourse extends Component {
     const targetId = this.state.currentStudentId
     return (
       <div>
-        <AppNavbar/>
-        <Container fluid> 
-          <Form onSubmit={this.handleSubmit}>
-            <ButtonGroup className="float-right" inline="true">
-              <Button size="sm" color="primary" type="submit" id='addStudentToCourse'>
-                <UncontrolledTooltip placement="auto" target='addStudentToCourse'>
-                  Add Selected Students to Course
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon="save" size="2x"/>
-              </Button>
-              <DetailButton entityTypeCapName = {'Student'} targetId = {targetId} to = {`/student/${targetId}/detail`}/>
-              <Button  size="sm" color="secondary" tag={Link} to="/courses" id="backToCourse">
-                <UncontrolledTooltip placement="auto" target="backToCourse">
-                  Discard and Back to Course
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon='backward' size="2x"/>
-              </Button>
-              </ButtonGroup>
-          </Form>
-          <h3>Add Students to Course</h3>
-          <Table className="mt-4"> 
-            <StudentListHeaders />
-            <tbody>
-              <StudentList
-                courseStudentsIds = {this.state.courseStudentsIds}
-                allStudents = {this.state.allStudents}
-                studentOnClickFunction = {(fileNumber) => {this.toggleInscription(fileNumber)}}
-                styleFunction = {(fileNumber) => this.setRowColor(fileNumber)}
-                getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
-              />
-            </tbody>
-          </Table>
-        </Container>
+        <AppNavbar>
+          <Container fluid> 
+            <Form onSubmit={this.handleSubmit}>
+              <ButtonGroup className="float-right" inline="true">
+                <Button size="sm" color="primary" type="submit" id='addStudentToCourse'>
+                  <UncontrolledTooltip placement="auto" target='addStudentToCourse'>
+                    Add Selected Students to Course
+                  </UncontrolledTooltip>
+                  <FontAwesomeIcon icon="save" size="2x"/>
+                </Button>
+                <DetailButton entityTypeCapName = {'Student'} targetId = {targetId} to = {`/student/${targetId}/detail`}/>
+                <Button  size="sm" color="secondary" tag={Link} to="/courses" id="backToCourse">
+                  <UncontrolledTooltip placement="auto" target="backToCourse">
+                    Discard and Back to Course
+                  </UncontrolledTooltip>
+                  <FontAwesomeIcon icon='backward' size="2x"/>
+                </Button>
+                </ButtonGroup>
+            </Form>
+            <h3>Add Students to Course</h3>
+            <Table className="mt-4"> 
+              <StudentListHeaders />
+              <tbody>
+                <StudentList
+                  courseStudentsIds = {this.state.courseStudentsIds}
+                  allStudents = {this.state.allStudents}
+                  studentOnClickFunction = {(fileNumber) => {this.toggleInscription(fileNumber)}}
+                  styleFunction = {(fileNumber) => this.setRowColor(fileNumber)}
+                  getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
+                />
+              </tbody>
+            </Table>
+          </Container>
+        </AppNavbar>
       </div>
     );
   }

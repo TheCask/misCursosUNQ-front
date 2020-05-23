@@ -49,41 +49,43 @@ class SubjectEdit extends Component {
     let newSubject = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newSubject ? 'Edit Subject' : 'Add Subject'}</h2>;
     return <div>
-      <AppNavbar/>
-      <Container fluid>
-        <Form onSubmit={this.handleSubmit}>
-          {title}
-          <FormGroup className="float-right">
-            <ButtonGroup>
-              <SaveButton
-                entityId = {item.fileNumber}
-                entityTypeCapName = "Subject"
-              />
-              {' '}
-              <CancelButton
-                to = {"/subjects"}
-                entityTypeCapName = "Subject"
-              />
-            </ButtonGroup>
-          </FormGroup>
-          <FormGroup>
-            <Input type="text" name="code" id="code" value={item.code || ''} required
-                   onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="text" name="name" id="name" value={item.name || ''} required
-                   onChange={this.handleChange} placeholder="Subject Name"/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="text" name="acronym" id="acronym" value={item.acronym || ''} required
-                   onChange={this.handleChange} placeholder="Subject Acronym"/>
-          </FormGroup>
-          <FormGroup>
-            <Input type="url" name="programURL" id="programURL" value={item.programURL || ''}
-              onChange={this.handleChange} placeholder="URL to Subject's Program"/>
-          </FormGroup>
-        </Form>
-      </Container>
+      <AppNavbar>
+
+        <Container fluid>
+          <Form onSubmit={this.handleSubmit}>
+            {title}
+            <FormGroup className="float-right">
+              <ButtonGroup>
+                <SaveButton
+                  entityId = {item.fileNumber}
+                  entityTypeCapName = "Subject"
+                />
+                {' '}
+                <CancelButton
+                  to = {"/subjects"}
+                  entityTypeCapName = "Subject"
+                />
+              </ButtonGroup>
+            </FormGroup>
+            <FormGroup>
+              <Input type="text" name="code" id="code" value={item.code || ''} required
+                    onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="text" name="name" id="name" value={item.name || ''} required
+                    onChange={this.handleChange} placeholder="Subject Name"/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="text" name="acronym" id="acronym" value={item.acronym || ''} required
+                    onChange={this.handleChange} placeholder="Subject Acronym"/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="url" name="programURL" id="programURL" value={item.programURL || ''}
+                onChange={this.handleChange} placeholder="URL to Subject's Program"/>
+            </FormGroup>
+          </Form>
+        </Container>
+      </AppNavbar>
     </div>
   }
 }

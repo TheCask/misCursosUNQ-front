@@ -8,19 +8,20 @@ import * as SubjectAPI from './services/SubjectAPI';
 class FullSubjectList extends Component {
   render() {
     return(
-    <div>
-        <AppNavbar/>
-        <SubjectListContainer 
-          subjectListTitle = {'Subjects'}
-          onGetAll = { (handleSuccess, handleError) => SubjectAPI.getSubjectsAsync(handleSuccess, handleError) }
-          onDelete = { (subjectCode, handleSuccess, handleError) => SubjectAPI.deleteSubjectAsync(subjectCode, handleSuccess, handleError)}
-          onDeleteConsequenceList = {[
-          "The subject will no longer be available.",
-          "If the subject has courses associated, deleting is not allowed.",
-          "Please change subject from courses before trying to delete."
-        ]}
-        addButtonTo = {`/subject/new`}
-        />
+    <div className='bla'>
+        <AppNavbar>
+          <SubjectListContainer 
+            subjectListTitle = {'Subjects'}
+            onGetAll = { (handleSuccess, handleError) => SubjectAPI.getSubjectsAsync(handleSuccess, handleError) }
+            onDelete = { (subjectCode, handleSuccess, handleError) => SubjectAPI.deleteSubjectAsync(subjectCode, handleSuccess, handleError)}
+            onDeleteConsequenceList = {[
+            "The subject will no longer be available.",
+            "If the subject has courses associated, deleting is not allowed.",
+            "Please change subject from courses before trying to delete."
+          ]}
+          addButtonTo = {`/subject/new`}
+          />
+        </AppNavbar>
       </div>
     )
   }

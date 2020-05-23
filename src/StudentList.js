@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
-import { Container, Table} from 'reactstrap';
+import { Container, Table, Row, Col } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as StudentAPI from './services/StudentAPI';
+import SideBar from './SideBar';
 
 class FullStudentList extends Component {
   render() {
     return(
-    <div>
-      <AppNavbar/>
-      <StudentListContainer 
-        studentListTitle = {'Students'}
-        onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
-        onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
-        onDeleteConsequenceList = {[
-          "The student will no longer be available.",
-          "The student will be removed of every current course as well as any previous he ever took.",
-          "The student's attendance to any lesson (current or previous) will be removed."
-        ]}
-        addButtonTo = {`/student/new`}
-      />
-    </div>
+      <div>
+        <AppNavbar>
+          <StudentListContainer 
+                  studentListTitle = {'Students'}
+                  addButtonTo = {`/student/new`}
+                  onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
+                  onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
+                  onDeleteConsequenceList = {[
+                    "The student will no longer be available.",
+                    "The student will be removed of every current course as well as any previous he ever took.",
+                    "The student's attendance to any lesson (current or previous) will be removed."
+                  ]}
+                  />
+        </AppNavbar>
+      </div>
     )
   }
 }

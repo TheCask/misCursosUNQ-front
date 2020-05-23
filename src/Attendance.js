@@ -75,37 +75,38 @@ class Attendance extends Component {
     if (isLoading) { return <AppSpinner/> }
     return (
       <div>
-        <AppNavbar/>
-        <Container fluid>
-          <Form onSubmit={this.handleSubmit}>
-            <ButtonGroup className="float-right" inline="true">
-              <Button size="sm" color="primary" type="submit" id="saveAttendance">
-                <UncontrolledTooltip placement="auto" target="saveAttendance">
-                  Save Attendance
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon='save' size="2x"/>
-              </Button>
-              <Button size="sm"  color="secondary" tag={Link} to="/courses" id="backToCourse">
-                <UncontrolledTooltip placement="auto" target="backToCourse">
-                  Discard and Back to Course
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon='backward' size="2x"/>
-              </Button>
-            </ButtonGroup>
-          </Form>
-          <h3>Students</h3>
-          <Table className="mt-4">
-            <StudentListHeaders />
-            <tbody>
-              <StudentList
-                students = {this.state.students}
-                studentOnClickFunction = {(fileNumber) =>  {this.toggleAttendance(fileNumber)}}
-                styleFunction = {(fileNumber) => this.setRowColor(fileNumber)} 
-                getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
-              />
-            </tbody>
-          </Table>
-        </Container>
+        <AppNavbar>
+          <Container fluid>
+            <Form onSubmit={this.handleSubmit}>
+              <ButtonGroup className="float-right" inline="true">
+                <Button size="sm" color="primary" type="submit" id="saveAttendance">
+                  <UncontrolledTooltip placement="auto" target="saveAttendance">
+                    Save Attendance
+                  </UncontrolledTooltip>
+                  <FontAwesomeIcon icon='save' size="2x"/>
+                </Button>
+                <Button size="sm"  color="secondary" tag={Link} to="/courses" id="backToCourse">
+                  <UncontrolledTooltip placement="auto" target="backToCourse">
+                    Discard and Back to Course
+                  </UncontrolledTooltip>
+                  <FontAwesomeIcon icon='backward' size="2x"/>
+                </Button>
+              </ButtonGroup>
+            </Form>
+            <h3>Students</h3>
+            <Table className="mt-4">
+              <StudentListHeaders />
+              <tbody>
+                <StudentList
+                  students = {this.state.students}
+                  studentOnClickFunction = {(fileNumber) =>  {this.toggleAttendance(fileNumber)}}
+                  styleFunction = {(fileNumber) => this.setRowColor(fileNumber)} 
+                  getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
+                />
+              </tbody>
+            </Table>
+          </Container>
+        </AppNavbar>
       </div>
     );
   }
