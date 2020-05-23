@@ -38,7 +38,7 @@ export default class AppNavbar extends Component {
             <Col md='auto' style={{ padding: '0px', height: 'inherit'}}>
               <SideBar />
             </Col>
-            <Col className='bla'>
+            <Col className='content'>
               {this.props.children}
             </Col>
           </Row>
