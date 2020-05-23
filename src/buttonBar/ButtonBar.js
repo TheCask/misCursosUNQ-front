@@ -15,6 +15,7 @@ class ButtonBar extends Component {
     this.disableButtonAvailability = this.disableButtonAvailability.bind(this);
     this.entityType = props.entityType;
     this.addButtonTo = props.addButtonTo;
+    this.deleteButtonTo = props.deleteButtonTo;
   }
 
   toggleModal(e) {
@@ -45,7 +46,8 @@ class ButtonBar extends Component {
           <DeleteButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
-                  onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} />
+                  onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} 
+                  to = {this.deleteButtonTo}/>
           <BBModal
             fade={false}
             isOpen = {() => this.state.modal}
