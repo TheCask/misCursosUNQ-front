@@ -11,10 +11,13 @@ import * as StudentAPI from './services/StudentAPI';
 class AddStudentsToCourse extends Component {
 
   emptyItem = {
-    courseName: '',
     courseCode: '',
+    courseFullCode: '',
     courseShift: '',
     courseIsOpen: '',
+    courseYear: '',
+    courseSeason: '',
+    courseLocation: '',
     subject: {
         code: ''
     },

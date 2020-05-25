@@ -88,7 +88,7 @@ export class CourseListContainer extends Component {
                 courses = {this.state.courses}
                 courseOnClickFunction = {(courseId) =>  {this.setState({targetId: courseId})}}
                 styleFunction = {(courseId) => this.setSelectedRowColor(courseId)}
-                getIconFunction = {(courseCode, courseId) => this.getCourseIcon(courseCode, courseId)}
+                getIconFunction = {(courseFullCode, courseId) => this.getCourseIcon(courseFullCode, courseId)}
                 booleanFormatterFunction = {(boolean) => this.formatYESoNO(boolean)}
               />
             </tbody>
@@ -100,67 +100,40 @@ export class CourseListContainer extends Component {
 
   formatYESoNO(boolean) { return boolean===false ? 'No' : 'Yes'; }
 
-  getCourseIcon(courseCode, courseId) {
+  getCourseIcon(courseFullCode, courseId) {
     if(courseId === this.state.targetId) {
-      switch(courseCode.split("-")[0]) {
+      switch(courseFullCode.split("-")[0]) {
         case "80000":
-          return (
-            <span className="fa-layers fa-fw">
-              <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="left-10 up-10"/>
-              <FontAwesomeIcon icon='book-reader' size="1x" color="darkred" transform="right-10 up-10"/>
-              <FontAwesomeIcon icon='pencil-alt' size="1x" color="darkred" transform="left-10 down-10"/>
-              <FontAwesomeIcon icon='graduation-cap' size="1x" color="darkred" transform="right-10 down-10"/>
-            </span>)
+          return (<> <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="left-10 up-10"/>
+                    <FontAwesomeIcon icon='book-reader' size="1x" color="darkred" transform="right-10 up-10"/>
+                    <FontAwesomeIcon icon='pencil-alt' size="1x" color="darkred" transform="left-10 down-10"/>
+                    <FontAwesomeIcon icon='graduation-cap' size="1x" color="darkred" transform="right-10 down-10"/> </>);
         case "80005":
-          return (
-            <span className="fa-layers fa-fw">
-              <FontAwesomeIcon icon='bug' size="1x" color="black" transform="left-10 up-10"/>
-              <FontAwesomeIcon icon='microchip' size="1x" color="black" transform="right-10 up-10"/>
-              <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
-              <FontAwesomeIcon icon='project-diagram' size="1x" color="black" transform="right-10 down-10"/>
-            </span>)
+          return (<> <FontAwesomeIcon icon='bug' size="1x" color="black" transform="left-10 up-10"/>
+                    <FontAwesomeIcon icon='microchip' size="1x" color="black" transform="right-10 up-10"/>
+                    <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
+                    <FontAwesomeIcon icon='project-diagram' size="1x" color="black" transform="right-10 down-10"/> </>);
         case "80003":
-          return (
-            <span className="fa-layers fa-fw">
-              <FontAwesomeIcon icon='brain' size="1x" color="darkblue" transform="left-10 up-10"/>
-              <FontAwesomeIcon icon='shapes' size="1x" color="darkblue" transform="right-10 up-10"/>
-              <FontAwesomeIcon icon='infinity' size="1x" color="darkblue" transform="left-10 down-10"/>
-              <FontAwesomeIcon icon='calculator' size="1x" color="darkblue" transform="right-10 down-10"/>
-            </span>)
+          return (<> <FontAwesomeIcon icon='brain' size="1x" color="darkblue" transform="left-10 up-10"/>
+                    <FontAwesomeIcon icon='shapes' size="1x" color="darkblue" transform="right-10 up-10"/>
+                    <FontAwesomeIcon icon='infinity' size="1x" color="darkblue" transform="left-10 down-10"/>
+                    <FontAwesomeIcon icon='calculator' size="1x" color="darkblue" transform="right-10 down-10"/> </>);
         case "80004":
-          return (
-            <span className="fa-layers fa-fw">
-              <FontAwesomeIcon icon='thermometer-half' size="1x" color="darkgreen" transform="left-10 up-10"/>
-              <FontAwesomeIcon icon='atom' size="1x" color="darkgreen" transform="right-10 up-10"/>
-              <FontAwesomeIcon icon='flask' size="1x" color="darkgreen" transform="left-10 down-10"/>
-              <FontAwesomeIcon icon='magnet' size="1x" color="darkgreen" transform="right-10 down-10"/>
-            </span>)
-        default:
-          return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="2x" color="gray"/>
+          return (<> <FontAwesomeIcon icon='thermometer-half' size="1x" color="darkgreen" transform="left-10 up-10"/>
+                    <FontAwesomeIcon icon='atom' size="1x" color="darkgreen" transform="right-10 up-10"/>
+                    <FontAwesomeIcon icon='flask' size="1x" color="darkgreen" transform="left-10 down-10"/>
+                    <FontAwesomeIcon icon='magnet' size="1x" color="darkgreen" transform="right-10 down-10"/> </>);
+        default: return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="2x" color="gray"/>
       }
     }
     else { return ''}  
   }
 }
-    
-const CourseListHeaders = () =>
-  <thead>
-    <tr>
-      <th width="4%"></th>
-      <th width="7%">Name</th>
-      <th width="10%">Code</th>
-      <th width="5%">Shift</th>
-      <th width="5%">Open</th>
-      <th width="2%">Students</th>
-      <th width="2%">Lessons</th>
-      <th width="3%">Attendance</th>
-    </tr>
-  </thead>
   
 const CourseList = props => {
   return props.courses.map( (course, index) => {
     const courseOnClickFunction = () => props.courseOnClickFunction(course.courseId);
-    const getIconFunction = (courseCode, courseId) => props.getIconFunction(courseCode, courseId);
+    const getIconFunction = (courseFullCode, courseId) => props.getIconFunction(courseFullCode, courseId);
     const booleanFormatterFunction = (boolean) => props.booleanFormatterFunction(boolean); 
     return (
       <CourseListItem
@@ -174,13 +147,35 @@ const CourseList = props => {
     )
   });
 }
-    
+
+const CourseListHeaders = () =>
+  <thead>
+    <tr>
+      <th width="1%"></th>
+      <th width="2%">Code</th>
+      <th width="3%">Subject</th>
+      <th width="3%">Season</th>
+      <th width="3%">Shift</th>
+      <th width="2%">Open</th>
+      <th width="1%">Students</th>
+      <th width="1%">Lessons</th>
+      <th width="1%">Attendance</th>
+    </tr>
+  </thead>
+
 const CourseListItem = props => {
   return (
     <tr onClick={props.courseOnClickFunction} id={props.course.courseId} style={props.style}> 
-      <td style={{textAlign: 'center'}}> {props.getIconFunction(props.course.courseCode, props.course.courseId) || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.courseName || ''}</td>
+      <td style={{textAlign: 'center'}}> 
+        <span className="fa-layers fa-fw" style={{marginLeft: '-50px', marginRight: '-50px'}}>
+          { props.getIconFunction(props.course.courseFullCode, props.course.courseId) || '' }
+        </span>
+      </td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.courseCode || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.subject.acronym || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>
+        {props.course.courseSeason || ''}{' '}{props.course.courseYear || ''}
+      </td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.courseShift || ''}</td>
       <td style={{whiteSpace: 'nowrap'}}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.students.length || ''}</td>

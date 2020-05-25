@@ -8,15 +8,18 @@ import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
-import Log from './Log';
+//import Log from './Log';
 
 class CourseEdit extends Component {
 
   emptyItem = {
-    courseName: '',
     courseCode: '',
+    courseFullCode: '',
     courseShift: '',
     courseIsOpen: true,
+    courseYear: '',
+    courseSeason: '',
+    courseLocation: '',
     subject: {
       code: '',
       name: ''
@@ -84,7 +87,6 @@ class CourseEdit extends Component {
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
     return <div>
       <AppNavbar>
-
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
             {title}
@@ -96,12 +98,24 @@ class CourseEdit extends Component {
             </FormGroup>
             <FormGroup row>
               <Col sm={3}>
-                <Input type="text" name="courseCode" id="code" value={item.courseCode || ''} disabled/>
+                <Input type="text" name="courseFullCode" id="fullCode" value={item.courseFullCode || ''} disabled/>
               </Col>
             </FormGroup>
+            <FormGroup row>
+              <Input type="text" min="1" maxlength="5" name="courseCode" id="code" value={item.courseCode || ''} required
+                    onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
+            </FormGroup>
             <FormGroup>
-              <Input type="text" name="courseName" id="name" value={item.courseName || ''} required
-                    onChange={this.handleChange} autoComplete="Course Name" placeholder="Name"/>
+              <Input type="select" name="courseSeason" id="season" value={item.courseSeason || ''} required
+                    onChange={this.handleChange}>
+                      <option>1C</option>
+                      <option>2C</option>
+              </Input>
+              <UncontrolledTooltip placement="auto" target="season"> Select Season </UncontrolledTooltip>
+            </FormGroup>
+            <FormGroup>
+              <Input type="number" min="2000" max="2100" name="courseYear" id="year" value={item.courseYear || ''} required
+                    onChange={this.handleChange} autoComplete="Course Year" placeholder="Year"/>
             </FormGroup>
             <FormGroup>
               <Input type="select" name="subject.code" id="subject" value={item.subject.name || ''}
@@ -111,8 +125,12 @@ class CourseEdit extends Component {
               <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
             </FormGroup>
             <FormGroup>
-              <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''}
-                onChange={this.handleChange} label="Shift" required>
+              <Input type="text" name="courseLocation" id="location" value={item.courseLocation || ''} required
+                    onChange={this.handleChange} autoComplete="Course Location" placeholder="Location"/>
+            </FormGroup>
+            <FormGroup>
+              <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''} required
+                onChange={this.handleChange}>
                   <option>Mañana</option>
                   <option>Tarde</option>
                   <option>Noche</option>
