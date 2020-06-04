@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Table, Row, Col } from 'reactstrap';
+import { Container, Table } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as StudentAPI from './services/StudentAPI';
-import SideBar from './SideBar';
 
 class FullStudentList extends Component {
   render() {

@@ -97,7 +97,7 @@ class UserEdit extends Component {
             </ButtonGroup>
           </FormGroup>
             <FormGroup>
-              <Input type="number" name="personalData.dni" id="dni" value={item.personalData.dni || ''}
+              <Input type="number"  min="0" max="2147483647" name="personalData.dni" id="dni" value={item.personalData.dni || ''}
                     onChange={this.handleChange} placeholder="DNI" required/>
             </FormGroup>
             <FormGroup>

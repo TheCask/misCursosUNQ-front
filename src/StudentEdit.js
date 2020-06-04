@@ -95,8 +95,9 @@ class StudentEdit extends Component {
                     onChange={this.handleChange} placeholder="e Mail"/>
           </FormGroup>
           <FormGroup>
-              <Input type="number" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
-                    onChange={this.handleChange} placeholder="Cell Phone"/>
+              <Input type="tel" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''} 
+                      title="Separar característica y número con un guión. Ej. 0229-4787658"
+                      onChange={this.handleChange} placeholder="Cell Phone" pattern="[0-9]*-[0-9]*"/>
           </FormGroup>
 
           </Form>

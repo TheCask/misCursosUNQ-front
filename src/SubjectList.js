@@ -19,6 +19,7 @@ class FullSubjectList extends Component {
           "Please change subject from courses before trying to delete."
         ]}
         addButtonTo = {`/subject/new`}
+        deleteButtonTo = {'/subjects'}
         />
       </AppNavbar>
     )
@@ -32,6 +33,7 @@ export class SubjectListContainer extends Component {
     this.title = this.props.subjectListTitle;
     this.state = {subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}; 
     this.addButtonTo = props.addButtonTo;
+    this.deleteButtonTo = props.deleteButtonTo;
     this.contextParams = props;
   }
 
@@ -70,6 +72,7 @@ export class SubjectListContainer extends Component {
             deleteEntityFunction={deleteSubjectFunction}
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
+            deleteButtonTo = {this.deleteButtonTo}
           />
           <h3>{this.title}</h3>
           <Table hover className="mt-4">

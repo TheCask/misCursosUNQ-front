@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom';
+import { Container, Row, Col, Navbar, NavbarBrand, NavLink } from 'reactstrap';
 import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
 import SideBar from './SideBar';
