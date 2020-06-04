@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import { UserListContainer } from './UserList'
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as SubjectAPI from './services/SubjectAPI';
@@ -36,7 +37,6 @@ class SubjectEdit extends Component {
     item[name] = value;
     this.setState({item});
   }
-
 
   async handleSubmit(event) {
     event.preventDefault();
@@ -84,9 +84,27 @@ class SubjectEdit extends Component {
                 onChange={this.handleChange} placeholder="URL to Subject's Program"/>
             </FormGroup>
           </Form>
+          {this.renderUsers()}
         </Container>
       </AppNavbar>
     </div>
+  }
+
+  renderUsers() {
+    const subjectId = this.props.match.params.id;
+    if (subjectId !== 'new') {
+      return (
+        <UserListContainer 
+          userListTitle = {'Subject Coordinators'}
+          onGetAll = { (handleSuccess, handleError) => SubjectAPI.getSubjectCoordinatorsAsync(subjectId, handleSuccess, handleError) }
+          onDelete = { (userId, handleSuccess, handleError) => SubjectAPI.deleteSubjectCoordinatorAsync(userId, subjectId, handleSuccess, handleError)}
+          onDeleteConsequenceList = {[
+            "The user will no longer be coordinator of this subject."
+          ]}
+          addButtonTo = {`/subject/${subjectId}/addCoordinators`}
+        />
+      );
+    }
   }
 }
 

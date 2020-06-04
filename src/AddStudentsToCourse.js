@@ -54,10 +54,9 @@ class AddStudentsToCourse extends Component {
     item['students'] = students
     item['lessons'] = []
     this.setState({item: item})
-    CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
+    CourseAPI.postCourseAsync(item, () => this.props.history.push(`/course/${item.courseId}`), null); // TODO: replace null by error showing code
   }
 
-  // TODO disable togle inscripted
   toggleInscription(stFileNumber) {
     let courseStudents = this.state.item.students
     if (!courseStudents.find(st => st.fileNumber === stFileNumber)) {
@@ -97,7 +96,7 @@ class AddStudentsToCourse extends Component {
                   <FontAwesomeIcon icon="save" size="2x"/>
                 </Button>
                 <DetailButton entityTypeCapName = {'Student'} targetId = {targetId} to = {`/student/${targetId}/detail`}/>
-                <Button  size="sm" color="secondary" tag={Link} to="/courses" id="backToCourse">
+                <Button  size="sm" color="secondary" tag={Link} to={`/course/${this.state.item.courseId}`} id="backToCourse">
                   <UncontrolledTooltip placement="auto" target="backToCourse">
                     Discard and Back to Course
                   </UncontrolledTooltip>
@@ -114,7 +113,7 @@ class AddStudentsToCourse extends Component {
                   allStudents = {this.state.allStudents}
                   studentOnClickFunction = {(fileNumber) => {this.toggleInscription(fileNumber)}}
                   styleFunction = {(fileNumber) => this.setRowColor(fileNumber)}
-                  getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
+                  setIconFunction = {(fileNumber) => this.setRowIcon(fileNumber)}
                 />
               </tbody>
             </Table>
@@ -124,7 +123,7 @@ class AddStudentsToCourse extends Component {
     );
   }
 
-  getCourseIcon(fileNumber) {
+  setRowIcon(fileNumber) {
     if (this.state.courseStudentsIds.find(st => st.fileNumber === fileNumber)) {
       return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/>
     }
@@ -155,14 +154,14 @@ const StudentListHeaders = () =>
 const StudentList = props => {
   return props.allStudents.map( (student, index) => {
     const studentOnClickFunction = () => props.studentOnClickFunction(student.fileNumber);
-    const getIconFunction = (fileNumber) => props.getIconFunction(fileNumber);
+    const setIconFunction = (fileNumber) => props.setIconFunction(fileNumber);
     return (
       <StudentListItem
         key = {index}
         student = {student} 
         studentOnClickFunction = {studentOnClickFunction} 
         style = {props.styleFunction(student.fileNumber)}
-        getIconFunction = {getIconFunction}
+        setIconFunction = {setIconFunction}
       />
     )
   });
@@ -176,7 +175,7 @@ const StudentListItem = props =>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
-    <td style={{textAlign: 'center'}}> {props.getIconFunction(props.student.fileNumber)}</td>
+    <td style={{textAlign: 'center'}}> {props.setIconFunction(props.student.fileNumber)}</td>
   </tr>;
 
 export default AddStudentsToCourse;

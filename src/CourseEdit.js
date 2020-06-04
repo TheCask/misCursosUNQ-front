@@ -102,7 +102,7 @@ class CourseEdit extends Component {
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Input type="text" min="1" maxlength="5" name="courseCode" id="code" value={item.courseCode || ''} required
+              <Input type="text" min="1" maxLength="5" name="courseCode" id="code" value={item.courseCode || ''} required
                     onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
             </FormGroup>
             <FormGroup>

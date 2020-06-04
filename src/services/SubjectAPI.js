@@ -22,3 +22,23 @@ export async function postSubjectAsync(subjectJson, handleSuccess, handleError){
     const response = await fetch('/api/subject', BackAPI.postInit(subjectJson));
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
 }
+
+// SUBJECT COORDINATOR
+
+// getAllBySubjectId
+export async function getSubjectCoordinatorsAsync(subjectCode, handleSuccess, handleError){
+    const response = await fetch(`/api/subject/${subjectCode}/coordinators/`);
+    BackAPI.handleGet(response, handleSuccess, handleError)
+}
+
+// delete
+export async function deleteSubjectCoordinatorAsync(userId, subjectCode, handleSuccess, handleError){
+    const response = await fetch(`/api/subject/${subjectCode}/${userId}/`, BackAPI.deleteInit())
+    BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
+}
+
+// updateCoordinators
+export async function updateSubjectCoordinatorsAsync(subjectCode, coordinatorsListJson, handleSuccess, handleError){
+    const response = await fetch(`/api/subject/${subjectCode}/coordinators/`, BackAPI.postInit(coordinatorsListJson));
+    BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
+}

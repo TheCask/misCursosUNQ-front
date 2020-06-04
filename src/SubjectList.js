@@ -19,7 +19,7 @@ class FullSubjectList extends Component {
           "Please change subject from courses before trying to delete."
         ]}
         addButtonTo = {`/subject/new`}
-        deleteButtonTo = {'./'}
+        deleteButtonTo = {'/subjects'}
         />
       </AppNavbar>
     )
