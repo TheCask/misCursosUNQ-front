@@ -48,7 +48,8 @@ class AddCoordinatorsToSubject extends Component {
     let coordinators = this.state.subjectCoordinatorsIds
     item['coordinators'] = coordinators
     this.setState({item: item})
-    SubjectAPI.updateSubjectCoordinatorsAsync(item.subjectCode, item.coordinators, () => this.props.history.push('/subjects'), null); // TODO: replace null by error showing code
+    SubjectAPI.updateSubjectCoordinatorsAsync(item.subjectCode, item.coordinators, 
+      () => this.props.history.push(`/subject/${item.subjectCode}`), null); // TODO: replace null by error showing code
   }
 
   toggleAssignment(usUserId) {
@@ -94,7 +95,7 @@ class AddCoordinatorsToSubject extends Component {
                   <FontAwesomeIcon icon="save" size="2x"/>
                 </Button>
                 <DetailButton entityTypeCapName = {'Subject'} targetId = {targetId} to = {`/subject/${targetId}/detail`}/>
-                <Button  size="sm" color="secondary" tag={Link} to="/subjects" id="backToSubject">
+                <Button  size="sm" color="secondary" tag={Link} to={`/subject/${this.state.item.subjectCode}`} id="backToSubject">
                   <UncontrolledTooltip placement="auto" target="backToSubject">
                     Discard and Back to Subject
                   </UncontrolledTooltip>

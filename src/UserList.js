@@ -57,7 +57,7 @@ export class UserListContainer extends Component {
     const targetUser = this.state.users.find(user => user.userId === userId)
     if (targetUser) {
       return (targetUser.taughtCourses.length > 0 || 
-        targetUser.taughtCourses.length > 0) 
+        targetUser.coordinatedSubjects.length > 0) 
     }
     return false
   }
@@ -81,7 +81,7 @@ export class UserListContainer extends Component {
             deleteEntityFunction = {deleteUserFunction}
             disallowDelete = {this.disallowsDelete(this.state.targetId)}
             consequenceList = {this.contextParams.onDeleteConsequenceList}
-            addButtonTo = {this.addButtonTo} 
+            addButtonTo = {this.addButtonTo}
           />
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 

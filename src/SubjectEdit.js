@@ -50,7 +50,6 @@ class SubjectEdit extends Component {
     const title = <h2 className="float-left">{!newSubject ? 'Edit Subject' : 'Add Subject'}</h2>;
     return <div>
       <AppNavbar>
-
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
             {title}
