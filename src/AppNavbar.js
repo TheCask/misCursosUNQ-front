@@ -35,7 +35,7 @@ export default class AppNavbar extends Component {
         </Navbar>
         <Container fluid style={{margin: '0px', height: '100vh'}}>
           <Row style={{height: 'inherit'}}>
-            <Col md='auto' style={{ padding: '0px', height: 'inherit'}}>
+            <Col md='auto' style={{ padding: '0px', height: 'inherit', boxShadow: "inset 7px 0px 11px 1px rgba(0,0,0,0.45)"}}>
               <SideBar />
             </Col>
             <Col className='content'>
