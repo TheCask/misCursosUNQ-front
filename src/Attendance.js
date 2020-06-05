@@ -87,7 +87,7 @@ class Attendance extends Component {
                 </Button>
                 <Button size="sm"  color="secondary" tag={Link} to="/courses" id="backToCourse">
                   <UncontrolledTooltip placement="auto" target="backToCourse">
-                    Discard and Back to Course
+                    Discard and Back to Courses
                   </UncontrolledTooltip>
                   <FontAwesomeIcon icon='backward' size="2x"/>
                 </Button>

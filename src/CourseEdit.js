@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, Col } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { StudentListContainer } from './StudentList'
+import { UserListContainer } from './UserList'
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
@@ -149,6 +150,7 @@ class CourseEdit extends Component {
             </ButtonGroup>
           </Form>
           {this.renderStudents()}
+          {this.renderTeachers()}
         </Container>
       </AppNavbar>
     </div>
@@ -167,6 +169,24 @@ class CourseEdit extends Component {
             "Student's attendance and grades info will be removed."
           ]}
           addButtonTo = {`/course/${courseId}/addStudents`}
+        />
+      );
+    }
+  }
+
+  renderTeachers() {
+    const courseId = this.props.match.params.id;
+    if (courseId !== 'new') {
+      return (
+        <UserListContainer 
+          userListTitle = {'Course Teachers'}
+          onGetAll = { (handleSuccess, handleError) => CourseAPI.getCourseTeachersAsync(courseId, handleSuccess, handleError) }
+          onDelete = { (userId, handleSuccess, handleError) => CourseAPI.deleteCourseTeacherAsync(userId, courseId, handleSuccess, handleError)}
+          onDeleteConsequenceList = {[
+            "The teacher will no longer be part of this course."
+          ]}
+          addButtonTo = {`/course/${courseId}/addTeachers`}
+          entityType = 'teacher'
         />
       );
     }

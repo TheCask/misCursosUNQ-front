@@ -7,7 +7,7 @@ export const BBModal = props =>
     <Modal isOpen={props.isOpen()} modalTransition={{ timeout: 1 }}
            toggle={props.toggle} size="lg" returnFocusAfterClose={false}>
         <ModalHeader>
-            <h3>{props.title}</h3>
+            {props.title}
         </ModalHeader>
         <ModalBody>
             {props.description}

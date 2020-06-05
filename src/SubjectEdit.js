@@ -56,7 +56,7 @@ class SubjectEdit extends Component {
             <FormGroup className="float-right">
               <ButtonGroup>
                 <SaveButton
-                  entityId = {item.fileNumber}
+                  entityId = {item.code}
                   entityTypeCapName = "Subject"
                 />
                 {' '}
@@ -101,6 +101,7 @@ class SubjectEdit extends Component {
             "The user will no longer be coordinator of this subject."
           ]}
           addButtonTo = {`/subject/${subjectId}/addCoordinators`}
+          entityType = 'coordinator'
         />
       );
     }

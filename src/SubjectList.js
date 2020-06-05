@@ -53,6 +53,14 @@ export class SubjectListContainer extends Component {
     );
   }
 
+  disallowsDelete(subjectCode) {
+    const targetSubject = this.state.subjects.find(subject => subject.code === subjectCode)
+    if (targetSubject) {
+      return false
+    }
+    return false
+  }
+
   setSelectedRowColor(rowId) {
     if (rowId === this.state.targetId) {
       return {backgroundColor:'#F0F8FF'}
@@ -70,6 +78,7 @@ export class SubjectListContainer extends Component {
             entityType = 'subject'
             targetId={this.state.targetId} 
             deleteEntityFunction={deleteSubjectFunction}
+            disallowDelete = {this.disallowsDelete(this.state.targetId)}
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
             deleteButtonTo = {this.deleteButtonTo}

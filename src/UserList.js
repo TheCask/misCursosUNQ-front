@@ -20,6 +20,8 @@ class FullUserList extends Component {
             "Please remove courses or subjects from user before trying to delete."
           ]}
           addButtonTo = {`/user/new`}
+          deleteButtonTo = {'/users'}
+          entityType = 'user'
         />
       </AppNavbar>
     </div>
@@ -34,6 +36,8 @@ export class UserListContainer extends Component {
     this.title = this.props.userListTitle;
     this.state = {users: [], isLoading: true, targetId: ''};
     this.addButtonTo = props.addButtonTo;
+    this.deleteButtonTo = props.deleteButtonTo;
+    this.entityType = props.entityType;
     this.contextParams = props;
   }
 
@@ -76,12 +80,13 @@ export class UserListContainer extends Component {
       <div>
         <Container fluid>     
           <ButtonBar 
-            entityType = 'user' 
+            entityType = {this.entityType}
             targetId = {this.state.targetId} 
             deleteEntityFunction = {deleteUserFunction}
             disallowDelete = {this.disallowsDelete(this.state.targetId)}
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
+            deleteButtonTo = {this.deleteButtonTo}
           />
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
@@ -104,12 +109,12 @@ const UserListHeaders = () =>
 <thead>
     <tr>
       <th width="3%">DNI</th>
-      <th width="7%" >First Name</th>
-      <th width="7%" >Last Name</th>
-      <th width="7%" >e-Mail</th>
-      <th width="4%" >Cell Phone</th>
-      <th width="2%" >Dedication</th>
-      <th width="1%" >Aditional Hours</th>
+      <th width="7%">First Name</th>
+      <th width="7%">Last Name</th>
+      <th width="7%">e-Mail</th>
+      <th width="4%">Cell Phone</th>
+      <th width="2%">Dedication</th>
+      <th width="1%">Aditional Hours</th>
   </tr>
 </thead>;
 
