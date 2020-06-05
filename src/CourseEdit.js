@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, Col } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, Col, Row, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { StudentListContainer } from './StudentList'
 import { UserListContainer } from './UserList'
@@ -89,65 +89,94 @@ class CourseEdit extends Component {
     return <div>
       <AppNavbar>
         <Container fluid>
-          <Form onSubmit={this.handleSubmit}>
-            {title}
-            <FormGroup className="float-right">
-            <ButtonGroup>
+          <Row xs="2">
+            <Col>{title}</Col>
+            <Col>
+            <ButtonGroup className="float-right">
               <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" />
               <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
             </ButtonGroup>
-            </FormGroup>
-            <FormGroup row>
-              <Col sm={3}>
+            </Col>
+          </Row>
+          <Form onSubmit={this.handleSubmit}>  
+          <Row form>
+            <Col xs="2">
+              <FormGroup>
+                <Label for="fullCode">Full Code</Label>
                 <Input type="text" name="courseFullCode" id="fullCode" value={item.courseFullCode || ''} disabled/>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Input type="text" min="1" maxLength="5" name="courseCode" id="code" value={item.courseCode || ''} required
-                    onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
-            </FormGroup>
+              </FormGroup>
+            </Col>
+            <Col xs="1">
+              <FormGroup>
+                <Label for="code">Code</Label>
+                <Input type="text" min="1" maxLength="5" name="courseCode" id="code" value={item.courseCode || ''} required
+                  onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
+              </FormGroup>
+            </Col>
+            <Col xs="5">
+              <FormGroup>
+                <Label for="subject">Subject</Label>
+                <Input type="select" name="subject.code" id="subject" value={item.subject.name || ''}
+                      onChange={this.handleChange} label="Subject Code" required>
+                  {this.subjectOptions()}
+                </Input>
+                <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs="2">
+              <FormGroup>
+                <Label for="season">Season</Label>
+                <Input type="select" name="courseSeason" id="season" value={item.courseSeason || ''} required
+                      onChange={this.handleChange}>
+                        <option>1C</option>
+                        <option>2C</option>
+                </Input>
+                <UncontrolledTooltip placement="auto" target="season"> Select Season </UncontrolledTooltip>
+              </FormGroup>
+            </Col>
+            <Col xs="2">
             <FormGroup>
-              <Input type="select" name="courseSeason" id="season" value={item.courseSeason || ''} required
-                    onChange={this.handleChange}>
-                      <option>1C</option>
-                      <option>2C</option>
-              </Input>
-              <UncontrolledTooltip placement="auto" target="season"> Select Season </UncontrolledTooltip>
-            </FormGroup>
-            <FormGroup>
+              <Label for="year">Year</Label>
               <Input type="number" min="2000" max="2100" name="courseYear" id="year" value={item.courseYear || ''} required
                     onChange={this.handleChange} autoComplete="Course Year" placeholder="Year"/>
             </FormGroup>
-            <FormGroup>
-              <Input type="select" name="subject.code" id="subject" value={item.subject.name || ''}
-                    onChange={this.handleChange} label="Subject Code" required>
-                {this.subjectOptions()}
-              </Input>
-              <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
-            </FormGroup>
-            <FormGroup>
-              <Input type="text" name="courseLocation" id="location" value={item.courseLocation || ''} required
-                    onChange={this.handleChange} autoComplete="Course Location" placeholder="Location"/>
-            </FormGroup>
-            <FormGroup>
-              <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''} required
-                onChange={this.handleChange}>
-                  <option>Mañana</option>
-                  <option>Tarde</option>
-                  <option>Noche</option>
-              </Input>
-              <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
-            </FormGroup>
-            <ButtonGroup size="sm">
-              <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
-                <FontAwesomeIcon icon='lock-open' size="1x" id="lock"/>
-              </Button>
-              <UncontrolledTooltip placement="auto" target="isOpen"> Unlock Course </UncontrolledTooltip>
-              <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
-                <FontAwesomeIcon icon='lock' size="1x" id="unlock"/>
-              </Button>
-              <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
-            </ButtonGroup>
+            </Col>
+            <Col xs="2">
+              <FormGroup>
+                <Label for="shift">Shift</Label>
+                <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''} required
+                  onChange={this.handleChange}>
+                    <option>Mañana</option>
+                    <option>Tarde</option>
+                    <option>Noche</option>
+                </Input>
+                <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
+              </FormGroup>
+            </Col>
+            <Col xs="2">
+              <FormGroup>
+                <Label for="location">Location</Label>
+                <Input type="text" name="courseLocation" id="location" value={item.courseLocation || ''} required
+                      onChange={this.handleChange} autoComplete="Course Location" placeholder="Location"/>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs="1">
+              <ButtonGroup size="sm">
+                <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
+                  <FontAwesomeIcon icon='lock-open' size="2x" id="lock"/>
+                </Button>
+                <UncontrolledTooltip placement="auto" target="isOpen"> Unlock Course </UncontrolledTooltip>
+                <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
+                  <FontAwesomeIcon icon='lock' size="2x" id="unlock"/>
+                </Button>
+                <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
+              </ButtonGroup>
+            </Col>
+          </Row>
           </Form>
           {this.renderStudents()}
           {this.renderTeachers()}
