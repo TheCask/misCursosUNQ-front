@@ -50,14 +50,13 @@ class SubjectEdit extends Component {
     const title = <h2 className="float-left">{!newSubject ? 'Edit Subject' : 'Add Subject'}</h2>;
     return <div>
       <AppNavbar>
-
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
             {title}
             <FormGroup className="float-right">
               <ButtonGroup>
                 <SaveButton
-                  entityId = {item.fileNumber}
+                  entityId = {item.code}
                   entityTypeCapName = "Subject"
                 />
                 {' '}
@@ -102,6 +101,7 @@ class SubjectEdit extends Component {
             "The user will no longer be coordinator of this subject."
           ]}
           addButtonTo = {`/subject/${subjectId}/addCoordinators`}
+          entityType = 'coordinator'
         />
       );
     }

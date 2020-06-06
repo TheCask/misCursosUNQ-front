@@ -5,6 +5,7 @@ import './App.css';
 import FullCourseList from './CourseList';
 import CourseEdit from './CourseEdit';
 import AddStudentsToCourse from './AddStudentsToCourse';
+import AddTeachersToCourse from './AddStudentsToCourse';
 import AddCoordinatorsToSubject from './AddCoordinatorsToSubject'
 import Attendance from './Attendance';
 import FullStudentList from './StudentList';
@@ -30,6 +31,7 @@ class App extends Component {
           <Route path='/courses' exact={true} component={FullCourseList}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>
+          <Route path='/course/:id/addTeachers' component={AddTeachersToCourse}/>
           <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/students' exact={true} component={FullStudentList}/>
           <Route path='/student/:id' component={StudentEdit}/>

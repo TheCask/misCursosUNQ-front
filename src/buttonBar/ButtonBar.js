@@ -27,22 +27,33 @@ class ButtonBar extends Component {
     this.setState({modalTargetId: ''});
   }
 
+  routeTo(name) {
+    switch (name) {
+      case 'teacher': return 'user'
+      case 'coordinator': return 'user'
+      default: return name
+    }
+  }
+
   render() {
     const targetId = this.props.targetId;
     const entityType =  this.entityType;
+    const route = this.routeTo(entityType)
     const entityTypeCap = entityType.charAt(0).toUpperCase() + entityType.slice(1);
     return (
       <div className="float-right">
         <ButtonGroup inline="true">
-          <AddButton entityTypeCapName = {entityTypeCap} to = {this.addButtonTo} />
+          <AddButton 
+                  entityTypeCapName = {entityTypeCap} 
+                  to = {this.addButtonTo} />
           <EditButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
-                  to = {`/${entityType}/${targetId}`} />
+                  to = {`/${route}/${targetId}`} />
           <DetailButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
-                  to = {`/${entityType}/${targetId}/detail`} />
+                  to = {`/${route}/${targetId}/detail`} />
           <DeleteButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}

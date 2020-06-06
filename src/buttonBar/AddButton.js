@@ -22,6 +22,14 @@ function icon(entityTypeCapName) {
             <FontAwesomeIcon icon="chalkboard-teacher" size="1x"/>
             <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
         </span> )
+        case 'Teacher': return ( <span>
+            <FontAwesomeIcon icon="chalkboard-teacher" size="1x"/>
+            <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
+        </span> )
+        case 'Coordinator': return ( <span>
+            <FontAwesomeIcon icon="chalkboard-teacher" size="1x"/>
+            <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
+        </span> )
         case 'Student': return ( <span>
             <FontAwesomeIcon icon="user-graduate" size="1x"/>
             <FontAwesomeIcon icon="plus-circle" size="1x" transform="right-5 up-5"/>
