@@ -6,9 +6,9 @@ export default class ComponentWithErrorHandling extends Component {
    /*
     By extending this class you get some easy error handling.
 
-    You can use the easy constructor:
+    You can use the easy handler constructor:
 
-        this.buildHandler("get student details")
+        this.showError("get student details")
     
     Or create your own handler like this:
 
@@ -54,7 +54,7 @@ export default class ComponentWithErrorHandling extends Component {
     />
   }
 
-  buildHandler(whileTryingTo){
+  showError(whileTryingTo){
       return (errorCode, errorText) => {
             this.setState({
               isErrorModalOpen: true,
