@@ -4,23 +4,30 @@ import ErrorModal from './ErrorModal';
 export default class ComponentWithErrorHandling extends Component {
 
    /*
-    You can create your own handler like this:
+    By extending this class you get some easy error handling.
 
-   handleGetStudentError = (errorCode, errorText) => {
-    this.setState({
-      isErrorModalOpen: true,
-      lastError: {
-        title: "Ups, something went wrong...", 
-        shortDesc: "An error occurred while trying to get student details." ,
-        httpCode: "HTTP CODE: " + errorCode,
-        errorText: errorText
-      }
-    })
+    You can use the easy constructor:
 
-    Or use the easy constructor:
+        this.buildHandler("get student details")
+    
+    Or create your own handler like this:
 
-    buildHandler("get sudent details")
-  }
+        // When calling this function with the appropiate details (errorCode and errorText), an error modal will show up.
+        handleGetStudentError = (errorCode, errorText) => {
+            this.setState({
+                isErrorModalOpen: true,
+                lastError: {
+                    title: "Ups, something went wrong...", 
+                    shortDesc: "An error occurred while trying to get student details." ,
+                    httpCode: "HTTP CODE: " + errorCode,
+                    errorText: errorText
+                }
+            })
+        }
+
+    Remember to include the modal rendering in your ComponentWithErrorHandling extending class:
+
+        {this.renderErrorModal()}
    
    */ 
 
