@@ -9,9 +9,10 @@ import * as StudentAPI from './services/StudentAPI';
 class StudentEdit extends Component {
 
   emptyItem = {
-    fileNumber: '',
+    fileNumber: 0,
     personalData: {
-      dni: '',
+      // personalDataId: 0,
+      dni: 0,
       firstName: '',
       lastName: '',
       email: '',
@@ -39,7 +40,7 @@ class StudentEdit extends Component {
   handleChange(event) {
     const {name, value} = event.target;
     let item = {...this.state.item};
-    if (name === "fileNumber") { item[name] = value; }
+    if (name === 'fileNumber') { item[name] = value; }
     else { item['personalData'][name] = value }
     item['attendedLessons'] = []
     this.setState({item});
@@ -57,7 +58,6 @@ class StudentEdit extends Component {
     const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
     return <div>
       <AppNavbar>
-
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           {title}
@@ -75,11 +75,11 @@ class StudentEdit extends Component {
             </ButtonGroup>
           </FormGroup>
             <FormGroup>
-              <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''} required
+              <Input type="number" min="0" max="2147483647" name="fileNumber" id="number" value={item.fileNumber || ''} required
                     onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
           </FormGroup>
           <FormGroup>
-              <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
+              <Input type="number" min="0" max="2147483647" name="dni" id="dni" value={item.personalData.dni || ''}
                     onChange={this.handleChange} placeholder="DNI" required/>
             </FormGroup>
             <FormGroup>
@@ -99,7 +99,6 @@ class StudentEdit extends Component {
                       title="Separar característica y número con un guión. Ej. 0229-4787658"
                       onChange={this.handleChange} placeholder="Cell Phone" pattern="[0-9]*-[0-9]*"/>
           </FormGroup>
-
           </Form>
         </Container>
       </AppNavbar>

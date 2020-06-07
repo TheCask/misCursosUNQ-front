@@ -88,7 +88,7 @@ export class CourseListContainer extends Component {
                 courses = {this.state.courses}
                 courseOnClickFunction = {(courseId) =>  {this.setState({targetId: courseId})}}
                 styleFunction = {(courseId) => this.setSelectedRowColor(courseId)}
-                getIconFunction = {(courseFullCode, courseId) => this.getCourseIcon(courseFullCode, courseId)}
+                getIconFunction = {(subjectCode, courseId) => this.getCourseIcon(subjectCode, courseId)}
                 booleanFormatterFunction = {(boolean) => this.formatYESoNO(boolean)}
               />
             </tbody>
@@ -100,9 +100,9 @@ export class CourseListContainer extends Component {
 
   formatYESoNO(boolean) { return boolean===false ? 'No' : 'Yes'; }
 
-  getCourseIcon(courseFullCode, courseId) {
+  getCourseIcon(subjectCode, courseId) {
     if(courseId === this.state.targetId) {
-      switch(courseFullCode.split("-")[0]) {
+      switch(subjectCode.split("-")[0]) {
         case "80000":
           return (<> <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="left-10 up-10"/>
                     <FontAwesomeIcon icon='book-reader' size="1x" color="darkred" transform="right-10 up-10"/>
@@ -133,7 +133,7 @@ export class CourseListContainer extends Component {
 const CourseList = props => {
   return props.courses.map( (course, index) => {
     const courseOnClickFunction = () => props.courseOnClickFunction(course.courseId);
-    const getIconFunction = (courseFullCode, courseId) => props.getIconFunction(courseFullCode, courseId);
+    const getIconFunction = (subjectCode, courseId) => props.getIconFunction(subjectCode, courseId);
     const booleanFormatterFunction = (boolean) => props.booleanFormatterFunction(boolean); 
     return (
       <CourseListItem
@@ -168,7 +168,7 @@ const CourseListItem = props => {
     <tr onClick={props.courseOnClickFunction} id={props.course.courseId} style={props.style}> 
       <td style={{textAlign: 'center'}}> 
         <span className="fa-layers fa-fw" style={{marginLeft: '-50px', marginRight: '-50px'}}>
-          { props.getIconFunction(props.course.courseFullCode, props.course.courseId) || '' }
+          { props.getIconFunction(props.course.subject.code, props.course.courseId) || '' }
         </span>
       </td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.courseCode || ''}</td>

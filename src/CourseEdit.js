@@ -9,17 +9,17 @@ import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
-//import Log from './Log';
+import Log from './Log';
+
 
 class CourseEdit extends Component {
 
   emptyItem = {
     courseCode: '',
-    courseFullCode: '',
-    courseShift: '',
+    courseShift: 'Mañana',
     courseIsOpen: true,
-    courseYear: '',
-    courseSeason: '',
+    courseYear: 2020,
+    courseSeason: '1C',
     courseLocation: '',
     subject: {
       code: '',
@@ -27,7 +27,8 @@ class CourseEdit extends Component {
     },
     students: [],
     lessons: [],
-    teachers: []
+    teachers: [],
+    evaluations: []
   };
 
   constructor(props) {
@@ -80,15 +81,18 @@ class CourseEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
+    if (item.subject.name === '') { this.setDefaultSubjectName() }
     CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
   }
 
   render() {
     const {item} = this.state;
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
+    
     return <div>
       <AppNavbar>
         <Container fluid>
+        <Form onSubmit={this.handleSubmit}>
           <Row xs="2">
             <Col>{title}</Col>
             <Col>
@@ -98,26 +102,25 @@ class CourseEdit extends Component {
             </ButtonGroup>
             </Col>
           </Row>
-          <Form onSubmit={this.handleSubmit}>  
           <Row form>
-            <Col xs="2">
-              <FormGroup>
+            <Col xs="3">
+              {/* <FormGroup> */}
                 <Label for="fullCode">Full Code</Label>
                 <Input type="text" name="courseFullCode" id="fullCode" value={item.courseFullCode || ''} disabled/>
-              </FormGroup>
+              {/* </FormGroup> */}
             </Col>
             <Col xs="1">
               <FormGroup>
                 <Label for="code">Code</Label>
-                <Input type="text" min="1" maxLength="5" name="courseCode" id="code" value={item.courseCode || ''} required
+                <Input type="text" min="1" maxLength="5" name="courseCode" id="code" value={item.courseCode} required
                   onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
               </FormGroup>
             </Col>
-            <Col xs="5">
+            <Col xs="6">
               <FormGroup>
                 <Label for="subject">Subject</Label>
-                <Input type="select" name="subject.code" id="subject" value={item.subject.name || ''}
-                      onChange={this.handleChange} label="Subject Code" required>
+                <Input type="select" name="subject.code" id="subject"  value={item.subject.name || ''} required
+                      onChange={this.handleChange} label="Subject Code">
                   {this.subjectOptions()}
                 </Input>
                 <UncontrolledTooltip placement="auto" target="subject"> Select Subject </UncontrolledTooltip>
@@ -125,13 +128,13 @@ class CourseEdit extends Component {
             </Col>
           </Row>
           <Row form>
-            <Col xs="2">
+            <Col xs="1">
               <FormGroup>
                 <Label for="season">Season</Label>
-                <Input type="select" name="courseSeason" id="season" value={item.courseSeason || ''} required
+                <Input type="select" name="courseSeason" id="season" value={item.courseSeason} required
                       onChange={this.handleChange}>
-                        <option>1C</option>
-                        <option>2C</option>
+                        <option>{'1C'}</option>
+                        <option>{'2C'}</option>
                 </Input>
                 <UncontrolledTooltip placement="auto" target="season"> Select Season </UncontrolledTooltip>
               </FormGroup>
@@ -139,14 +142,14 @@ class CourseEdit extends Component {
             <Col xs="2">
             <FormGroup>
               <Label for="year">Year</Label>
-              <Input type="number" min="2000" max="2100" name="courseYear" id="year" value={item.courseYear || ''} required
+              <Input type="number" min={2000} max={2100} name="courseYear" id="year" value={item.courseYear} required
                     onChange={this.handleChange} autoComplete="Course Year" placeholder="Year"/>
             </FormGroup>
             </Col>
             <Col xs="2">
               <FormGroup>
                 <Label for="shift">Shift</Label>
-                <Input type="select" name="courseShift" id="shift" value={item.courseShift || ''} required
+                <Input type="select" name="courseShift" id="shift" value={item.courseShift} required
                   onChange={this.handleChange}>
                     <option>Mañana</option>
                     <option>Tarde</option>
@@ -158,7 +161,7 @@ class CourseEdit extends Component {
             <Col xs="2">
               <FormGroup>
                 <Label for="location">Location</Label>
-                <Input type="text" name="courseLocation" id="location" value={item.courseLocation || ''} required
+                <Input type="text" name="courseLocation" id="location" value={item.courseLocation} required
                       onChange={this.handleChange} autoComplete="Course Location" placeholder="Location"/>
               </FormGroup>
             </Col>
@@ -177,7 +180,7 @@ class CourseEdit extends Component {
               </ButtonGroup>
             </Col>
           </Row>
-          </Form>
+        </Form>
           {this.renderStudents()}
           {this.renderTeachers()}
         </Container>
@@ -233,6 +236,13 @@ class CourseEdit extends Component {
       return (<option key={sj.code}>{sj.name}</option>) 
     })
     )
+  }
+
+  setDefaultSubjectName() {
+    let {item, subjectList} = {...this.state };
+    item['subject']['name'] = subjectList[0].name
+    item['subject']['code'] = subjectList[0].code
+    this.setState({item});
   }
 }
 

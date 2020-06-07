@@ -9,16 +9,14 @@ import * as UserAPI from './services/UserAPI';
 class UserEdit extends Component {
 
   emptyItem = {
-      userId: '',
       personalData: {
-          dni: '',
+          dni: null,
           firstName: '',
           lastName: '',
           email: '',
           cellPhone: '' 
       },
       jobDetail: {
-          jobDetailId: '',
           cuitNumber: '',
           category: '',
           grade: '',
@@ -113,8 +111,9 @@ class UserEdit extends Component {
                     onChange={this.handleChange} placeholder="e Mail" required/>
             </FormGroup>
             <FormGroup>
-              <Input type="number" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
-                    onChange={this.handleChange} placeholder="Cell Phone"/>
+              <Input type="tel" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
+                    title="Separar característica y número con un guión. Ej. 0229-4787658"
+                    onChange={this.handleChange} placeholder="Cell Phone" pattern="[0-9]*-[0-9]*"/>
             </FormGroup>
             <FormGroup>
               <Input type="number" name="jobDetail.cuitNumber" id="cuitNumber" value={item.jobDetail.cuitNumber || ''}
