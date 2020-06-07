@@ -1,5 +1,5 @@
 import React,{ useState, Component } from 'react';
-import ErrorHandler from './ErrorHandler';
+import ErrorBoundary from './errorHandling/ErrorBoundary';
 
 export default class GrandParent extends Component {
 
@@ -9,9 +9,9 @@ export default class GrandParent extends Component {
       }
     // We pass a callback to Child
     render (){ 
-    return <ErrorHandler>
+    return <ErrorBoundary>
         <Parent />
-    </ErrorHandler>   
+    </ErrorBoundary>   
     };
 }
 

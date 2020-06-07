@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class ErrorHandler extends Component {
+export default class ErrorBoundary extends Component {
 
   constructor(props){
     super(props);

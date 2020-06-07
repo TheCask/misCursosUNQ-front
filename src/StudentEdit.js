@@ -5,7 +5,7 @@ import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as StudentAPI from './services/StudentAPI';
-import ComponentWithErrorHandling from './ComponentWithErrorHandling'
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
 class StudentEdit extends ComponentWithErrorHandling {
 

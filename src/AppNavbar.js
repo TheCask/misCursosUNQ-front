@@ -3,8 +3,7 @@ import { Container, Row, Col, Navbar, NavbarBrand, NavLink } from 'reactstrap';
 import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
 import SideBar from './SideBar';
-import ErrorModal from './ErrorModal';
-import ErrorHandler from './ErrorHandler';
+import ErrorBoundary from './errorHandling/ErrorBoundary';
 
 export default class AppNavbar extends Component {
   constructor(props) {
@@ -44,9 +43,9 @@ export default class AppNavbar extends Component {
               <SideBar />
             </Col>
             <Col className='content'>
-              <ErrorHandler>
+              <ErrorBoundary>
                 {this.props.children}
-              </ErrorHandler>
+              </ErrorBoundary>
             </Col>
           </Row>
         </Container>
