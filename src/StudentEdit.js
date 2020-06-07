@@ -34,7 +34,7 @@ class StudentEdit extends ComponentWithErrorHandling {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      StudentAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), this.buildHandler("get student details")) // TODO: replace null by error showing code
+      StudentAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), this.showError("get student details")) // TODO: replace null by error showing code
     }
   }
 
@@ -50,7 +50,7 @@ class StudentEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.buildHandler("save student")); // TODO: replace null by error showing code
+    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.showError("save student")); // TODO: replace null by error showing code
   }
 
   render() {
