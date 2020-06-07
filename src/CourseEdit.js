@@ -10,9 +10,11 @@ import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
 import Log from './Log';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
 
-class CourseEdit extends Component {
+
+class CourseEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
     courseCode: '',
@@ -33,10 +35,10 @@ class CourseEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {...this.state, ...{
       item: this.emptyItem,
       subjectList: [],
-    };
+    }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleIsOpen = this.toggleIsOpen.bind(this);
@@ -44,9 +46,9 @@ class CourseEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      CourseAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), null) // TODO: replace null by error showing code
+      CourseAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), this.showError("get course by ID")) 
     }
-    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json}), null); // TODO: replace null by error showing code
+    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json}), this.showError("get subjects"));
   }
 
   handleChange(event) {
@@ -82,7 +84,7 @@ class CourseEdit extends Component {
     event.preventDefault();
     const {item} = this.state;
     if (item.subject.name === '') { this.setDefaultSubjectName() }
-    CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
+    CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), this.showError("save course"));
   }
 
   render() {

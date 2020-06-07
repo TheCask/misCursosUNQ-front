@@ -6,6 +6,8 @@ import AppSpinner from './AppSpinner'
 import AppNavbar from './AppNavbar'
 import ButtonBar from './buttonBar/ButtonBar';
 import * as CourseAPI from './services/CourseAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+
 
 class FullCourseList extends Component {
   render() {

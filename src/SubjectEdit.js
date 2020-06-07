@@ -6,8 +6,10 @@ import { UserListContainer } from './UserList'
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as SubjectAPI from './services/SubjectAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-class SubjectEdit extends Component {
+
+class SubjectEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
     code: '',
@@ -18,16 +20,16 @@ class SubjectEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {...this.state, ...{
       item: this.emptyItem,
-    };
+    }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      SubjectAPI.getSubjectByIdAsync(this.props.match.params.id, subject => this.setState({item: subject}), null) // TODO: replace null by error showing code
+      SubjectAPI.getSubjectByIdAsync(this.props.match.params.id, subject => this.setState({item: subject}), this.showError("get subject"));
     }
   }
 
@@ -41,15 +43,16 @@ class SubjectEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    SubjectAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), null); // TODO: replace null by error showing code
+    SubjectAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), this.showError("save subject"));
   }
 
   render() {
     const {item} = this.state;
     let newSubject = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newSubject ? 'Edit Subject' : 'Add Subject'}</h2>;
-    return <div>
+    return (
       <AppNavbar>
+        {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
             {title}
@@ -86,8 +89,7 @@ class SubjectEdit extends Component {
           {this.renderUsers()}
         </Container>
       </AppNavbar>
-    </div>
-  }
+    )};
 
   renderUsers() {
     const subjectId = this.props.match.params.id;

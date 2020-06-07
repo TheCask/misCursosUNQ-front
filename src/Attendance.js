@@ -5,10 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
 import Log from './Log';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import * as CourseAPI from './services/CourseAPI';
 import * as LessonAPI from './services/LessonAPI';
 
-class Attendance extends Component {
+class Attendance extends ComponentWithErrorHandling {
 
   emptyItem = {
     course: {
@@ -19,13 +20,14 @@ class Attendance extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {...this.state, ...{
       attendantStudentsIds: [], 
       students: [], 
       lessons: [], 
       item: this.emptyItem,
       isLoading: true,
-      currentStudentId: ''};
+      currentStudentId: ''
+    }};
     this.toggleAttendance = this.toggleAttendance.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -36,8 +38,8 @@ class Attendance extends Component {
     CourseAPI.getCourseStudentsAsync(courseId, json => { 
       this.setState({students: json}) 
       this.collectStudentsIds(json)}, 
-      null); // TODO: replace null by error showing code
-    CourseAPI.getCourseLessonsAsync(courseId, json => this.setState({lessons: json, isLoading:false }), null) // TODO: replace null by error showing code
+      this.showError("get course students")); 
+    CourseAPI.getCourseLessonsAsync(courseId, json => this.setState({lessons: json, isLoading:false }), this.showError("get course lessons"))
   }
 
   async handleSubmit(event) {
@@ -46,7 +48,7 @@ class Attendance extends Component {
     let students = this.state.attendantStudentsIds
     item['attendantStudents'] = students
     this.setState({item: item})
-    LessonAPI.postLessonAsync(item, () => this.props.history.push('/courses'), null); // TODO: replace null by error showing code
+    LessonAPI.postLessonAsync(item, () => this.props.history.push('/courses'), this.showError("save lesson")); 
   }
 
   toggleAttendance(stFileNumber) {
@@ -74,8 +76,8 @@ class Attendance extends Component {
     const {isLoading} = this.state;
     if (isLoading) { return <AppSpinner/> }
     return (
-      <div>
         <AppNavbar>
+          {this.renderErrorModal()}
           <Container fluid>
             <Form onSubmit={this.handleSubmit}>
               <ButtonGroup className="float-right" inline="true">
@@ -107,7 +109,6 @@ class Attendance extends Component {
             </Table>
           </Container>
         </AppNavbar>
-      </div>
     );
   }
 

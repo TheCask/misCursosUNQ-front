@@ -5,8 +5,10 @@ import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as UserAPI from './services/UserAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-class UserEdit extends Component {
+
+class UserEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
       personalData: {
@@ -34,16 +36,16 @@ class UserEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {...this.state, ...{
       item: this.emptyItem,
-    };
+    }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      UserAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), null) // TODO: replace null by error showing code
+      UserAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), this.showError("get user info"));
     }
   }
 
@@ -69,15 +71,16 @@ class UserEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    UserAPI.postUserAsync(item, () => this.props.history.push('/users'), null); // TODO: replace null by error showing code
+    UserAPI.postUserAsync(item, () => this.props.history.push('/users'), this.showError("save user"));
   }
 
   render() {
     const {item} = this.state;
     let newUser = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newUser ? 'Edit User' : 'Add User'}</h2>;
-    return <div>
+    return (
       <AppNavbar>
+        {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           {title}
@@ -150,8 +153,7 @@ class UserEdit extends Component {
           </Form>
         </Container>
       </AppNavbar>
-    </div>
-  }
+  )}
 }
 
 export default withRouter(UserEdit);

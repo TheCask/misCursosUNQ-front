@@ -57,7 +57,8 @@ class StudentEdit extends ComponentWithErrorHandling {
     const {item} = this.state;
     let newStudent = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
-    return <AppNavbar>
+    return (
+      <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
@@ -103,7 +104,7 @@ class StudentEdit extends ComponentWithErrorHandling {
           </Form>
         </Container>
       </AppNavbar>
-  }
+    )}
 }
 
 export default withRouter(StudentEdit);

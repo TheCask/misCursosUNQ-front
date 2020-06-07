@@ -4,8 +4,10 @@ import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as StudentAPI from './services/StudentAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-class FullStudentList extends Component {
+
+class FullStudentList extends ComponentWithErrorHandling {
   render() {
     return(
       <div>
@@ -27,19 +29,19 @@ class FullStudentList extends Component {
   }
 }
 
-export class StudentListContainer extends Component {
+export class StudentListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
+    this.state = {...this.state, ...{students: [], isLoading: true, targetId: ''}};
     this.title = this.props.studentListTitle;
-    this.state = {students: [], isLoading: true, targetId: ''};
     this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({students: json, isLoading: false}, null )); // TODO: replace null by error showing code
+    this.contextParams.onGetAll(json => this.setState({students: json, isLoading: false}), this.showError("get students"));
   }
 
   remove(studentId) {
@@ -49,7 +51,7 @@ export class StudentListContainer extends Component {
         let updatedStudents = [...this.state.students].filter(student => student.fileNumber !== studentId);
         this.setState({students: updatedStudents, targetId: ''});
       },
-      null // TODO: replace null by error showing code
+      this.showError("remove student")
     );
   }
 
@@ -65,6 +67,7 @@ export class StudentListContainer extends Component {
     const deleteStudentFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
+        {this.renderErrorModal()}
         <Container fluid> 
           <ButtonBar
             entityType='student' 

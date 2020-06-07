@@ -9,7 +9,7 @@ const DeleteButton = (props) =>
             color="danger"
             size="sm"
             disabled = {props.targetId === ''}
-            tag={Link}
+            //tag={ props.to ? Link : null }
             to={props.to}
             onClick={props.onClick} >
         <UncontrolledTooltip placement="auto" target={`delete_${props.entityTypeCapName}`} disabled = {props.targetId === ''} >

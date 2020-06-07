@@ -4,12 +4,14 @@ import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as UserAPI from './services/UserAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-class FullUserList extends Component {
+
+class FullUserList extends ComponentWithErrorHandling {
   render() {
     return(
-    <div>
       <AppNavbar>
+        {this.renderErrorModal()}
         <UserListContainer 
           userListTitle = {'Users'}
           onGetAll = { (handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError) }
@@ -24,17 +26,17 @@ class FullUserList extends Component {
           entityType = 'user'
         />
       </AppNavbar>
-    </div>
     )
   }
 }
 
-export class UserListContainer extends Component {
+export class UserListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
+    this.state = {...this.state, ...{
+      users: [], isLoading: true, targetId: ''}};
     this.title = this.props.userListTitle;
-    this.state = {users: [], isLoading: true, targetId: ''};
     this.addButtonTo = props.addButtonTo;
     this.deleteButtonTo = props.deleteButtonTo;
     this.entityType = props.entityType;
@@ -43,7 +45,7 @@ export class UserListContainer extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}, null )); // TODO: replace null by error showing code
+    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}, this.showError("get users' info") )); // TODO: replace null by error showing code
   }
 
   remove(userId) {
@@ -53,7 +55,7 @@ export class UserListContainer extends Component {
         let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
         this.setState({users: updatedUsers, targetId: ''});
       },
-      null // TODO: replace null by error showing code
+      this.showError("remove user")
     );
   }
 

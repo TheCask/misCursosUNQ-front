@@ -4,11 +4,14 @@ import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as SubjectAPI from './services/SubjectAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-class FullSubjectList extends Component {
+
+class FullSubjectList extends ComponentWithErrorHandling {
   render() {
     return(
       <AppNavbar>
+        {this.renderErrorModal()}
         <SubjectListContainer 
           subjectListTitle = {'Subjects'}
           onGetAll = { (handleSuccess, handleError) => SubjectAPI.getSubjectsAsync(handleSuccess, handleError) }
@@ -26,12 +29,12 @@ class FullSubjectList extends Component {
   }
 }
 
-export class SubjectListContainer extends Component {
+export class SubjectListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
+    this.state = {...this.state, ...{subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}}; 
     this.title = this.props.subjectListTitle;
-    this.state = {subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}; 
     this.addButtonTo = props.addButtonTo;
     this.deleteButtonTo = props.deleteButtonTo;
     this.contextParams = props;
@@ -39,7 +42,7 @@ export class SubjectListContainer extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({subjects: json, isLoading: false}, null )); // TODO: replace null by error showing code
+    this.contextParams.onGetAll(json => this.setState({subjects: json, isLoading: false}, this.showError("get subjects") ));
   }
 
   remove(subjectId) {
@@ -49,7 +52,7 @@ export class SubjectListContainer extends Component {
         let updatedSubjects = [...this.state.subjects].filter(subject => subject.code !== subjectId);
         this.setState({subjects: updatedSubjects, targetId: ''});
       },
-      null // TODO: replace null by error showing code
+      this.showError("remove subject")
     );
   }
 
