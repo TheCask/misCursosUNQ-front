@@ -12,10 +12,9 @@ class AddStudentsToCourse extends Component {
 
   emptyItem = {
     courseCode: '',
-    courseFullCode: '',
     courseShift: '',
     courseIsOpen: '',
-    courseYear: '',
+    courseYear: 0,
     courseSeason: '',
     courseLocation: '',
     subject: {

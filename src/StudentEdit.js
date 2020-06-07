@@ -10,9 +10,10 @@ import ComponentWithErrorHandling from './ComponentWithErrorHandling'
 class StudentEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
-    fileNumber: '',
+    fileNumber: 0,
     personalData: {
-      dni: '',
+      // personalDataId: 0,
+      dni: 0,
       firstName: '',
       lastName: '',
       email: '',
@@ -41,7 +42,7 @@ class StudentEdit extends ComponentWithErrorHandling {
   handleChange(event) {
     const {name, value} = event.target;
     let item = {...this.state.item};
-    if (name === "fileNumber") { item[name] = value; }
+    if (name === 'fileNumber') { item[name] = value; }
     else { item['personalData'][name] = value }
     item['attendedLessons'] = []
     this.setState({item});
@@ -69,8 +70,8 @@ class StudentEdit extends ComponentWithErrorHandling {
     const {item} = this.state;
     let newStudent = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
-    return <div>
-      <AppNavbar >
+    return 
+      <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
@@ -89,11 +90,11 @@ class StudentEdit extends ComponentWithErrorHandling {
             </ButtonGroup>
           </FormGroup>
             <FormGroup>
-              <Input type="number" name="fileNumber" id="number" value={item.fileNumber || ''} required
+              <Input type="number" min="0" max="2147483647" name="fileNumber" id="number" value={item.fileNumber || ''} required
                     onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
           </FormGroup>
           <FormGroup>
-              <Input type="number" name="dni" id="dni" value={item.personalData.dni || ''}
+              <Input type="number" min="0" max="2147483647" name="dni" id="dni" value={item.personalData.dni || ''}
                     onChange={this.handleChange} placeholder="DNI" required/>
             </FormGroup>
             <FormGroup>
@@ -113,11 +114,9 @@ class StudentEdit extends ComponentWithErrorHandling {
                       title="Separar característica y número con un guión. Ej. 0229-4787658"
                       onChange={this.handleChange} placeholder="Cell Phone" pattern="[0-9]*-[0-9]*"/>
           </FormGroup>
-
           </Form>
         </Container>
       </AppNavbar>
-    </div>
   }
 }
 
