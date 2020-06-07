@@ -3,6 +3,27 @@ import ErrorModal from './ErrorModal';
 
 export default class ComponentWithErrorHandling extends Component {
 
+   /*
+    You can create your own handler like this:
+
+   handleGetStudentError = (errorCode, errorText) => {
+    this.setState({
+      isErrorModalOpen: true,
+      lastError: {
+        title: "Ups, something went wrong...", 
+        shortDesc: "An error occurred while trying to get student details." ,
+        httpCode: "HTTP CODE: " + errorCode,
+        errorText: errorText
+      }
+    })
+
+    Or use the easy constructor:
+
+    buildHandler("get sudent details")
+  }
+   
+   */ 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +45,21 @@ export default class ComponentWithErrorHandling extends Component {
         lastError = {this.state.lastError}
         toggle={this.toggleErrorModal}
     />
+  }
+
+  buildHandler(whileTryingTo){
+      return (errorCode, errorText) => {
+            this.setState({
+              isErrorModalOpen: true,
+              lastError: {
+                title: "Ups, something went wrong...", 
+                shortDesc: "An error occurred while trying to " + whileTryingTo + "." ,
+                httpCode: "HTTP CODE: " + errorCode,
+                errorText: errorText
+              }
+            })
+
+        }
   }
 }
 

@@ -30,12 +30,11 @@ class StudentEdit extends ComponentWithErrorHandling {
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSaveError = this.handleSaveError.bind(this);
   }
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      StudentAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), null) // TODO: replace null by error showing code
+      StudentAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), this.buildHandler("get student details")) // TODO: replace null by error showing code
     }
   }
 
@@ -48,30 +47,17 @@ class StudentEdit extends ComponentWithErrorHandling {
     this.setState({item});
   }
 
-  handleSaveError(errorCode, errorText){
-    this.setState({
-      isErrorModalOpen: true,
-      lastError: {
-        title: "Ups, something went wrong...", 
-        shortDesc: "An error occurred while trying to save." ,
-        httpCode: "HTTP CODE: " + errorCode,
-        errorText: errorText
-      }
-    })
-  }
-
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.handleSaveError); // TODO: replace null by error showing code
+    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.buildHandler("save student")); // TODO: replace null by error showing code
   }
 
   render() {
     const {item} = this.state;
     let newStudent = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
-    return 
-      <AppNavbar>
+    return <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
