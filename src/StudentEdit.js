@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as StudentAPI from './services/StudentAPI';
+import ComponentWithErrorHandling from './ComponentWithErrorHandling'
 
-class StudentEdit extends Component {
+class StudentEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
     fileNumber: '',
@@ -23,11 +24,12 @@ class StudentEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {...this.state, ...{
       item: this.emptyItem,
-    };
+    }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSaveError = this.handleSaveError.bind(this);
   }
 
   async componentDidMount() {
@@ -45,10 +47,22 @@ class StudentEdit extends Component {
     this.setState({item});
   }
 
+  handleSaveError(errorCode, errorText){
+    this.setState({
+      isErrorModalOpen: true,
+      lastError: {
+        title: "Ups, something went wrong...", 
+        shortDesc: "An error occurred while trying to save." ,
+        httpCode: "HTTP CODE: " + errorCode,
+        errorText: errorText
+      }
+    })
+  }
+
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), null); // TODO: replace null by error showing code
+    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.handleSaveError); // TODO: replace null by error showing code
   }
 
   render() {
@@ -56,8 +70,8 @@ class StudentEdit extends Component {
     let newStudent = this.props.match.params.id === 'new'
     const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
     return <div>
-      <AppNavbar>
-
+      <AppNavbar >
+        {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           {title}

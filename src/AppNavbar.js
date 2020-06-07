@@ -3,18 +3,25 @@ import { Container, Row, Col, Navbar, NavbarBrand, NavLink } from 'reactstrap';
 import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
 import SideBar from './SideBar';
+import ErrorModal from './ErrorModal';
+import ErrorHandler from './ErrorHandler';
 
 export default class AppNavbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
-    this.toggle = this.toggle.bind(this);
+    this.state = {isErrorModalOpen: true, lastError: {title: "", description: "", error: null}};
+    this.toggle = this.toggleErrorModal.bind(this);
     this.props = props;
   }
 
-  toggle() {
+  showError(title, description, error){
+    this.setState({isErrorModalOpen: true, 
+                   lastError: {title: "", description: "", error: null}});
+  }
+
+  toggleErrorModal() {
     this.setState({
-      isOpen: !this.state.isOpen
+      isErrorModalOpen: !this.state.isErrorModalOpen
     });
   }
 
@@ -37,10 +44,14 @@ export default class AppNavbar extends Component {
               <SideBar />
             </Col>
             <Col className='content'>
-              {this.props.children}
+              <ErrorHandler>
+                {this.props.children}
+              </ErrorHandler>
             </Col>
           </Row>
         </Container>
+        
+
       </div>
 
     )

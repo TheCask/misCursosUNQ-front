@@ -14,6 +14,7 @@ import FullSubjectList from './SubjectList';
 import SubjectEdit from './SubjectEdit';
 import FullUserList from './UserList';
 import UserEdit from './UserEdit';
+import EXPERIMENTING from './EXPERIMENTING';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -40,6 +41,7 @@ class App extends Component {
           <Route path='/subject/:id' component={SubjectEdit}/>
           <Route path='/users' exact={true} component={FullUserList}/>
           <Route path='/user/:id' component={UserEdit}/>
+          <Route path='/experimenting' component={EXPERIMENTING}/>
         </Switch>
       </Router>
     )
