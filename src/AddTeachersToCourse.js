@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as CourseAPI from './services/CourseAPI';
 import * as UserAPI from './services/UserAPI';
 
-class AddStudentsToCourse extends Component {
+class AddTeachersToCourse extends Component {
 
   emptyItem = {
     courseCode: '',
@@ -168,7 +168,7 @@ const TeacherList = props => {
 }
 
 const TeacherListItem = props => 
-  <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style}> 
+  <tr onClick={props.teacherOnClickFunction} id={props.user.userId} style={props.style}> 
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.lastName || ''}</td>
@@ -179,4 +179,4 @@ const TeacherListItem = props =>
     <td style={{textAlign: 'center'}}> {props.setIconFunction(props.user.userId)}</td>
   </tr>;
 
-export default AddStudentsToCourse;
+export default AddTeachersToCourse;

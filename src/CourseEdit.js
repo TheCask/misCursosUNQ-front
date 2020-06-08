@@ -9,7 +9,6 @@ import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
-import Log from './Log';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
 

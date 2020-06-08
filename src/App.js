@@ -5,7 +5,7 @@ import './App.css';
 import FullCourseList from './CourseList';
 import CourseEdit from './CourseEdit';
 import AddStudentsToCourse from './AddStudentsToCourse';
-import AddTeachersToCourse from './AddStudentsToCourse';
+import AddTeachersToCourse from './AddTeachersToCourse';
 import AddCoordinatorsToSubject from './AddCoordinatorsToSubject'
 import Attendance from './Attendance';
 import FullStudentList from './StudentList';
