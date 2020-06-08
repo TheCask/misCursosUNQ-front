@@ -113,7 +113,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col xs="1">
               <FormGroup>
                 <Label for="code">Code</Label>
-                <Input type="text" min="1" maxLength="5" name="courseCode" id="code" value={item.courseCode} required
+                <Input type="text" maxLength="5" name="courseCode" id="code" value={item.courseCode} required
                   onChange={this.handleChange} autoComplete="Course Code" placeholder="Code"/>
               </FormGroup>
             </Col>
@@ -132,8 +132,8 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col xs="1">
               <FormGroup>
                 <Label for="season">Season</Label>
-                <Input type="select" name="courseSeason" id="season" value={item.courseSeason} required
-                      onChange={this.handleChange}>
+                <Input type="select" name="courseSeason" id="season" 
+                      value={item.courseSeason} onChange={this.handleChange} required>
                         <option>{'1C'}</option>
                         <option>{'2C'}</option>
                 </Input>
@@ -143,15 +143,15 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col xs="2">
             <FormGroup>
               <Label for="year">Year</Label>
-              <Input type="number" min={2000} max={2100} name="courseYear" id="year" value={item.courseYear} required
-                    onChange={this.handleChange} autoComplete="Course Year" placeholder="Year"/>
+              <Input type="number" min="2000" max="2100" name="courseYear" id="year" value={item.courseYear} 
+                    onChange={this.handleChange} autoComplete="Course Year" placeholder="Year" required/>
             </FormGroup>
             </Col>
             <Col xs="2">
               <FormGroup>
                 <Label for="shift">Shift</Label>
-                <Input type="select" name="courseShift" id="shift" value={item.courseShift} required
-                  onChange={this.handleChange}>
+                <Input type="select" name="courseShift" id="shift" 
+                value={item.courseShift} onChange={this.handleChange} required>
                     <option>Mañana</option>
                     <option>Tarde</option>
                     <option>Noche</option>
@@ -162,8 +162,8 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col xs="2">
               <FormGroup>
                 <Label for="location">Location</Label>
-                <Input type="text" name="courseLocation" id="location" value={item.courseLocation} required
-                      onChange={this.handleChange} autoComplete="Course Location" placeholder="Location"/>
+                <Input type="text" maxLength="20" name="courseLocation" id="location" value={item.courseLocation} 
+                      onChange={this.handleChange} autoComplete="Course Location" placeholder="Location" required/>
               </FormGroup>
             </Col>
           </Row>
