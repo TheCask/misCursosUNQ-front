@@ -20,15 +20,15 @@ class UserEdit extends ComponentWithErrorHandling {
       },
       jobDetail: {
           cuitNumber: '',
-          category: '',
-          grade: '',
-          dedication: '',
-          contractRelation: '',
-          aditionalHours: '',
+          category: ' ',
+          grade: ' ',
+          dedication: ' ',
+          contractRelation: ' ',
+          aditionalHours: 0,
           cvURL: '',
           lastUpdate: '',
-          gradeTitles: [],
-          posGradeTitles: []
+          gradeTitles: '',
+          posGradeTitles: ''
       },
       coordinatedSubjects: [],
       taughtCourses: []
@@ -99,42 +99,62 @@ class UserEdit extends ComponentWithErrorHandling {
               </ButtonGroup>
           </Col>
           </Row>
+          <Row form>
+            <Col xs="2">
             <FormGroup>
-              <Label for="shift">DNI Number</Label>
-              <Input type="number"  min="0" max="2147483647" name="personalData.dni" id="dni" value={item.personalData.dni || ''}
+              <Label for="dni">DNI Number</Label>
+              <Input type="number"  min="0" max="2147483647" name="personalData.dni" id="dni" value={item.personalData.dni}
                     onChange={this.handleChange} placeholder="DNI" required/>
             </FormGroup>
+            </Col>
+            <Col xs="5">
             <FormGroup>
-              <Label for="shift">First Name</Label>
-              <Input type="text" maxLength="50" name="personalData.firstName" id="firstName" value={item.personalData.firstName || ''}
+              <Label for="firstName">First Name</Label>
+              <Input type="text" maxLength="50" name="personalData.firstName" id="firstName" value={item.personalData.firstName}
                     onChange={this.handleChange} placeholder="First Name" required/>
             </FormGroup>
+            </Col>
+            <Col xs="5">
             <FormGroup>
-              <Label for="shift">Last Name</Label>
-              <Input type="text" maxLength="50" name="personalData.lastName" id="lastName" value={item.personalData.lastName || ''}
+              <Label for="lastName">Last Name</Label>
+              <Input type="text" maxLength="50" name="personalData.lastName" id="lastName" value={item.personalData.lastName}
                     onChange={this.handleChange} placeholder="Last Name" required/>
             </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs="5">
             <FormGroup>
-              <Label for="shift">Mail</Label>
-              <Input type="email" maxLength="50" name="personalData.email" id="email" value={item.personalData.email || ''}
-                    onChange={this.handleChange} placeholder="e Mail" required/>
+              <Label for="email">Mail</Label>
+              <Input type="text" maxLength="50" name="personalData.email" id="email" value={item.personalData.email}
+                    title="Formato admitido: usuario@servidor.dom"
+                    onChange={this.handleChange} placeholder="e Mail" pattern="^.*@.*\..*$" required/>
             </FormGroup>
+            </Col>
+            <Col xs="4">
             <FormGroup>
-              <Label for="shift">Cell Phone</Label>
-              <Input type="tel" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
+              <Label for="cellPhone">Cell Phone</Label>
+              <Input type="tel" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone}
                     title="Separar característica y número con un guión (no incluir 15 al inicio). Ej. 0229-4787658"
                     onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}" required/>
             </FormGroup>
+            </Col>
+            <Col xs="3">
             <FormGroup>
-              <Label for="shift">CUIT/CUIL</Label>
-              <Input type="tel" name="jobDetail.cuitNumber" id="cuitNumber" value={item.jobDetail.cuitNumber || ''}
+              <Label for="cuitNumber">CUIT/CUIL</Label>
+              <Input type="text" name="jobDetail.cuitNumber" id="cuitNumber" value={item.jobDetail.cuitNumber || ''}
                     title="Separar con guiones. Ej. 20-12345678-3"
-                    onChange={this.handleChange} placeholder="Cuit Number" pattern="\d{2}-\d{8}-\d" required/>
+                    onChange={this.handleChange} placeholder="Cuit Number" pattern="\d{2}-\d{8}-\d"/>
             </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs="3">
             <FormGroup>
-              <Label for="shift">Category</Label>
-              <Input type="select" name="jobDetail.category" id="category" value={item.jobDetail.category || ''}
+              <Label for="category">Category</Label>
+              <Input type="select" name="jobDetail.category" id="category" value={item.jobDetail.category}
                     onChange={this.handleChange} placeholder="Category">
+                    <option> </option>
                     <option>Auxiliar</option>
                     <option>Instructor/a</option>
                     <option>Adjunto/a</option>
@@ -145,50 +165,83 @@ class UserEdit extends ComponentWithErrorHandling {
               </Input>
               <UncontrolledTooltip placement="auto" target="category"> Select Category </UncontrolledTooltip>
             </FormGroup>
+            </Col>
+            <Col xs="1">
             <FormGroup>
-              <Label for="shift">Grade</Label>
-              <Input type="select" name="jobDetail.grade" id="grade" value={item.jobDetail.grade || ''}
+              <Label for="grade">Grade</Label>
+              <Input type="select" name="jobDetail.grade" id="grade" value={item.jobDetail.grade}
                     onChange={this.handleChange} placeholder="Grade">
+                    <option> </option>
                     <option>A</option>
                     <option>B</option>
               </Input>
               <UncontrolledTooltip placement="auto" target="grade"> Select Grade </UncontrolledTooltip>
             </FormGroup>
+            </Col>
+            <Col xs="3">
             <FormGroup>
-              <Label for="shift">Dedication</Label>
-              <Input type="select" name="jobDetail.dedication" id="dedication" value={item.jobDetail.dedication || ''}
+              <Label for="dedication">Dedication</Label>
+              <Input type="select" name="jobDetail.dedication" id="dedication" value={item.jobDetail.dedication}
                     onChange={this.handleChange} placeholder="Dedication">
+                    <option> </option>
                     <option>Parcial</option>
                     <option>Semi Exclusiva</option>
                     <option>Exclusiva</option>
               </Input>
               <UncontrolledTooltip placement="auto" target="dedication"> Select Dedication </UncontrolledTooltip>
             </FormGroup>
+            </Col>
+            <Col xs="3">
             <FormGroup>
-            <Label for="shift">Contract Relation</Label>
-              <Input type="select" name="jobDetail.contractRelation" id="relation" value={item.jobDetail.contractRelation || ''}
+            <Label for="relation">Contract Relation</Label>
+              <Input type="select" name="jobDetail.contractRelation" id="relation" value={item.jobDetail.contractRelation}
                     onChange={this.handleChange} placeholder="Contract Relation">
+                    <option> </option>
                     <option>Contratado/a</option>
                     <option>Interino/a</option>
                     <option>Ordinario/a</option>
               </Input>
               <UncontrolledTooltip placement="auto" target="relation"> Select Contract Relation </UncontrolledTooltip>
             </FormGroup>
+            </Col>
+            <Col xs="2">
             <FormGroup>
-              <Label for="shift">Aditional Hours</Label>
-              <Input type="number" name="jobDetail.aditionalHours" id="aditional" value={item.jobDetail.aditionalHours || ''}
+              <Label for="aditional">Aditional Hours</Label>
+              <Input type="number" name="jobDetail.aditionalHours" id="aditional" value={item.jobDetail.aditionalHours}
                     onChange={this.handleChange} placeholder="Aditional Hours"/>
             </FormGroup>
+            </Col>
+          </Row>
+          <Row form xs="1">
             <FormGroup>
-              <Label for="shift">CV Link Relation</Label>
+              <Label for="gradeTitles">Grade Titles</Label>
+              <Input type="text" maxLength="200" name="jobDetail.gradeTitles" id="gradeTitles" value={item.jobDetail.gradeTitles || ''}
+                    onChange={this.handleChange} placeholder="Grade Titles"/>
+            </FormGroup>
+          </Row>
+          <Row form xs="1">
+            <FormGroup>
+              <Label for="posGradeTitles">Posgrade Titles</Label>
+              <Input type="text" maxLength="200" name="jobDetail.posGradeTitles" id="posGradeTitles" value={item.jobDetail.posGradeTitles || ''}
+                    onChange={this.handleChange} placeholder="Posgrade Titles"/>
+            </FormGroup>
+          </Row>
+          <Row form>
+            <Col xs="9">
+            <FormGroup>
+              <Label for="shift">CV Link</Label>
               <Input type="url" name="jobDetail.cvURL" id="cvUrl" value={item.jobDetail.cvURL || ''}
                     onChange={this.handleChange} placeholder="CV URL"/>
             </FormGroup>
+            </Col>
+            <Col xs="3">
             <FormGroup>
               <Label for="shift">Last CV Update</Label>
               <Input type="date" name="jobDetail.lastUpdate" id="update" value={item.jobDetail.lastUpdate || ''}
                     onChange={this.handleChange} placeholder="CV Last Update" disabled/>
             </FormGroup>
+            </Col>
+          </Row>
           </Form>
         </Container>
       </AppNavbar>
