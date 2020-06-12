@@ -8,13 +8,19 @@ import Log from './Log';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import * as CourseAPI from './services/CourseAPI';
 import * as LessonAPI from './services/LessonAPI';
+import ListPickerModal from './buttonBar/ListPickerModal';
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 class Attendance extends ComponentWithErrorHandling {
 
   emptyItem = {
+    lessonId: '',
     course: {
       courseId: this.props.match.params.id
     },
+    lessonDay: truncTime(new Date()),
     attendantStudents: []
   };
 
@@ -30,24 +36,41 @@ class Attendance extends ComponentWithErrorHandling {
     }};
     this.toggleAttendance = this.toggleAttendance.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
     let courseId = this.props.match.params.id
-    CourseAPI.getCourseStudentsAsync(courseId, json => { 
-      this.setState({students: json}) 
-      this.collectStudentsIds(json)}, 
-      this.showError("get course students")); 
-    CourseAPI.getCourseLessonsAsync(courseId, json => this.setState({lessons: json, isLoading:false }), this.showError("get course lessons"))
+    CourseAPI.getCourseStudentsAsync(
+      courseId, 
+      json => { 
+        this.setState({students: json}) 
+        this.collectStudentsIds(json)}, 
+      this.showError("get course students")
+    ); 
+    CourseAPI.getCourseLessonsAsync(
+      courseId, 
+      json => {
+        let jsonWithParsedDates = json.map( (lesson, index) => {
+          let parsedDate = new Date( lesson.lessonDay.replace("-","/") );
+          let newLesson = {...lesson};
+          newLesson.lessonDay = parsedDate;
+          return newLesson;
+        });
+        this.setState({lessons: jsonWithParsedDates, isLoading:false })
+        this.emptyItem.attendantStudents = [...this.state.students];
+      }, 
+      this.showError("get course lessons")
+    );
   }
 
   async handleSubmit(event) {
     event.preventDefault();
     let item = {...this.state.item};
-    let students = this.state.attendantStudentsIds
-    item['attendantStudents'] = students
-    this.setState({item: item})
+    let students = this.state.attendantStudentsIds;
+    item['attendantStudents'] = students;
+    this.setState({item: item});
     LessonAPI.postLessonAsync(item, () => this.props.history.push('/courses'), this.showError("save lesson")); 
   }
 
@@ -72,6 +95,26 @@ class Attendance extends ComponentWithErrorHandling {
     this.setState({attendantStudentsIds: students4JSON})
   }
 
+  itemDisplayFunc(lesson){ 
+    
+    return getDisplayFormat(lesson.lessonDay)
+  }
+
+  handleDateChange = date => {
+    let lessonFound = this.state.lessons.find( lesson => this.isSameDate(lesson.lessonDay, date) );
+    if (!lessonFound) {
+      this.emptyItem.lessonDay = truncTime(date);
+      lessonFound = this.emptyItem;
+    }
+    this.setState({item: lessonFound, attendantStudentsIds: lessonFound.attendantStudents});
+  }
+
+  isSameDate = (d1, d2) => {
+    return d1.getDate() === d2.getDate() &&
+           d1.getMonth() === d2.getMonth() &&
+           d1.getFullYear() === d2.getFullYear();
+  }
+
   render() {
     const {isLoading} = this.state;
     if (isLoading) { return <AppSpinner/> }
@@ -79,7 +122,7 @@ class Attendance extends ComponentWithErrorHandling {
         <AppNavbar>
           {this.renderErrorModal()}
           <Container fluid>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit}> 
               <ButtonGroup className="float-right" inline="true">
                 <Button size="sm" color="primary" type="submit" id="saveAttendance">
                   <UncontrolledTooltip placement="auto" target="saveAttendance">
@@ -93,6 +136,14 @@ class Attendance extends ComponentWithErrorHandling {
                   </UncontrolledTooltip>
                   <FontAwesomeIcon icon='backward' size="2x"/>
                 </Button>
+              </ButtonGroup>
+              <ButtonGroup className="float-right" inline="true" style={{padding: "5px 20px"}}>
+                <DatePicker 
+                  selected = {this.state.item.lessonDay}
+                  maxDate={ truncTime(new Date()) }
+                  onChange = {this.handleDateChange}
+                  highlightDates = {this.getLessonDates()}
+                />
               </ButtonGroup>
             </Form>
             <h3>Students</h3>
@@ -110,6 +161,10 @@ class Attendance extends ComponentWithErrorHandling {
           </Container>
         </AppNavbar>
     );
+  }
+
+  getLessonDates() {
+    return this.state.lessons.map((lesson) => lesson.lessonDay);
   }
 
   getCourseIcon(fileNumber) {
@@ -151,6 +206,20 @@ const StudentList = props => {
       />
     )
   });
+}
+
+const getDisplayFormat = date => {
+  var dd = String(date.getDate()).padStart(2, '0');
+  var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = date.getFullYear();
+
+  date = yyyy + '-' + mm + '-' + dd;
+  return date;
+}
+
+const truncTime = date => { 
+  date.setHours(0,0,0,0) 
+  return date;
 }
 
 const StudentListItem = props =>
