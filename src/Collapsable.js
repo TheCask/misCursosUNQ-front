@@ -8,9 +8,9 @@ export default function Collapsable (props) {
 
   return (
     <div>
-      <Button color="primary" onClick={toggle} style={{ marginBottom: '1rem' }}>{`${isOpen ? 'Show ' : 'Hide '} ${props.entityTypeCapName}`}</Button>
+      <Button color="primary" onClick={toggle} style={{ marginBottom: '1rem' }}>{`${isOpen ? 'Hide ' : 'Show '} ${props.entityTypeCapName}`}</Button>
       <Collapse isOpen={isOpen}>
-        {this.props.children}
+        {props.children}
       </Collapse>
     </div>
   );

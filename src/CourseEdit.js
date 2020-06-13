@@ -10,6 +10,7 @@ import CancelButton from './buttonBar/CancelButton'
 import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+import Collapsable from './Collapsable';
 
 
 
@@ -182,8 +183,12 @@ class CourseEdit extends ComponentWithErrorHandling {
             </Col>
           </Row>
         </Form>
+        <Collapsable entityTypeCapName={'Students'} >
           {this.renderStudents()}
+        </Collapsable>
+        <Collapsable entityTypeCapName={'Teachers'} >
           {this.renderTeachers()}
+        </Collapsable>
         </Container>
       </AppNavbar>
     </div>
