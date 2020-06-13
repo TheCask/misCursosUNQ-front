@@ -14,7 +14,7 @@ import FullSubjectList from './SubjectList';
 import SubjectEdit from './SubjectEdit';
 import FullUserList from './UserList';
 import UserEdit from './UserEdit';
-import EvaluationPage from './Evaluation';
+//import EvaluationPage from './Evaluation';
 import EXPERIMENTING from './EXPERIMENTING';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'

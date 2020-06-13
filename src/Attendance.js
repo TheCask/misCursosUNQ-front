@@ -9,7 +9,6 @@ import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandli
 import * as CourseAPI from './services/CourseAPI';
 import * as LessonAPI from './services/LessonAPI';
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
 
 class Attendance extends ComponentWithErrorHandling {
@@ -19,7 +18,7 @@ class Attendance extends ComponentWithErrorHandling {
     course: {
       courseId: this.props.match.params.id
     },
-    lessonDay: truncTime(new Date()),
+    lessonDay: this.truncTime(new Date()),
     attendantStudents: []
   };
 
