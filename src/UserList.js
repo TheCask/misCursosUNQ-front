@@ -15,15 +15,19 @@ class FullUserList extends ComponentWithErrorHandling {
           userListTitle = {'Users'}
           onGetAll = { (handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError) }
           onDelete = { (userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
-          onDeleteConsequenceList = {[
-            "The user will no longer be available.",
-            "If the user has taught courses or coordinated subjects, deleting is not allowed.",
-            "Please remove courses or subjects from user before trying to delete."
-          ]}
           addButtonTo = {`/user/new`}
           deleteButtonTo = {'/users'}
           entityType = 'user'
           applyDisallowDeleteFunction = { true }
+          onDeleteConsequenceList = {[ "The user will no longer be available." ]}
+          onDisableDeleteTitle = { "Forbidden delete of User" }
+          onDisableDeleteBody = {
+            <div>
+            <h3>This action is forbidden: </h3>
+            <ul><li>The user has taught courses or coordinated subjects, deleting is not allowed.</li>
+            <li>Please remove courses or subjects from user before trying to delete.</li></ul>
+            </div>
+          }
         />
       </AppNavbar>
     )
@@ -43,6 +47,8 @@ export class UserListContainer extends ComponentWithErrorHandling {
     this.contextParams = props;
     this.disallowDelete = props.disallowDelete;
     this.applyDisallowDeleteFunction = props.applyDisallowDeleteFunction;
+    this.onDisableDeleteTitle = props.onDisableDeleteTitle;
+    this.onDisableDeleteBody = props.onDisableDeleteBody;
   }
 
   componentDidMount() {
@@ -90,6 +96,8 @@ export class UserListContainer extends ComponentWithErrorHandling {
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
             deleteButtonTo = {this.deleteButtonTo}
+            onDisableDeleteTitle = { this.onDisableDeleteTitle }
+            onDisableDeleteBody = { this.onDisableDeleteBody }
           />
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 

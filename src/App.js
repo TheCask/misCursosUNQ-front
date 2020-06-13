@@ -14,7 +14,7 @@ import FullSubjectList from './SubjectList';
 import SubjectEdit from './SubjectEdit';
 import FullUserList from './UserList';
 import UserEdit from './UserEdit';
-import EvaluationPage from './Evaluation';
+//import EvaluationPage from './Evaluation';
 import EXPERIMENTING from './EXPERIMENTING';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -34,7 +34,7 @@ class App extends Component {
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>
           <Route path='/course/:id/addTeachers' component={AddTeachersToCourse}/>
-          <Route path='/course/:id/evaluations' component={EvaluationPage}/>
+          {/* <Route path='/course/:id/evaluations' component={EvaluationPage}/> */}
           <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/students' exact={true} component={FullStudentList}/>
           <Route path='/student/:id' component={StudentEdit}/>

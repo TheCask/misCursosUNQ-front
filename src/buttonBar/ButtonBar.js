@@ -63,11 +63,12 @@ class ButtonBar extends Component {
             fade={false}
             isOpen = {() => this.state.modal}
             toggle = {this.toggleModal}
-            title = {`You are about to delete selected ${entityType}. Are you sure?`}
             onProceed = {() => {this.props.deleteEntityFunction(); this.disableButtonAvailability(); this.toggleModal(); }}
             proceedTooltip = {"YES, DELETE (I know what I'm doing)"}
             disallowDelete = {this.props.disallowDelete}
-            description = {
+            
+            title = { this.props.disallowDelete ? this.props.onDisableDeleteTitle : `You are about to delete selected ${entityType}. Are you sure?` }
+            description = { this.props.disallowDelete ? this.props.onDisableDeleteBody : 
               <div>
                 <h4>This action will have the following consequences:</h4>
                 <ul>
@@ -75,7 +76,7 @@ class ButtonBar extends Component {
                     return (<li key = {index}>{consequence}</li>);
                   })}
                 </ul>
-              </div>
+              </div> 
             }
           />          
         </ButtonGroup>
