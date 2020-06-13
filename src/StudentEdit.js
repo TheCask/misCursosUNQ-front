@@ -99,7 +99,7 @@ class StudentEdit extends ComponentWithErrorHandling {
           <FormGroup>
               <Input type="tel" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''} 
                       title="Separar característica y número con un guión. Ej. 0229-4787658"
-                      onChange={this.handleChange} placeholder="Cell Phone" pattern="[0-9]*-[0-9]*"/>
+                      onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}"/>
           </FormGroup>
           </Form>
         </Container>
