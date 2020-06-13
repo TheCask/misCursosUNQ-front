@@ -34,7 +34,7 @@ class App extends Component {
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>
           <Route path='/course/:id/addTeachers' component={AddTeachersToCourse}/>
-          <Route path='/course/:id/evaluations' component={EvaluationPage}/>
+          {/* <Route path='/course/:id/evaluations' component={EvaluationPage}/> */}
           <Route path='/course/:id' component={CourseEdit}/>
           <Route path='/students' exact={true} component={FullStudentList}/>
           <Route path='/student/:id' component={StudentEdit}/>
@@ -44,6 +44,8 @@ class App extends Component {
           <Route path='/users' exact={true} component={FullUserList}/>
           <Route path='/user/:id' component={UserEdit}/>
           <Route path='/experimenting' component={EXPERIMENTING}/>
+{/*           <Route path='/evaluation' component={EvaluationPage}/> */}
+
         </Switch>
       </Router>
     )
