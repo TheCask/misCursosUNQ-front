@@ -1368,11 +1368,6 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.0.tgz#0e1bdf8d021e7ea58affade33d9d607e11365915"
   integrity sha512-NMrDy6EWh9TPdSRiHmHH2ye1v5U0gBD7pRYwSwJvomx7Bm4GG04vu63dYiVzebLOx2obPpJugew06xVP0Nk7hA==
 
-"@scarf/scarf@^1.0.4":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.0.6.tgz#52011dfb19187b53b75b7b6eac20da0810ddd88f"
-  integrity sha512-y4+DuXrAd1W5UIY3zTcsosi/1GyYT8k5jGnZ/wG7UUHVrU+MHlH4Mp87KK2/lvMW4+H7HVcdB+aJhqywgXksjA==
-
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-4.2.0.tgz#dadcb6218503532d6884b210e7f3c502caaa44b1"
@@ -8858,13 +8853,6 @@ react-scripts@3.4.1:
     workbox-webpack-plugin "4.3.1"
   optionalDependencies:
     fsevents "2.1.2"
-
-react-table@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.2.0.tgz#a2d8a84efa610be541103b3c714cacbb15df9d1a"
-  integrity sha512-hcBwPimjwOKQZoaeoQnUYyQNCg3NhjA1xAhKmuxam03sKsxE5NfI4GZ1qJcBQ8CJVj78e1o/lOKCh1AGuPmcnQ==
-  dependencies:
-    "@scarf/scarf" "^1.0.4"
 
 react-transition-group@^2.3.1:
   version "2.9.0"

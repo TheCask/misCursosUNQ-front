@@ -18,7 +18,7 @@ class Attendance extends ComponentWithErrorHandling {
     course: {
       courseId: this.props.match.params.id
     },
-    lessonDay: this.truncTime(new Date()),
+    lessonDay: truncTime(new Date()),
     attendantStudents: []
   };
 

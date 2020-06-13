@@ -111,10 +111,10 @@ class CourseEdit extends ComponentWithErrorHandling {
           </Row>
           <Row form>
             <Col xs="3">
-              {/* <FormGroup> */}
+              <FormGroup>
                 <Label for="fullCode">Full Code</Label>
                 <Input type="text" name="courseFullCode" id="fullCode" value={this.getFullCode(item.courseCode, item.subject.code) || ''} disabled/>
-              {/* </FormGroup> */}
+              </FormGroup>
             </Col>
             <Col xs="1">
               <FormGroup>
@@ -216,6 +216,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             "Student's attendance and grades info will be removed."
           ]}
           addButtonTo = {`/course/${courseId}/addStudents`}
+          renderSearch = { false }
         />
       );
     }
@@ -235,6 +236,7 @@ class CourseEdit extends ComponentWithErrorHandling {
           addButtonTo = {`/course/${courseId}/addTeachers`}
           entityType = 'teacher'
           applyDisallowDeleteFunction = { false }
+          renderSearch = { false }
         />
       );
     }

@@ -23,3 +23,9 @@ export async function postUserAsync(userJson, handleSuccess, handleError){
     const response = await fetch('/api/user', BackAPI.postInit(userJson));
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
 }
+
+// search
+export async function searchUsersAsync(text, handleSuccess, handleError) {
+    const response = await fetch(`/api/users/search?text=${text}`)
+    BackAPI.handleGet(response, handleSuccess, handleError)
+}

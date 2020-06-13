@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import { Container, Table} from 'reactstrap';
+import React, {Component} from 'react';
+import {Container, Table, InputGroup, Button, Input, 
+  InputGroupAddon, Form, Col, Row, UncontrolledTooltip} from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as UserAPI from './services/UserAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 class FullUserList extends ComponentWithErrorHandling {
   render() {
@@ -13,21 +15,23 @@ class FullUserList extends ComponentWithErrorHandling {
         {this.renderErrorModal()}
         <UserListContainer 
           userListTitle = {'Users'}
-          onGetAll = { (handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError) }
-          onDelete = { (userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
-          addButtonTo = {`/user/new`}
+          onGetAll = {(handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError)}
+          onDelete = {(userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
+          onSearch = {(text, handleSuccess, handleError) => UserAPI.searchUsersAsync(text, handleSuccess, handleError)}
+          renderSearch = {true}
+          addButtonTo = {'/user/new'}
           deleteButtonTo = {'/users'}
           entityType = 'user'
-          applyDisallowDeleteFunction = { true }
+          applyDisallowDeleteFunction = {true}
           onDeleteConsequenceList = {[ "The user will no longer be available." ]}
-          onDisableDeleteTitle = { "Forbidden delete of User" }
+          onDisableDeleteTitle = {"Forbidden delete of User"}
           onDisableDeleteBody = {
             <div>
             <h3>This action is forbidden: </h3>
             <ul><li>The user has taught courses or coordinated subjects, deleting is not allowed.</li>
             <li>Please remove courses or subjects from user before trying to delete.</li></ul>
             </div>
-          }
+         }
         />
       </AppNavbar>
     )
@@ -39,7 +43,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
-      users: [], isLoading: true, targetId: ''}};
+      users: [], isLoading: true, targetId: '', searchText: ''}};
     this.title = this.props.userListTitle;
     this.addButtonTo = props.addButtonTo;
     this.deleteButtonTo = props.deleteButtonTo;
@@ -49,12 +53,16 @@ export class UserListContainer extends ComponentWithErrorHandling {
     this.applyDisallowDeleteFunction = props.applyDisallowDeleteFunction;
     this.onDisableDeleteTitle = props.onDisableDeleteTitle;
     this.onDisableDeleteBody = props.onDisableDeleteBody;
-  }
+    this.renderSearch = props.renderSearch
+    this.handleChange = this.handleChange.bind(this)
+    this.doSearch = this.doSearch.bind(this)
+ }
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}, this.showError("get users' info") )); // TODO: replace null by error showing code
-  }
+    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}, 
+      this.showError("get users info")));
+ }
 
   remove(userId) {
     this.contextParams.onDelete(
@@ -62,18 +70,28 @@ export class UserListContainer extends ComponentWithErrorHandling {
       () => {
         let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
         this.setState({users: updatedUsers, targetId: ''});
-      },
-      this.showError("remove user")
-    );
+     },
+      this.showError("remove user"));
+  }
+
+  doSearch() {
+    this.setState({isLoading: true});
+    this.contextParams.onSearch(
+      this.state.searchText,
+      json => this.setState({users: json, isLoading: false},
+      this.showError("search users")));
+  }
+
+  handleChange(event) {
+    const {name, value} = event.target;
+    this.setState({[name]: value});
   }
 
   disallowsDelete(userId) {
     const targetUser = this.state.users.find(user => user.userId === userId)
-    if (targetUser && (targetUser.taughtCourses.length > 0 || targetUser.coordinatedSubjects.length > 0)) {
-      return true
-    }
-    return false
-  }
+    return (targetUser && (targetUser.taughtCourses.length > 0 || 
+        targetUser.coordinatedSubjects.length > 0))
+  } 
 
   setSelectedRowColor(rowId) {
     if (rowId === this.state.targetId) {
@@ -83,30 +101,41 @@ export class UserListContainer extends ComponentWithErrorHandling {
 
   render() {
     const isLoading = this.state.isLoading;
-    if (isLoading) { return (<AppSpinner/>) }
+    if (isLoading) {return (<AppSpinner/>)}
     const deleteUserFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
-        <Container fluid>     
-          <ButtonBar 
-            entityType = {this.entityType}
-            targetId = {this.state.targetId} 
-            deleteEntityFunction = {deleteUserFunction}
-            disallowDelete = {this.applyDisallowDeleteFunction ? this.disallowsDelete(this.state.targetId) : false }
-            consequenceList = {this.contextParams.onDeleteConsequenceList}
-            addButtonTo = {this.addButtonTo}
-            deleteButtonTo = {this.deleteButtonTo}
-            onDisableDeleteTitle = { this.onDisableDeleteTitle }
-            onDisableDeleteBody = { this.onDisableDeleteBody }
-          />
-          <h3>{this.title}</h3>
+        <Container fluid>
+          <Row xs="4">
+            <Col> <h3>{this.title}</h3> </Col>
+            <Col xs="6"> 
+              {this.renderSearch ?  <SearchField 
+                doSearch = {this.doSearch}
+                serachText = {this.state.serachText}
+                handleChange = {this.handleChange}/>
+                : null}
+            </Col>
+            <Col>
+              <ButtonBar 
+                entityType = {this.entityType}
+                targetId = {this.state.targetId} 
+                deleteEntityFunction = {deleteUserFunction}
+                disallowDelete = {this.applyDisallowDeleteFunction ? this.disallowsDelete(this.state.targetId) : false}
+                consequenceList = {this.contextParams.onDeleteConsequenceList}
+                addButtonTo = {this.addButtonTo}
+                deleteButtonTo = {this.deleteButtonTo}
+                onDisableDeleteTitle = {this.onDisableDeleteTitle}
+                onDisableDeleteBody = {this.onDisableDeleteBody}
+              />
+            </Col>
+          </Row>    
           <Table hover className="mt-4"> 
             <UserListHeaders/>
             <tbody>
               <UserList 
                 users = {this.state.users}
-                userOnClickFunction = {(userId) =>  {this.setState({targetId: userId})}}
-                styleFunction = {(userId) => this.setSelectedRowColor(userId)} 
+                userOnClickFunction = {(userId) => {this.setState({targetId: userId})}}
+                styleFunction = {(userId) => this.setSelectedRowColor(userId)}
               />
             </tbody>
           </Table>
@@ -153,5 +182,19 @@ const UserListItem = props =>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.dedication || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.aditionalHours || ''}</td>
   </tr>;
+
+const SearchField = props =>
+  <InputGroup>
+    <Input type="text" name="searchText" id="searchInput" placeholder="Type to search Users ..."
+      value={props.searchText} onChange={props.handleChange}/>
+    <InputGroupAddon addonType="append">
+      <Button color="secondary" id="searchButton" onClick={props.doSearch}>
+        <UncontrolledTooltip target="searchButton">
+          Search Users
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="search" size="1x"/>
+      </Button>
+    </InputGroupAddon>
+  </InputGroup>;
 
 export default FullUserList;
