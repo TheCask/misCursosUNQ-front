@@ -8,9 +8,7 @@ import Log from './Log';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import * as CourseAPI from './services/CourseAPI';
 import * as LessonAPI from './services/LessonAPI';
-//import ListPickerModal from './buttonBar/ListPickerModal';
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
 
 class Attendance extends ComponentWithErrorHandling {
