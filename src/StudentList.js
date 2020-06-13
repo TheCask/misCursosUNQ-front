@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react'; //{Component}
 import { Container, Table, InputGroup, Button, Input, 
-  InputGroupAddon, Form, Col, Row, UncontrolledTooltip } from 'reactstrap';
+  InputGroupAddon, Col, Row, UncontrolledTooltip } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
@@ -19,6 +19,8 @@ class FullStudentList extends ComponentWithErrorHandling {
                   addButtonTo = {`/student/new`}
                   onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
                   onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
+                  onSearch = {(text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(1, text, handleSuccess, handleError)}
+                  renderSearch = {true}
                   onDeleteConsequenceList = {[
                     "The student will no longer be available.",
                     "The student will be removed of every current course as well as any previous he ever took.",
@@ -39,6 +41,9 @@ export class StudentListContainer extends ComponentWithErrorHandling {
     this.title = this.props.studentListTitle;
     this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
+    this.renderSearch = props.renderSearch
+    this.handleChange = this.handleChange.bind(this)
+    this.doSearch = this.doSearch.bind(this)
   }
 
   componentDidMount() {
@@ -57,6 +62,19 @@ export class StudentListContainer extends ComponentWithErrorHandling {
     );
   }
 
+  doSearch() {
+    this.setState({isLoading: true});
+    this.contextParams.onSearch(
+      this.state.searchText,
+      json => this.setState({students: json, isLoading: false},
+      this.showError("search students")));
+  }
+
+  handleChange(event) {
+    const {name, value} = event.target;
+    this.setState({[name]: value});
+  }
+
   setSelectedRowColor(rowId) {
     if (rowId === this.state.targetId) {
       return {backgroundColor:'#F0F8FF'}
@@ -70,15 +88,26 @@ export class StudentListContainer extends ComponentWithErrorHandling {
     return (
       <div>
         {this.renderErrorModal()}
-        <Container fluid> 
-          <ButtonBar
-            entityType='student' 
-            targetId = {this.state.targetId} 
-            deleteEntityFunction = {deleteStudentFunction} 
-            consequenceList = {this.contextParams.onDeleteConsequenceList}
-            addButtonTo = {this.addButtonTo}
-          />
-          <h3>{this.title}</h3>
+        <Container fluid>
+          <Row xs="4">
+            <Col> <h3>{this.title}</h3> </Col>
+              <Col xs="6"> 
+                {this.renderSearch ?  <SearchField 
+                  doSearch = {this.doSearch}
+                  serachText = {this.state.serachText}
+                  handleChange = {this.handleChange}/>
+                  : null}
+              </Col>
+            <Col>
+              <ButtonBar
+                entityType='student' 
+                targetId = {this.state.targetId} 
+                deleteEntityFunction = {deleteStudentFunction} 
+                consequenceList = {this.contextParams.onDeleteConsequenceList}
+                addButtonTo = {this.addButtonTo}
+              />
+            </Col>
+          </Row>
           <Table hover className="mt-4"> 
             <StudentListHeaders />
             <tbody>
@@ -130,5 +159,19 @@ const StudentListItem = props =>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
   </tr>;
+
+const SearchField = props =>
+  <InputGroup>
+    <Input type="text" name="searchText" id="searchInput" placeholder="Type to search Students ..."
+      value={props.searchText} onChange={props.handleChange}/>
+    <InputGroupAddon addonType="append">
+      <Button color="secondary" id="searchButton" onClick={props.doSearch}>
+        <UncontrolledTooltip target="searchButton">
+          Search Students
+        </UncontrolledTooltip>
+        <FontAwesomeIcon icon="search" size="1x"/>
+      </Button>
+    </InputGroupAddon>
+  </InputGroup>;
 
 export default FullStudentList;

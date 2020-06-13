@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react'; //{Component}
 import {Container, Table, InputGroup, Button, Input, 
-  InputGroupAddon, Form, Col, Row, UncontrolledTooltip} from 'reactstrap';
+  InputGroupAddon, Col, Row, UncontrolledTooltip} from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
@@ -17,7 +17,7 @@ class FullUserList extends ComponentWithErrorHandling {
           userListTitle = {'Users'}
           onGetAll = {(handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError)}
           onDelete = {(userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
-          onSearch = {(text, handleSuccess, handleError) => UserAPI.searchUsersAsync(text, handleSuccess, handleError)}
+          onSearch = {(text, handleSuccess, handleError) => UserAPI.searchUsersAsync(1, text, handleSuccess, handleError)}
           renderSearch = {true}
           addButtonTo = {'/user/new'}
           deleteButtonTo = {'/users'}

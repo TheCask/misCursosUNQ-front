@@ -23,3 +23,9 @@ export async function deleteStudentAsync(studentId, handleSuccess, handleError){
     const response = await fetch(`/api/student/${studentId}`, BackAPI.deleteInit())
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)   
 }
+
+// search
+export async function searchStudentsAsync(page, text, handleSuccess, handleError) {
+    const response = await fetch(`/api/students/search?text=${text}&page=${page}`)
+    BackAPI.handleGet(response, handleSuccess, handleError)
+}

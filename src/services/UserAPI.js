@@ -25,7 +25,7 @@ export async function postUserAsync(userJson, handleSuccess, handleError){
 }
 
 // search
-export async function searchUsersAsync(text, handleSuccess, handleError) {
-    const response = await fetch(`/api/users/search?text=${text}`)
+export async function searchUsersAsync(page, text, handleSuccess, handleError) {
+    const response = await fetch(`/api/users/search?text=${text}&page=${page}`)
     BackAPI.handleGet(response, handleSuccess, handleError)
 }

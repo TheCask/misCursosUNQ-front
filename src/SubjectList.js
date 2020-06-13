@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react'; //{Component}
 import { Container, Table } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';

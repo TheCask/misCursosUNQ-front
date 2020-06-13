@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, UncontrolledTooltip } from 'reactstrap';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const DeleteButton = (props) =>

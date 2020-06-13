@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react'; //{Component}
 import { Button, ButtonGroup, Container, Table, Form, UncontrolledTooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

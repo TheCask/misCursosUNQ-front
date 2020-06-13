@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse, Button, CardBody, Card } from 'reactstrap';
+import { Collapse, Button } from 'reactstrap';
 
 export default function Collapsable (props) {
   const [isOpen, setIsOpen] = useState(false);
