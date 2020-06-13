@@ -87,6 +87,11 @@ class CourseEdit extends ComponentWithErrorHandling {
     CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), this.showError("save course"));
   }
 
+  getFullCode(courseCode, subjectCode) {
+    const split = subjectCode.split('-')
+    return `${split[0]}-${courseCode}-${split[1]}`;
+  }
+
   render() {
     const {item} = this.state;
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
@@ -108,7 +113,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col xs="3">
               {/* <FormGroup> */}
                 <Label for="fullCode">Full Code</Label>
-                <Input type="text" name="courseFullCode" id="fullCode" value={item.courseFullCode || ''} disabled/>
+                <Input type="text" name="courseFullCode" id="fullCode" value={this.getFullCode(item.courseCode, item.subject.code) || ''} disabled/>
               {/* </FormGroup> */}
             </Col>
             <Col xs="1">
