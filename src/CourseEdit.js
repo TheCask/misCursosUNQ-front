@@ -220,6 +220,7 @@ class CourseEdit extends ComponentWithErrorHandling {
           ]}
           addButtonTo = {`/course/${courseId}/addTeachers`}
           entityType = 'teacher'
+          applyDisallowDeleteFunction = { false }
         />
       );
     }

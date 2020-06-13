@@ -34,7 +34,7 @@ export async function getCourseStudentsAsync(courseId, handleSuccess, handleErro
 
 // delete
 export async function deleteCourseStudentAsync(studentId, courseId, handleSuccess, handleError){
-    const response = await fetch(`/api/course/${courseId}/${studentId}/`, BackAPI.deleteInit())
+    const response = await fetch(`/api/course/${courseId}/S${studentId}/`, BackAPI.deleteInit())
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError) 
 }
 
@@ -48,7 +48,7 @@ export async function getCourseTeachersAsync(courseId, handleSuccess, handleErro
 
 // delete
 export async function deleteCourseTeacherAsync(userId, courseId, handleSuccess, handleError){
-    const response = await fetch(`/api/course/${courseId}/${userId}/`, BackAPI.deleteInit())
+    const response = await fetch(`/api/course/${courseId}/T${userId}/`, BackAPI.deleteInit())
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError) 
 }
 

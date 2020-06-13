@@ -6,7 +6,6 @@ import ButtonBar from './buttonBar/ButtonBar';
 import * as UserAPI from './services/UserAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-
 class FullUserList extends ComponentWithErrorHandling {
   render() {
     return(
@@ -24,6 +23,7 @@ class FullUserList extends ComponentWithErrorHandling {
           addButtonTo = {`/user/new`}
           deleteButtonTo = {'/users'}
           entityType = 'user'
+          applyDisallowDeleteFunction = { true }
         />
       </AppNavbar>
     )
@@ -41,6 +41,8 @@ export class UserListContainer extends ComponentWithErrorHandling {
     this.deleteButtonTo = props.deleteButtonTo;
     this.entityType = props.entityType;
     this.contextParams = props;
+    this.disallowDelete = props.disallowDelete;
+    this.applyDisallowDeleteFunction = props.applyDisallowDeleteFunction;
   }
 
   componentDidMount() {
@@ -61,9 +63,8 @@ export class UserListContainer extends ComponentWithErrorHandling {
 
   disallowsDelete(userId) {
     const targetUser = this.state.users.find(user => user.userId === userId)
-    if (targetUser) {
-      return (targetUser.taughtCourses.length > 0 || 
-        targetUser.coordinatedSubjects.length > 0) 
+    if (targetUser && (targetUser.taughtCourses.length > 0 || targetUser.coordinatedSubjects.length > 0)) {
+      return true
     }
     return false
   }
@@ -85,7 +86,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
             entityType = {this.entityType}
             targetId = {this.state.targetId} 
             deleteEntityFunction = {deleteUserFunction}
-            disallowDelete = {this.disallowsDelete(this.state.targetId)}
+            disallowDelete = {this.applyDisallowDeleteFunction ? this.disallowsDelete(this.state.targetId) : false }
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
             deleteButtonTo = {this.deleteButtonTo}
