@@ -14,19 +14,20 @@ class FullStudentList extends ComponentWithErrorHandling {
     return(
       <div>
         <AppNavbar>
+          {this.renderErrorModal()}
           <StudentListContainer 
-                  studentListTitle = {'Students'}
-                  addButtonTo = {`/student/new`}
-                  onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
-                  onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
-                  onSearch = {(text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(1, text, handleSuccess, handleError)}
-                  renderSearch = {true}
-                  onDeleteConsequenceList = {[
-                    "The student will no longer be available.",
-                    "The student will be removed of every current course as well as any previous he ever took.",
-                    "The student's attendance to any lesson (current or previous) will be removed."
-                  ]}
-                  />
+            studentListTitle = {'Students'}
+            addButtonTo = {`/student/new`}
+            onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
+            onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
+            onSearch = {(page, text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(page, text, handleSuccess, handleError)}
+            renderSearch = {true}
+            onDeleteConsequenceList = {[
+              "The student will no longer be available.",
+              "The student will be removed of every current course as well as any previous he ever took.",
+              "The student's attendance to any lesson (current or previous) will be removed."
+            ]}
+            />
         </AppNavbar>
       </div>
     )
@@ -37,7 +38,8 @@ export class StudentListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...{students: [], isLoading: true, targetId: ''}};
+    this.state = {...this.state, ...{
+      students: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
     this.title = this.props.studentListTitle;
     this.addButtonTo = props.addButtonTo;
     this.contextParams = props;
@@ -48,7 +50,8 @@ export class StudentListContainer extends ComponentWithErrorHandling {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({students: json, isLoading: false}), this.showError("get students"));
+    this.contextParams.onGetAll(json => this.setState({students: json, isLoading: false}), 
+      this.showError("get students"));
   }
 
   remove(studentId) {
@@ -58,16 +61,16 @@ export class StudentListContainer extends ComponentWithErrorHandling {
         let updatedStudents = [...this.state.students].filter(student => student.fileNumber !== studentId);
         this.setState({students: updatedStudents, targetId: ''});
       },
-      this.showError("remove student")
-    );
+      this.showError("remove student"));
   }
 
   doSearch() {
     this.setState({isLoading: true});
     this.contextParams.onSearch(
+      this.state.pageNo,
       this.state.searchText,
-      json => this.setState({students: json, isLoading: false},
-      this.showError("search students")));
+      json => this.setState({students: json, isLoading: false}),
+      this.showError("search students"));
   }
 
   handleChange(event) {
@@ -94,7 +97,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
               <Col xs="6"> 
                 {this.renderSearch ?  <SearchField 
                   doSearch = {this.doSearch}
-                  serachText = {this.state.serachText}
+                  searchText = {this.state.searchText}
                   handleChange = {this.handleChange}/>
                   : null}
               </Col>

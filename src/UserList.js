@@ -17,7 +17,7 @@ class FullUserList extends ComponentWithErrorHandling {
           userListTitle = {'Users'}
           onGetAll = {(handleSuccess, handleError) => UserAPI.getUsersAsync(handleSuccess, handleError)}
           onDelete = {(userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
-          onSearch = {(text, handleSuccess, handleError) => UserAPI.searchUsersAsync(1, text, handleSuccess, handleError)}
+          onSearch = {(page, text, handleSuccess, handleError) => UserAPI.searchUsersAsync(page, text, handleSuccess, handleError)}
           renderSearch = {true}
           addButtonTo = {'/user/new'}
           deleteButtonTo = {'/users'}
@@ -43,7 +43,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
-      users: [], isLoading: true, targetId: '', searchText: ''}};
+      users: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
     this.title = this.props.userListTitle;
     this.addButtonTo = props.addButtonTo;
     this.deleteButtonTo = props.deleteButtonTo;
@@ -60,8 +60,8 @@ export class UserListContainer extends ComponentWithErrorHandling {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}, 
-      this.showError("get users info")));
+    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}), 
+      this.showError("get users info"));
  }
 
   remove(userId) {
@@ -77,9 +77,10 @@ export class UserListContainer extends ComponentWithErrorHandling {
   doSearch() {
     this.setState({isLoading: true});
     this.contextParams.onSearch(
+      this.state.pageNo,
       this.state.searchText,
-      json => this.setState({users: json, isLoading: false},
-      this.showError("search users")));
+      json => this.setState({users: json, isLoading: false}),
+      this.showError("search users"));
   }
 
   handleChange(event) {
@@ -105,13 +106,14 @@ export class UserListContainer extends ComponentWithErrorHandling {
     const deleteUserFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
+        {this.renderErrorModal()}
         <Container fluid>
           <Row xs="4">
             <Col> <h3>{this.title}</h3> </Col>
             <Col xs="6"> 
               {this.renderSearch ?  <SearchField 
                 doSearch = {this.doSearch}
-                serachText = {this.state.serachText}
+                searchText = {this.state.searchText}
                 handleChange = {this.handleChange}/>
                 : null}
             </Col>

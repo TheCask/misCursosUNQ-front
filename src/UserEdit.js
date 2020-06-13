@@ -12,7 +12,7 @@ class UserEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
       personalData: {
-          dni: null,
+          dni: '',
           firstName: '',
           lastName: '',
           email: '',
