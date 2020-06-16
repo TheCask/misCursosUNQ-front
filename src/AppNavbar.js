@@ -27,7 +27,7 @@ export default class AppNavbar extends Component {
     await fetch(`http://localhost:${config.serverPort}/user`, {credentials: 'include'})
       .then(response => response.json())
       .then(response => this.setState({body: response}));
-      Log.info(this.state.body, "Response");
+      Log.info("Response", this.state.body);
   }
 
   showError(title, description, error){
