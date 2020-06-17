@@ -87,15 +87,9 @@ class UserEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
               <ButtonGroup className="float-right">
-                <SaveButton
-                  entityId = {item.userId}
-                  entityTypeCapName = "User"
-                />
+                <SaveButton entityId = {item.userId} entityTypeCapName = "User"/>
                 {' '}
-                <CancelButton
-                  to = {"/users"}
-                  entityTypeCapName = "User"
-                />
+                <CancelButton to = {"/users"} entityTypeCapName = "User"/>
               </ButtonGroup>
           </Col>
           </Row>
@@ -229,14 +223,14 @@ class UserEdit extends ComponentWithErrorHandling {
           <Row form>
             <Col xs="9">
             <FormGroup>
-              <Label for="shift">CV Link</Label>
+              <Label for="cvUrl">CV Link</Label>
               <Input type="url" name="jobDetail.cvURL" id="cvUrl" value={item.jobDetail.cvURL || ''}
                     onChange={this.handleChange} placeholder="CV URL"/>
             </FormGroup>
             </Col>
             <Col xs="3">
             <FormGroup>
-              <Label for="shift">Last CV Update</Label>
+              <Label for="update">Last CV Update</Label>
               <Input type="date" name="jobDetail.lastUpdate" id="update" value={item.jobDetail.lastUpdate || ''}
                     onChange={this.handleChange} placeholder="CV Last Update" disabled/>
             </FormGroup>

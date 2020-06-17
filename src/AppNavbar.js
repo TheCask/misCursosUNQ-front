@@ -24,7 +24,7 @@ export default class AppNavbar extends Component {
 
   async componentDidMount() {
     // fetch won't send cookies unless you set credentials
-    await fetch(`http://localhost:${config.serverPort}/user`, {credentials: 'include'})
+    await fetch(`http://localhost:${config.serverPort}/getUser`, {credentials: 'include'})
       .then(response => response.json())
       .then(response => this.setState({body: response}));
       Log.info("Response", this.state.body);
@@ -42,7 +42,7 @@ export default class AppNavbar extends Component {
   render() {
     return (
       <div>
-        <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.80)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
+        <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.40)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
           <Col align="left">
             <NavbarBrand href="http://ciclointroductoriocyt.web.unq.edu.ar" >
               <img className="app-logo" alt="applogo" src={logoApp}
@@ -57,7 +57,7 @@ export default class AppNavbar extends Component {
           </Col>
           <Col align="right">
             <Greeting body={this.state.body} align="right"/>
-            <br></br>
+            {" "}
             <LogInOut body={this.state.body} uri={`http://localhost:${config.serverPort}`}/>
           </Col>
         </Navbar>

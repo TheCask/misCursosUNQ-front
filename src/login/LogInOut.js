@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button, UncontrolledTooltip } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default class LogInOut extends React.Component {
   constructor(props) {
@@ -7,16 +9,19 @@ export default class LogInOut extends React.Component {
 
 
   render() {
-    let message = (this.props.body.token)
-      ? 'sign out'
-      : 'sign in';
+    let message = (this.props.body.token) ? 'Sign Out' : 'Sign In';
 
-    let path = (this.props.body.token)
-      ? '/logout'
-      : '/login';
+    let path = (this.props.body.token) ? '/logout' : '/login';
 
     return (
-      <a href={this.props.uri + path}>{message}</a>
-    );
+    <Button href={this.props.uri + path} outline color="light" id="signInOut">
+      <UncontrolledTooltip placement="auto" target="signInOut">
+        {message}
+      </UncontrolledTooltip>
+      {message === 'Sign Out' ? 
+      <FontAwesomeIcon icon='sign-out-alt' size="1x" color="darkred" /> : 
+      <FontAwesomeIcon icon='sign-in-alt' size="1x" color="darkgreen" />}
+    </Button>
+    )
   }
 }
