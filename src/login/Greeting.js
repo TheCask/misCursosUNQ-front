@@ -19,7 +19,7 @@ export default class Greeting extends Component {
 
 const ProfileButton = (props) => {
   return (
-        <Button size="2x" color='light' outline to={'/profile'} id={"profile"}>
+        <Button size="2x" color='light' outline href={'/profile'} id={"profile"}>
           <FontAwesomeIcon icon="id-card" size="lg"/>
           {" "}
           {JSON.stringify(props.registration.username).replaceAll("\"","")}

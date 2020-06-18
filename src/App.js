@@ -14,6 +14,7 @@ import FullSubjectList from './SubjectList';
 import SubjectEdit from './SubjectEdit';
 import FullUserList from './UserList';
 import UserEdit from './UserEdit';
+import SetUser from './login/SetUser';
 //import EvaluationPage from './Evaluation';
 import EXPERIMENTING from './EXPERIMENTING';
 // FONT AWESOME
@@ -42,6 +43,7 @@ class App extends Component {
           <Route path='/subject/:id/addCoordinators' component={AddCoordinatorsToSubject}/>
           <Route path='/subject/:id' component={SubjectEdit}/>
           <Route path='/users' exact={true} component={FullUserList}/>
+          <Route path='/profile' exact={true} component={SetUser}/>
           <Route path='/user/:id' component={UserEdit}/>
           <Route path='/experimenting' component={EXPERIMENTING}/>
 {/*           <Route path='/evaluation' component={EvaluationPage}/> */}

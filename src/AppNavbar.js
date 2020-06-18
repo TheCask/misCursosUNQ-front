@@ -73,10 +73,7 @@ export default class AppNavbar extends Component {
             </Col>
           </Row>
         </Container>
-        
-
       </div>
-
     )
   }
 }
