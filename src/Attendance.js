@@ -4,12 +4,16 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from './AppNavbar';
 import AppSpinner from './AppSpinner';
-import Log from './Log';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import * as CourseAPI from './services/CourseAPI';
 import * as LessonAPI from './services/LessonAPI';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+const truncTime = date => { 
+  date.setHours(0,0,0,0) 
+  return date;
+}
 
 class Attendance extends ComponentWithErrorHandling {
 
@@ -75,13 +79,11 @@ class Attendance extends ComponentWithErrorHandling {
   toggleAttendance(stFileNumber) {
     let student = {fileNumber: stFileNumber}
     let studentList = this.state.attendantStudentsIds
-    Log.info("list of students", studentList)
     if (studentList.find(st => st.fileNumber === stFileNumber)) {
       const newStudentList = studentList.filter(st => st.fileNumber !== stFileNumber)
       studentList = newStudentList
     }
     else { studentList = studentList.concat(student) }
-    Log.info("list of students", studentList)
     this.setState({attendantStudentsIds: studentList})
   }
 
@@ -212,11 +214,6 @@ const getDisplayFormat = date => {
   var yyyy = date.getFullYear();
 
   date = yyyy + '-' + mm + '-' + dd;
-  return date;
-}
-
-const truncTime = date => { 
-  date.setHours(0,0,0,0) 
   return date;
 }
 

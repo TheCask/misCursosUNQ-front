@@ -30,3 +30,15 @@ export function deleteInit() {
         }
     })
 }
+
+export function authInit(json) {
+    return ({
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json)
+        }
+    )
+}

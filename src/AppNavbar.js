@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Container, Row, Col, Navbar, NavbarBrand, NavLink } from 'reactstrap';
 import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
@@ -6,12 +6,10 @@ import SideBar from './SideBar';
 import Greeting from './login/Greeting'
 import LogInOut from './login/LogInOut'
 import ErrorBoundary from './errorHandling/ErrorBoundary';
-import Log from './Log'
+import * as AuthAPI from './services/AuthAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
 
-// auth config
-const config = require('./authConfig');
-
-export default class AppNavbar extends Component {
+export default class AppNavbar extends ComponentWithErrorHandling {
   
   constructor(props) {
     super(props);
@@ -23,11 +21,7 @@ export default class AppNavbar extends Component {
   }
 
   async componentDidMount() {
-    // fetch won't send cookies unless you set credentials
-    await fetch(`http://localhost:${config.serverPort}/getUser`, {credentials: 'include'})
-      .then(response => response.json())
-      .then(response => this.setState({body: response}));
-      Log.info("Response", this.state.body);
+    AuthAPI.getAppUserByIdAsync(json => this.setState({body: json}), this.showError("get app user"));
   }
 
   showError(title, description, error){
@@ -56,9 +50,9 @@ export default class AppNavbar extends Component {
             </NavLink>
           </Col>
           <Col align="right">
-            <Greeting body={this.state.body} align="right"/>
+            <Greeting body={this.state.body}/>
             {" "}
-            <LogInOut body={this.state.body} uri={`http://localhost:${config.serverPort}`}/>
+            <LogInOut body={this.state.body}/>
           </Col>
         </Navbar>
         <Container fluid style={{margin: '0px', height: '100vh'}}>

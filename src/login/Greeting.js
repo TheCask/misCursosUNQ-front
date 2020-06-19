@@ -1,13 +1,8 @@
 import React, {Component} from 'react';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Log from '../Log'
-import Container from 'reactstrap/lib/Container';
 
 export default class Greeting extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     let message = (this.props.body.registration)
@@ -22,7 +17,7 @@ const ProfileButton = (props) => {
         <Button size="2x" color='light' outline href={'/profile'} id={"profile"}>
           <FontAwesomeIcon icon="id-card" size="lg"/>
           {" "}
-          {JSON.stringify(props.registration.username).replaceAll("\"","")}
+          {JSON.stringify(props.registration.username).replace(/["]/g,"")}
           <UncontrolledTooltip placement="auto" target="profile">
             Edit Profile
           </UncontrolledTooltip>

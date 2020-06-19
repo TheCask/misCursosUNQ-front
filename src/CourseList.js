@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Table, Button, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,7 +9,7 @@ import * as CourseAPI from './services/CourseAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
 
-class FullCourseList extends Component {
+class FullCourseList extends ComponentWithErrorHandling {
   render() {
     return(
     <div>
@@ -33,7 +33,7 @@ class FullCourseList extends Component {
   }
 }
 
-export class CourseListContainer extends Component {
+export class CourseListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
