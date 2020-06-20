@@ -65,15 +65,9 @@ class StudentEdit extends ComponentWithErrorHandling {
           {title}
           <FormGroup className="float-right">
             <ButtonGroup>
-              <SaveButton
-                entityId = {item.fileNumber}
-                entityTypeCapName = "Student"
-              />
+              <SaveButton entityId = {item.fileNumber} entityTypeCapName = "Student" />
               {' '}
-              <CancelButton
-                to = {"/students"}
-                entityTypeCapName = "Student"
-              />
+              <CancelButton to = {"/students"} entityTypeCapName = "Student" />
             </ButtonGroup>
           </FormGroup>
             <FormGroup>

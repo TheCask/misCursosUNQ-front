@@ -1,44 +1,60 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup, Label, CustomInput, Row, Col } from 'reactstrap';
+import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
+import AppSpinner from '../AppSpinner';
 import SaveButton from '../buttonBar/SaveButton'
 import CancelButton from '../buttonBar/CancelButton'
 import * as AuthAPI from '../services/AuthAPI'
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import Log from '../Log'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class SetUser extends ComponentWithErrorHandling {
 
   user = {
-    username: "TheCask",
-    email: "eugeniocalcena@gmail.com",
-    firstName: "Eugenio Nicolas",
+    username: "",
+    email: "",
+    firstName: "",
     fullName: "", // Autoconstruct lastName, firstName
-    lastName: "Cálcena",
+    lastName: "",
     middleName: "", // Not Used
-    mobilePhone: "11-35684811",
+    mobilePhone: "",
     passwordChangeRequired: false,
-    birthDate: "1981-05-07",
-    preferredLanguages: [], // this property always concats to the list (bug)
+    birthDate: "",
+    preferredLanguages: [], // this property always concats to the list (PATCH method bug on FusionAuth)
     timezone: "Etc/GMT-3", // not change
-    twoFactorDelivery: "None", // not change
-    twoFactorEnabled: false, // not change
-    usernameStatus: "ACTIVE", // not change
-    verified: true // not change
+    twoFactorDelivery: "None", // not used
+    twoFactorEnabled: false, // not used
+    usernameStatus: "ACTIVE", // not used
+    verified: true // only show
 }
 
   constructor(props) {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
-      user: this.user};
+      user: this.user, isLoading: true};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
   }
 
   async componentDidMount() {
-    AuthAPI.getGlobalUserByIdAsync(json => this.setState({user: json.user}), this.showError("get global profile"));
+    AuthAPI.getGlobalUserByIdAsync(json => this.setState({user: json.user || {} , isLoading: false}), 
+      this.showError("get global profile"));
+  }
+
+  showError(title, description, error){
+    this.setState({isErrorModalOpen: true, 
+      lastError: {title: "", description: "", error: null}});
+  }
+
+  handleToggleCheckbox(event) {
+    let newValue = !this.state.user.passwordChangeRequired;
+    let user = this.state.user;
+    user['passwordChangeRequired'] = newValue;
+    this.setState({user: user})
   }
 
   handleChange(event) {
@@ -46,9 +62,10 @@ class SetUser extends ComponentWithErrorHandling {
     let user = this.state.user;
     user[name] = value;
     user['fullName'] = user.lastName + ', ' + user.firstName; // constructs full user name
-    // update this property with empty list avoids always growing list (concat bug)
+    // update this property with empty list avoids always growing list (concat PATH bug on FusionAuth)
     user['preferredLanguages'] = []
     this.setState({ user: user });
+    Log.info("user", user)
   }
 
   handleSubmit(event) {
@@ -60,8 +77,9 @@ class SetUser extends ComponentWithErrorHandling {
   }
 
   render() {
-    const {user} = this.state;
+    const {user, isLoading} = this.state;
     const title = <h2 className="float-left">{user ? 'Edit Profile' : ''}</h2>;
+    if (isLoading) { return (<AppSpinner/>) }
     return (
       <AppNavbar>
         {/* {this.renderErrorModal()} */}
@@ -73,11 +91,18 @@ class SetUser extends ComponentWithErrorHandling {
               <ButtonGroup className="float-right">
                 <SaveButton entityId = {user} entityTypeCapName = "User"/>
                 {' '}
-                <CancelButton to = {"/"} entityTypeCapName = "User" />
+                <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
               </ButtonGroup>
             </Col>
           </Row>
           <Row>
+            <Col xs="1">
+              <Label for="emailCheck">Verified?</Label>
+              {user.verified ? 
+                <FontAwesomeIcon icon='user-check' color="green" size="2x"/>
+                : <FontAwesomeIcon icon='user-times' color="red" size="2x"/>
+              }
+            </Col>
             <Col xs="3">
             <FormGroup>
               <Label for="username">User Name</Label>
@@ -91,7 +116,7 @@ class SetUser extends ComponentWithErrorHandling {
               <Input type="email" maxLength="50" name="email" id="email" value={user.email || ''}
                     onChange={this.handleChange} placeholder="e Mail" pattern="^.*@.*\..*$" required/>
             </FormGroup>
-            </Col> 
+            </Col>
             <Col xs="2">
             <FormGroup>
               <Label for="mobilePhone">Cell Phone</Label>
@@ -100,9 +125,9 @@ class SetUser extends ComponentWithErrorHandling {
                     onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}" required/>
             </FormGroup>
             </Col>
-            <Col xs="3">
+            <Col xs="2">
             <FormGroup>
-              <Label for="birthDate">Fecha de Nacimiento</Label>
+              <Label for="birthDate">Bith Date</Label>
               <Input type="text" maxLength="10" name="birthDate" id="birthDate" value={user.birthDate || ''}
                     title="Formato AAAA-MM-DD. Ej. 2003-07-25" pattern="\w{4}-\w{2}-\w{2}" required
                     onChange={this.handleChange} placeholder="Fecha de Nacimiento"/>
@@ -131,12 +156,18 @@ class SetUser extends ComponentWithErrorHandling {
             </FormGroup>
             </Col>
           </Row>
+          <br></br>
           <Row>
             <Col xs="6">
-            <FormGroup>
-              <Label for="passwordChangeRequired">Change Password</Label>
-              <CustomInput type="switch" name="passwordChangeRequired" id="passwordChangeRequired" value={user.passwordChangeRequired || ''}
-                    onChange={this.togglePasswordChangeRequired} label="Change Password in Next Login"/>
+            <FormGroup check inline>
+              <Label check for="passwordChangeRequired">
+              <Input type="checkbox" name="passwordChangeRequired" id="passwordChangeRequired" checked={user.passwordChangeRequired || ''}
+                    onChange={this.handleToggleCheckbox} label="Change Password in Next Login">
+              </Input> Change Password
+              </Label>
+              <UncontrolledTooltip placement="auto" target="passwordChangeRequired">
+                Check this if you want to change your password in next login.
+              </UncontrolledTooltip>
             </FormGroup>
             </Col>
           </Row>
