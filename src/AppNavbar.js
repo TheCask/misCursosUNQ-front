@@ -14,24 +14,23 @@ export default class AppNavbar extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {isErrorModalOpen: true, 
-      lastError: {title: "", description: "", error: null},
-      body: {}};
+      lastError: {title: "", description: "", error: null}}; //body: {}
     this.toggle = this.toggleErrorModal.bind(this);
     this.props = props;
   }
 
-  async componentDidMount() {
-    AuthAPI.getAppUserByIdAsync(json => this.setState({body: json}), this.showError("get app user"));
-  }
+  // async componentDidMount() {
+  //   AuthAPI.getAppUserByIdAsync(json => this.setState({body: json || {}}), this.showError("get app user"));
+  // }
 
-  showError(title, description, error){
-    this.setState({isErrorModalOpen: true, 
-      lastError: {title: "", description: "", error: null}});
-  }
+  // showError(title, description, error){
+  //   this.setState({isErrorModalOpen: true, 
+  //     lastError: {title: "", description: "", error: null}});
+  // }
 
-  toggleErrorModal() {
-    this.setState({isErrorModalOpen: !this.state.isErrorModalOpen});
-  }
+  // toggleErrorModal() {
+  //   this.setState({isErrorModalOpen: !this.state.isErrorModalOpen});
+  // }
 
   render() {
     return (
@@ -50,9 +49,7 @@ export default class AppNavbar extends ComponentWithErrorHandling {
             </NavLink>
           </Col>
           <Col align="right">
-            <Greeting body={this.state.body}/>
-            {" "}
-            <LogInOut body={this.state.body}/>
+            <Greeting/> {" "} <LogInOut/>
           </Col>
         </Navbar>
         <Container fluid style={{margin: '0px', height: '100vh'}}>

@@ -34,14 +34,14 @@ class SetUser extends ComponentWithErrorHandling {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
-      user: this.user, isLoading: true};
+      globalUser: this.user, isLoading: true};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
   }
 
   async componentDidMount() {
-    AuthAPI.getGlobalUserByIdAsync(json => this.setState({user: json.user || {} , isLoading: false}), 
+    AuthAPI.getGlobalUserByIdAsync(json => this.setState({globalUser: json.user || {} , isLoading: false}), 
       this.showError("get global profile"));
   }
 
@@ -51,45 +51,49 @@ class SetUser extends ComponentWithErrorHandling {
   }
 
   handleToggleCheckbox(event) {
-    let newValue = !this.state.user.passwordChangeRequired;
-    let user = this.state.user;
+    let newValue = !this.state.globalUser.passwordChangeRequired;
+    let user = this.state.globalUser;
     user['passwordChangeRequired'] = newValue;
-    this.setState({user: user})
+    this.setState({globalUser: user})
   }
 
   handleChange(event) {
     const {name, value} = event.target;
-    let user = this.state.user;
+    let user = this.state.globalUser;
     user[name] = value;
     user['fullName'] = user.lastName + ', ' + user.firstName; // constructs full user name
     // update this property with empty list avoids always growing list (concat PATH bug on FusionAuth)
     user['preferredLanguages'] = []
-    this.setState({ user: user });
+    this.setState({ globalUser: user });
     Log.info("user", user)
   }
 
   handleSubmit(event) {
+    /* prevent form to submit to:
+     - check some validation before submitting
+     - change values of input fields 
+     - submit using ajax calls */
     event.preventDefault();
-    const {user} = this.state;
-    Log.info("User", user)
+    const {globalUser} = this.state;
+    Log.info("User", globalUser)
     // save the change in FusionAuth
-    AuthAPI.postGlobalUserAsync(user, () => this.props.history.push('/profile'), this.showError("save global profile"));
+    AuthAPI.postGlobalUserAsync(globalUser, () => this.props.history.push('/profile'), this.showError("save global profile"));
   }
 
   render() {
-    const {user, isLoading} = this.state;
-    const title = <h2 className="float-left">{user ? 'Edit Profile' : ''}</h2>;
+    const {globalUser, isLoading} = this.state;
+    const title = <h2 className="float-left">{globalUser ? 'Edit Profile' : ''}</h2>;
     if (isLoading) { return (<AppSpinner/>) }
     return (
       <AppNavbar>
-        {/* {this.renderErrorModal()} */}
+        {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           <Row xs="2">
             <Col>{title}</Col>
             <Col>
               <ButtonGroup className="float-right">
-                <SaveButton entityId = {user} entityTypeCapName = "User"/>
+                <SaveButton entityId = {globalUser} entityTypeCapName = "User"/>
                 {' '}
                 <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
               </ButtonGroup>
@@ -98,7 +102,7 @@ class SetUser extends ComponentWithErrorHandling {
           <Row>
             <Col xs="1">
               <Label for="emailCheck">Verified?</Label>
-              {user.verified ? 
+              {globalUser.verified ? 
                 <FontAwesomeIcon icon='user-check' color="green" size="2x"/>
                 : <FontAwesomeIcon icon='user-times' color="red" size="2x"/>
               }
@@ -106,21 +110,21 @@ class SetUser extends ComponentWithErrorHandling {
             <Col xs="3">
             <FormGroup>
               <Label for="username">User Name</Label>
-              <Input type="text" maxLength="20" name="username" id="username" value={user.username || ''}
+              <Input type="text" maxLength="20" name="username" id="username" value={globalUser.username || ''}
                     onChange={this.handleChange} placeholder="Username" required />
             </FormGroup>
             </Col>
             <Col xs="4">
             <FormGroup>
               <Label for="email">Mail</Label>
-              <Input type="email" maxLength="50" name="email" id="email" value={user.email || ''}
+              <Input type="email" maxLength="50" name="email" id="email" value={globalUser.email || ''}
                     onChange={this.handleChange} placeholder="e Mail" pattern="^.*@.*\..*$" required/>
             </FormGroup>
             </Col>
             <Col xs="2">
             <FormGroup>
               <Label for="mobilePhone">Cell Phone</Label>
-              <Input type="text" name="mobilePhone" id="mobilePhone" value={user.mobilePhone || ''}
+              <Input type="text" name="mobilePhone" id="mobilePhone" value={globalUser.mobilePhone || ''}
                     title="Separar característica y número con un guión (no incluir 15 al inicio). Ej. 0229-4787658"
                     onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}" required/>
             </FormGroup>
@@ -128,7 +132,7 @@ class SetUser extends ComponentWithErrorHandling {
             <Col xs="2">
             <FormGroup>
               <Label for="birthDate">Bith Date</Label>
-              <Input type="text" maxLength="10" name="birthDate" id="birthDate" value={user.birthDate || ''}
+              <Input type="text" maxLength="10" name="birthDate" id="birthDate" value={globalUser.birthDate || ''}
                     title="Formato AAAA-MM-DD. Ej. 2003-07-25" pattern="\w{4}-\w{2}-\w{2}" required
                     onChange={this.handleChange} placeholder="Fecha de Nacimiento"/>
             </FormGroup>
@@ -138,21 +142,21 @@ class SetUser extends ComponentWithErrorHandling {
             <Col xs="4">
             <FormGroup>
               <Label for="firstName">First Name</Label>
-              <Input type="text" maxLength="50" name="firstName" id="firstName" value={user.firstName || ''}
+              <Input type="text" maxLength="50" name="firstName" id="firstName" value={globalUser.firstName || ''}
                     onChange={this.handleChange} placeholder="First Name" required/>
             </FormGroup>
             </Col>
             <Col xs="4">
             <FormGroup>
               <Label for="lastName">Last Name</Label>
-              <Input type="text" maxLength="50" name="lastName" id="lastName" value={user.lastName || ''}
+              <Input type="text" maxLength="50" name="lastName" id="lastName" value={globalUser.lastName || ''}
                     onChange={this.handleChange} placeholder="Last Name" required/>
             </FormGroup>
             </Col>
             <Col xs="4">
             <FormGroup>
               <Label for="fullName">Full Name</Label>
-              <Input type="text" name="fullName" id="fullName" value={user.fullName || ''} disabled/>
+              <Input type="text" name="fullName" id="fullName" value={globalUser.fullName || ''} disabled/>
             </FormGroup>
             </Col>
           </Row>
@@ -161,7 +165,7 @@ class SetUser extends ComponentWithErrorHandling {
             <Col xs="6">
             <FormGroup check inline>
               <Label check for="passwordChangeRequired">
-              <Input type="checkbox" name="passwordChangeRequired" id="passwordChangeRequired" checked={user.passwordChangeRequired || ''}
+              <Input type="checkbox" name="passwordChangeRequired" id="passwordChangeRequired" checked={globalUser.passwordChangeRequired || ''}
                     onChange={this.handleToggleCheckbox} label="Change Password in Next Login">
               </Input> Change Password
               </Label>
