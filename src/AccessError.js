@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Jumbotron, UncontrolledTooltip } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Jumbotron } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 
 export default class LogInOut extends Component {

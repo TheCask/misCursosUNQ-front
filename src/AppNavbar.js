@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Navbar, NavbarBrand, NavLink } from 'reactstrap';
+import { Container, Row, Col, Navbar } from 'reactstrap';
 import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
 import SideBar from './SideBar';
