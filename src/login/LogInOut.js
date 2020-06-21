@@ -28,13 +28,13 @@ export default class LogInOut extends ComponentWithErrorHandling {
     let message = (appUser.token) ? 'Sign Out' : 'Sign In';
     let path = (appUser.token) ? '/logout' : '/login';
     return (
-    <Button href={`http://localhost:${config.serverPort}` + path} outline color="light" id="signInOut">
+    <Button size="lg" color="light" outline href={`http://localhost:${config.serverPort}` + path} id="signInOut">
       <UncontrolledTooltip placement="auto" target="signInOut">
         {message}
       </UncontrolledTooltip>
       {message === 'Sign Out' ? 
-      <FontAwesomeIcon icon='sign-out-alt' size="1x" color="darkred" /> : 
-      <FontAwesomeIcon icon='sign-in-alt' size="1x" color="darkgreen" />}
+        <FontAwesomeIcon icon='sign-out-alt' size="lg" color="darkred" />
+        : <FontAwesomeIcon icon='sign-in-alt' size="lg" color="darkgreen" />}
     </Button>
     )
   }

@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Button, UncontrolledTooltip } from 'reactstrap';
+import { Button, UncontrolledTooltip, Media } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as AuthAPI from '../services/AuthAPI';
 import AppSpinner from '../AppSpinner';
@@ -23,7 +23,8 @@ export default class Greeting extends ComponentWithErrorHandling {
     if (this.state.isLoading) { return (<AppSpinner/>) }
     let globalUser = this.state.body.user;
     let message = (globalUser)
-      ? <ProfileButton greeting={globalUser.username ? globalUser.username : globalUser.email}/>
+      ? <ProfileButton greeting={globalUser.username ? globalUser.username : globalUser.email}
+          avatar={globalUser.imageUrl ? globalUser.imageUrl : <FontAwesomeIcon icon='id-card' size="lg" /> } />
       : "";
     return (<span>{message}</span>);
   }
@@ -31,8 +32,8 @@ export default class Greeting extends ComponentWithErrorHandling {
 
 const ProfileButton = (props) => {
   return (
-        <Button size="2x" color='light' outline href={'/profile'} id={"profile"}>
-          <FontAwesomeIcon icon="id-card" size="lg"/>
+        <Button size="lg" color='light' outline href={'/profile'} id="profile">
+          <Media width="32" object src={props.avatar} alt="User Avatar" />
           {" "}
           {JSON.stringify(props.greeting).replace(/["]/g,"")}
           <UncontrolledTooltip placement="auto" target="profile">
