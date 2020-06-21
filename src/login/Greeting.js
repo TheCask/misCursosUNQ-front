@@ -29,10 +29,10 @@ export default class Greeting extends ComponentWithErrorHandling {
     return (<span>{message}</span>);
   }
 }
-
+//style={{backgroundColor:"rgba(20, 0, 0, 0.40)"
 const ProfileButton = (props) => {
   return (
-        <Button size="lg" color='light' outline href={'/profile'} id="profile">
+        <Button block size="lg" color="rgba(20, 0, 0, 0.40)" href={'/profile'} id="profile">
           <Media width="32" object src={props.avatar} alt="User Avatar" />
           {" "}
           {JSON.stringify(props.greeting).replace(/["]/g,"")}

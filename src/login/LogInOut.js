@@ -28,7 +28,7 @@ export default class LogInOut extends ComponentWithErrorHandling {
     let message = (appUser.token) ? 'Sign Out' : 'Sign In';
     let path = (appUser.token) ? '/logout' : '/login';
     return (
-    <Button size="lg" color="light" outline href={`http://localhost:${config.serverPort}` + path} id="signInOut">
+    <Button size="lg" color="rgba(20, 0, 0, 0.40)" href={`http://localhost:${config.serverPort}` + path} id="signInOut">
       <UncontrolledTooltip placement="auto" target="signInOut">
         {message}
       </UncontrolledTooltip>

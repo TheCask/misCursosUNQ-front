@@ -21,21 +21,26 @@ export default class AppNavbar extends ComponentWithErrorHandling {
   render() {
     return (
       <div>
-        <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.40)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
-          <Col align="left">
-            <NavbarBrand href="http://ciclointroductoriocyt.web.unq.edu.ar" >
-              <img className="app-logo" alt="applogo" src={logoApp}
-                height="48" width="48" style={{margin: '0px 30px'}}/>
-            </NavbarBrand>
+        <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.20)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
+          <Col align="left">            
+            <a href="http://ciclointroductoriocyt.web.unq.edu.ar">
+            <img className="app-logo" alt="applogo" src={logoApp}
+              height="48" width="48" style={{margin: '0px 15px 0px 0px'}}/>
+            </a>
+            <a href="https://www.unq.edu.ar">
+              <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
+              height="48" width="128" style={{margin: '0px 0px'}}/>
+            </a>
+            {/* <NavbarBrand href="http://ciclointroductoriocyt.web.unq.edu.ar"> 
+            </NavbarBrand> */}
+            {/* <NavLink href="https://www.unq.edu.ar">
+            </NavLink> */}
           </Col>
           <Col align="center">
-            <NavLink href="https://www.unq.edu.ar">
-              <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
-                height="48" width="128" style={{margin: '0px 0px'}}/>
-            </NavLink>
+            <Greeting/>
           </Col>
           <Col align="right">
-            <Greeting/> {" "} <LogInOut/>
+            <LogInOut/>
           </Col>
         </Navbar>
         <Container fluid style={{margin: '0px', height: '100vh'}}>

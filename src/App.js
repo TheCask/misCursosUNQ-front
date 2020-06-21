@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // LOCAL
 import './App.css';
+import Home from './Home';
 import FullCourseList from './CourseList';
 import CourseEdit from './CourseEdit';
 import AddStudentsToCourse from './AddStudentsToCourse';
@@ -30,7 +31,7 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route path='/' exact={true} component={FullCourseList}/>
+          <Route path='/' exact={true} component={Home}/>
           <Route path='/courses' exact={true} component={FullCourseList}/>
           <Route path='/course/:id/lessons' component={Attendance}/>
           <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>

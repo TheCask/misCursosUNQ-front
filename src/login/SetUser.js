@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, Card, CardFooter, CardHeader, CardImg,
   ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
+import AccessError from '../AccessError';
 import AppSpinner from '../AppSpinner';
 import SaveButton from '../buttonBar/SaveButton'
 import CancelButton from '../buttonBar/CancelButton'
@@ -34,7 +35,7 @@ class SetUser extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {isErrorModalOpen: true, 
+    this.state = {isErrorModalOpen: false, 
       lastError: {title: "", description: "", error: null},
       globalUser: this.user, isLoading: true};
     this.handleChange = this.handleChange.bind(this);
@@ -74,7 +75,8 @@ class SetUser extends ComponentWithErrorHandling {
     const {globalUser} = this.state;
     Log.info(globalUser, "user")
     // save the change in FusionAuth
-    AuthAPI.postGlobalUserAsync(globalUser, () => this.props.history.push('/profile'), this.showError("save global profile"));
+    AuthAPI.postGlobalUserAsync(globalUser, () => this.props.history.push('/profile'), 
+      this.showError("save global profile"));
   }
 
   render() {
@@ -82,8 +84,10 @@ class SetUser extends ComponentWithErrorHandling {
     const title = <h2 className="float-left">{globalUser ? 'Edit Profile' : ''}</h2>;
     if (isLoading) { return (<AppSpinner/>) }
     return (
+      (!globalUser) ? <AccessError errorCode="User Not Logged" 
+        errorDetail="Make sure you are signed in before try to access this profile edit page"/>
+        :
       <AppNavbar>
-        {/* {this.renderErrorModal()} */}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           <Row xs="2">
@@ -150,7 +154,7 @@ class SetUser extends ComponentWithErrorHandling {
                       onChange={this.handleChange} placeholder="Fecha de Nacimiento"/>
               </FormGroup>
               <Label for="emailCheck">Verified</Label>
-              <Button block disabled outline size="sm">
+              <Button block disabled color="white" size="sm">
                   {globalUser.verified ? 
                     <FontAwesomeIcon id='emailCheck' icon='user-check' color="green" size="2x"/>
                     : <FontAwesomeIcon id='emailCheck' icon='user-times' color="red" size="2x"/>
@@ -164,11 +168,11 @@ class SetUser extends ComponentWithErrorHandling {
           <br></br>
           <Row>
             <Col xs="3">
-              <FormGroup>
+              {/* <FormGroup>
                 <Label for="imageURL">Image URL</Label>
                 <Input type="text" name="imageURL" id="imageURL" value={globalUser.imageUrl || ""}
                   onChange={this.handleChange} placeholder="Image URL" />
-              </FormGroup>
+              </FormGroup> */}
               <FormGroup check inline>
                 <Label check for="passwordChangeRequired">
                 <Input type="checkbox" name="passwordChangeRequired" id="passwordChangeRequired" checked={globalUser.passwordChangeRequired || ''}
