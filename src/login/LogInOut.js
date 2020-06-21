@@ -3,33 +3,23 @@ import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as AuthAPI from '../services/AuthAPI';
 import AppSpinner from '../AppSpinner';
-import Log from '../Log'
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 
 const config = require('./authConfig');
 
-export default class LogInOut extends React.Component {
+export default class LogInOut extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
       body: {}, isLoading: true};
-    this.toggle = this.toggleErrorModal.bind(this);
     this.props = props;
   }
 
   async componentDidMount() {
     AuthAPI.getAppUserByIdAsync(json => this.setState({body: json, isLoading: false}), 
       this.showError("get app user"));
-  }
-
-  showError(title, description, error){
-    this.setState({isErrorModalOpen: true, 
-      lastError: {title: "", description: "", error: null}});
-  }
-
-  toggleErrorModal() {
-    this.setState({isErrorModalOpen: !this.state.isErrorModalOpen});
   }
 
   render() {

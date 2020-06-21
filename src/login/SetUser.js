@@ -45,11 +45,6 @@ class SetUser extends ComponentWithErrorHandling {
       this.showError("get global profile"));
   }
 
-  showError(title, description, error){
-    this.setState({isErrorModalOpen: true, 
-      lastError: {title: "", description: "", error: null}});
-  }
-
   handleToggleCheckbox(event) {
     let newValue = !this.state.globalUser.passwordChangeRequired;
     let user = this.state.globalUser;
@@ -86,7 +81,7 @@ class SetUser extends ComponentWithErrorHandling {
     if (isLoading) { return (<AppSpinner/>) }
     return (
       <AppNavbar>
-        {this.renderErrorModal()}
+        {/* {this.renderErrorModal()} */}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           <Row xs="2">

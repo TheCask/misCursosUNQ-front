@@ -6,7 +6,6 @@ import SideBar from './SideBar';
 import Greeting from './login/Greeting'
 import LogInOut from './login/LogInOut'
 import ErrorBoundary from './errorHandling/ErrorBoundary';
-import * as AuthAPI from './services/AuthAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
 
 export default class AppNavbar extends ComponentWithErrorHandling {
@@ -14,23 +13,10 @@ export default class AppNavbar extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {isErrorModalOpen: true, 
-      lastError: {title: "", description: "", error: null}}; //body: {}
+      lastError: {title: "", description: "", error: null}};
     this.toggle = this.toggleErrorModal.bind(this);
     this.props = props;
   }
-
-  // async componentDidMount() {
-  //   AuthAPI.getAppUserByIdAsync(json => this.setState({body: json || {}}), this.showError("get app user"));
-  // }
-
-  // showError(title, description, error){
-  //   this.setState({isErrorModalOpen: true, 
-  //     lastError: {title: "", description: "", error: null}});
-  // }
-
-  // toggleErrorModal() {
-  //   this.setState({isErrorModalOpen: !this.state.isErrorModalOpen});
-  // }
 
   render() {
     return (

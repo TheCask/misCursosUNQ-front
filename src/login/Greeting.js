@@ -1,31 +1,22 @@
-import React, {Component} from 'react';
+import React  from 'react';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as AuthAPI from '../services/AuthAPI';
 import AppSpinner from '../AppSpinner';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 
-export default class Greeting extends Component {
+export default class Greeting extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
       body: {}, isLoading: true};
-    this.toggle = this.toggleErrorModal.bind(this);
   }
 
   async componentDidMount() {
     AuthAPI.getGlobalUserByIdAsync(json => this.setState({body: json, isLoading: false}), 
       this.showError("get global user"));
-  }
-
-  showError(title, description, error){
-    this.setState({isErrorModalOpen: true, 
-      lastError: {title: "", description: "", error: null}});
-  }
-
-  toggleErrorModal() {
-    this.setState({isErrorModalOpen: !this.state.isErrorModalOpen});
   }
 
   render() {

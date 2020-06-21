@@ -168,7 +168,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col xs="2">
               <FormGroup>
                 <Label for="location">Location</Label>
-                <Input type="text" maxLength="20" name="courseLocation" id="location" value={item.courseLocation} 
+                <Input type="text" maxLength="20" name="courseLocation" id="location" value={item.courseLocation || ''} 
                       onChange={this.handleChange} autoComplete="Course Location" placeholder="Location" required/>
               </FormGroup>
             </Col>
