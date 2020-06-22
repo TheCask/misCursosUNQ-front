@@ -37,7 +37,7 @@ class App extends ComponentWithErrorHandling {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
-      globalUser: {}, appUser: {}, actualRol: '', isLoadingG: true, isLoadingA: true};
+      globalUser: {}, appUser: {}, actualRol: 'Guest', isLoadingG: true, isLoadingA: true};
   };
 
   async componentDidMount() {
@@ -45,11 +45,16 @@ class App extends ComponentWithErrorHandling {
       this.showError("get global user"));
     AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
       this.showError("get app user"));
+    
+    const rehydrate = localStorage.getItem('rol') || '';
+    this.setState({actualRol: rehydrate});
+    Log.info(rehydrate)
   }
 
   chooseRol(rol) {
-    Log.info(rol, "ROL")
-    this.setState({actualRol: rol})
+    Log.info(rol, "ROL");
+    this.setState({actualRol: rol});
+    localStorage.setItem('rol', rol);
   }
 
   render() {

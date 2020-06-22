@@ -1,5 +1,5 @@
 import React  from 'react';
-import { Input } from 'reactstrap';
+import { CustomInput, FormGroup, Form, Label } from 'reactstrap';
 import {userContext} from './UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
@@ -14,23 +14,23 @@ export default class Rol extends ComponentWithErrorHandling {
     );
   }
 
-  handleChange(event) {
-    let rol = event.target.value;
-    return rol
-  }
-
   render() {
     return (
       <userContext.Consumer>
         { value => {
           let user = (value.appUser) ? value.appUser : null;
-          let roles = user ? user.roles.concat(['']) : [''];
+          let roles = user ? user.roles.concat(['Guest']) : ['Guest'];
           return (
             user ?
-            <Input type="select" name="rol" id="rol" label="Rol" value={value.actualRol || ''}
-              onChange={ () => { value.chooseRol(document.getElementById("rol").value); } }>
+            <Form inline>
+            <FormGroup>
+            <Label for="rol" className="mr-sm-2">Rol</Label>
+            <CustomInput style={{backgroundColor:"rgba(155, 155, 155, 0.5)", color:"black"}} type="select" name="rol" id="rol" label="Rol" 
+              value={value.actualRol || ''} onChange={ () => { value.chooseRol(document.getElementById("rol").value); } }>
                 {this.rolesOptions(roles)}
-            </Input>
+            </CustomInput>
+            </FormGroup>
+            </Form>
             : "")
           }
         }
@@ -38,13 +38,3 @@ export default class Rol extends ComponentWithErrorHandling {
     )
   }
 }
-
-            {/* //   <FormGroup>
-            //       <Input type="select" name="rol" id="rol"  value={value.actualRol || ''}
-            //             label="Rol">
-            //         {roles}
-            //       <FontAwesomeIcon icon='user-tag' size="xs" color="darkred" />
-            //       </Input>
-            //       <UncontrolledTooltip placement="auto" target="rol"> Select Rol </UncontrolledTooltip>
-            //   </FormGroup>
-            // : "") */}

@@ -23,7 +23,7 @@ export default class AppNavbar extends ComponentWithErrorHandling {
     return (
       <div>
         <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.20)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
-          <Col align="left">            
+          <Col xs="3" align="left">            
             <a href="http://ciclointroductoriocyt.web.unq.edu.ar">
             <img className="app-logo" alt="applogo" src={logoApp}
               height="48" width="48" style={{margin: '0px 15px 0px 0px'}}/>
@@ -33,13 +33,13 @@ export default class AppNavbar extends ComponentWithErrorHandling {
               height="48" width="128" style={{margin: '0px 0px'}}/>
             </a>
           </Col>
-          <Col align="center">
+          <Col xs="6" align="center">
             <Greeting/>
           </Col>
-          <Col align="center">
+          <Col xs="2" align="right">
             <Rol/>
           </Col>
-          <Col align="right">
+          <Col xs="1" align="right">
             <LogInOut/>
           </Col>
         </Navbar>
