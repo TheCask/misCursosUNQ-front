@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, Card, CardFooter, CardHeader, CardImg,
   ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
+import {userContext} from './UserContext';
 import AppNavbar from '../AppNavbar';
 import AccessError from '../AccessError';
 import AppSpinner from '../AppSpinner';

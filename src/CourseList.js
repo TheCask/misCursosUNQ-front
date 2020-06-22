@@ -180,8 +180,8 @@ const CourseListItem = props => {
       </td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.courseShift || ''}</td>
       <td style={{whiteSpace: 'nowrap'}}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.students.length || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.lessons.length || ''}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.students.length || 0}</td>
+      <td style={{whiteSpace: 'nowrap'}}>{props.course.lessons.length || 0 }</td>
       <td>
         <Button size="sm" color="success" outline block tag={Link} to={`/course/${props.course.courseId}/lessons`} id={"attendance_" + props.course.courseId}>
           <UncontrolledTooltip placement="auto" target={"attendance_" + props.course.courseId}>

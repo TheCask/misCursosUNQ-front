@@ -9,11 +9,11 @@ export default class Greeting extends ComponentWithErrorHandling {
   render() {
     return (
       <userContext.Consumer>
-        { userContext => { 
-          let globalUser = userContext.user
+        { value => { 
+          let user = value.globalUser;
           return (
-            globalUser ? <ProfileButton greeting={globalUser.username ? globalUser.username : globalUser.email}
-              avatar={globalUser.imageUrl ? globalUser.imageUrl : <FontAwesomeIcon icon='id-card' size="lg" /> } />
+            user ? <ProfileButton greeting={user.username ? user.username : user.email}
+              avatar={user.imageUrl ? user.imageUrl : <FontAwesomeIcon icon='id-card' size="lg" /> } />
               : ""
             )
           }

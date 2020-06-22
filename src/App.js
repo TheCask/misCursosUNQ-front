@@ -37,19 +37,25 @@ class App extends ComponentWithErrorHandling {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
-      body: {}, isLoading: true};
+      globalUser: {}, appUser: {}, isLoadingG: true, isLoadingA: true};
   };
 
   async componentDidMount() {
-    AuthAPI.getGlobalUserByIdAsync(json => this.setState({body: json, isLoading: false}), 
+    AuthAPI.getGlobalUserByIdAsync(json => this.setState({globalUser: json, isLoadingG: false}), 
       this.showError("get global user"));
+    AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
+      this.showError("get app user"));
   }
 
   render() {
-    if (this.state.isLoading) { return (<AppSpinner/>) }
-    Log.info(this.state.body, "User")
+    if (this.state.isLoadingG || this.state.isLoadingA) { return (<AppSpinner/>) }
+    const value = {
+      globalUser: this.state.globalUser.user,
+      appUser: this.state.appUser.registration,
+    }
+    Log.info(value, "User")
     return (
-      <userContext.Provider value={this.state.body}>
+      <userContext.Provider value={value}>
         <Router>
           <Switch>
             <Route path='/' exact={true} component={Home}/>
