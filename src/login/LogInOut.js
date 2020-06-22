@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, UncontrolledTooltip } from 'reactstrap';
+import {userContext} from './UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as AuthAPI from '../services/AuthAPI';
 import AppSpinner from '../AppSpinner';
@@ -37,5 +38,20 @@ export default class LogInOut extends ComponentWithErrorHandling {
         : <FontAwesomeIcon icon='sign-in-alt' size="lg" color="darkgreen" />}
     </Button>
     )
+
+    // return (
+    //   <userContext.Consumer>
+    //     { userContext => { 
+    //       let appUser = userContext
+    //       return (
+    //         globalUser ? <ProfileButton greeting={globalUser.username ? globalUser.username : globalUser.email}
+    //           avatar={globalUser.imageUrl ? globalUser.imageUrl : <FontAwesomeIcon icon='id-card' size="lg" /> } />
+    //           : ""
+    //         )
+    //       }
+    //     }
+    //   </userContext.Consumer>
+    // )
+
   }
 }
