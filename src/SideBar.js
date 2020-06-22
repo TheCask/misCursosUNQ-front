@@ -20,7 +20,8 @@ export default class SideBar extends Component {
           let user = (value.appUser) ? value.appUser : null;
           let role = user ? value.actualRol : 'Guest';
           return (
-            <Navbar dark style={{height: '100%', margin: '0px', alignItems: 'start', backgroundColor: 'rgb(88, 14, 14)', opacity: 0.7, paddingRight: '40px'}}>
+            //paddingRight: '40px'
+            <Navbar dark style={{height: '100%', margin: '0px', alignItems: 'start', backgroundColor: 'rgb(88, 14, 14)', opacity: 0.7, }}> 
               <Nav navbar vertical style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start', width: '100%' }}>
                   {
                     sidebarItems.map(item => 
@@ -34,6 +35,9 @@ export default class SideBar extends Component {
                       : ""
                     )
                   }
+                  <svg height="10" width="120">
+                    <line x1="0" y1="0" x2="120" y2="0" style={{stroke: 'rgba(255,255,255,0.4)', strokeWidth: '10'}} />
+                  </svg>
               </Nav>
             </Navbar> 
           )

@@ -27,7 +27,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
-import Log from './Log';
 
 library.add(fab, fas, faCheckSquare, faCoffee)
 
@@ -48,11 +47,9 @@ class App extends ComponentWithErrorHandling {
     
     const rehydrate = localStorage.getItem('rol') || '';
     this.setState({actualRol: rehydrate});
-    Log.info(rehydrate)
   }
 
   chooseRol(rol) {
-    Log.info(rol, "ROL");
     this.setState({actualRol: rol});
     localStorage.setItem('rol', rol);
   }
@@ -65,8 +62,7 @@ class App extends ComponentWithErrorHandling {
       actualRol: this.state.actualRol,
       chooseRol: rol => this.chooseRol(rol)
     }
-    Log.info(value, "User")
-    Log.info(value.actualRol, "Rol")
+
     return (
       <userContext.Provider value={value}>
         <Router>
