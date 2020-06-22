@@ -37,7 +37,7 @@ class App extends ComponentWithErrorHandling {
     super(props);
     this.state = {isErrorModalOpen: true, 
       lastError: {title: "", description: "", error: null},
-      globalUser: {}, appUser: {}, isLoadingG: true, isLoadingA: true};
+      globalUser: {}, appUser: {}, actualRol: '', isLoadingG: true, isLoadingA: true};
   };
 
   async componentDidMount() {
@@ -47,13 +47,21 @@ class App extends ComponentWithErrorHandling {
       this.showError("get app user"));
   }
 
+  chooseRol(rol) {
+    Log.info(rol, "ROL")
+    this.setState({actualRol: rol})
+  }
+
   render() {
     if (this.state.isLoadingG || this.state.isLoadingA) { return (<AppSpinner/>) }
     const value = {
       globalUser: this.state.globalUser.user,
       appUser: this.state.appUser.registration,
+      actualRol: this.state.actualRol,
+      chooseRol: rol => this.chooseRol(rol)
     }
     Log.info(value, "User")
+    Log.info(value.actualRol, "Rol")
     return (
       <userContext.Provider value={value}>
         <Router>

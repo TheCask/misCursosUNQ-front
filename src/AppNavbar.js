@@ -4,6 +4,7 @@ import logoUNQ from './images/logoUNQ.png';
 import logoApp from './images/logoAppWhite.png';
 import SideBar from './SideBar';
 import Greeting from './login/Greeting'
+import Rol from './login/Rol'
 import LogInOut from './login/LogInOut'
 import ErrorBoundary from './errorHandling/ErrorBoundary';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
@@ -31,13 +32,12 @@ export default class AppNavbar extends ComponentWithErrorHandling {
               <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
               height="48" width="128" style={{margin: '0px 0px'}}/>
             </a>
-            {/* <NavbarBrand href="http://ciclointroductoriocyt.web.unq.edu.ar"> 
-            </NavbarBrand> */}
-            {/* <NavLink href="https://www.unq.edu.ar">
-            </NavLink> */}
           </Col>
           <Col align="center">
             <Greeting/>
+          </Col>
+          <Col align="center">
+            <Rol/>
           </Col>
           <Col align="right">
             <LogInOut/>
