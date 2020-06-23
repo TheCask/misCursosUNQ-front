@@ -26,11 +26,11 @@ export default class AppNavbar extends ComponentWithErrorHandling {
           <Col xs="3" align="left">            
             <a href="http://ciclointroductoriocyt.web.unq.edu.ar">
             <img className="app-logo" alt="applogo" src={logoApp}
-              height="48" width="48" style={{margin: '0px 15px 0px 0px'}}/>
+              height="32" width="32" style={{margin: '0px 15px 0px 0px'}}/>
             </a>
             <a href="https://www.unq.edu.ar">
               <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
-              height="48" width="48" style={{margin: '0px 0px'}}/>
+              height="32" width="32" style={{margin: '0px 0px'}}/>
             </a>
           </Col>
           <Col xs="6" align="center">
