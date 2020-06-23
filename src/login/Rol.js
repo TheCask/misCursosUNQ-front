@@ -1,5 +1,5 @@
 import React  from 'react';
-import { CustomInput, FormGroup, Form, Label, UncontrolledTooltip } from 'reactstrap';
+import { CustomInput, FormGroup, Form, UncontrolledTooltip } from 'reactstrap';
 import {userContext} from './UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';

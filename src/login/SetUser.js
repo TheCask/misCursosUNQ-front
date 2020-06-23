@@ -2,7 +2,6 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, Card, CardFooter, CardHeader, CardImg,
   ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
-import {userContext} from './UserContext';
 import AppNavbar from '../AppNavbar';
 import AccessError from '../AccessError';
 import AppSpinner from '../AppSpinner';
@@ -10,7 +9,6 @@ import SaveButton from '../buttonBar/SaveButton'
 import CancelButton from '../buttonBar/CancelButton'
 import * as AuthAPI from '../services/AuthAPI'
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import Log from '../Log'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Button from 'reactstrap/lib/Button';
 
@@ -64,7 +62,6 @@ class SetUser extends ComponentWithErrorHandling {
     // update this property with empty list avoids always growing list (concat PATH bug on FusionAuth)
     user['preferredLanguages'] = []
     this.setState({ globalUser: user });
-    Log.info(user, "user")
   }
 
   handleSubmit(event) {
@@ -74,7 +71,6 @@ class SetUser extends ComponentWithErrorHandling {
      - submit using ajax calls */
     event.preventDefault();
     const {globalUser} = this.state;
-    Log.info(globalUser, "user")
     // save the change in FusionAuth
     AuthAPI.postGlobalUserAsync(globalUser, () => this.props.history.push('/profile'), 
       this.showError("save global profile"));

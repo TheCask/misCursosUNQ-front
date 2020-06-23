@@ -27,10 +27,10 @@ export default class SideBar extends Component {
                     sidebarItems.map(item => 
                       item.restrictedTo.includes(role) ?
                       <NavItem key={item.name}>
-                          <NavLink href={item.link} style={{alignItems: 'center', display: 'block', width: 'inherit' }}>
-                              <FontAwesomeIcon icon={item.icon} size="1x" color="light" style={{valign: 'center', width: '45px'}}/>
-                              {item.name}
-                          </NavLink>
+                        <NavLink href={item.link} style={{alignItems: 'center', display: 'block', width: 'inherit' }}>
+                          <FontAwesomeIcon icon={item.icon} size="1x" color="light" style={{valign: 'center', width: '45px'}}/>
+                          {item.name}
+                        </NavLink>
                       </NavItem>
                       : ""
                     )
