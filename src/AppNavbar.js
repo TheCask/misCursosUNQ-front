@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Navbar } from 'reactstrap';
 import logoUNQ from './images/logoUNQ.png';
-import logoApp from './images/logoAppWhite.png';
+import logoApp from './images/logoAppBlack.png';
 import SideBar from './SideBar';
 import Greeting from './login/Greeting'
 import Rol from './login/Rol'
@@ -30,7 +30,7 @@ export default class AppNavbar extends ComponentWithErrorHandling {
             </a>
             <a href="https://www.unq.edu.ar">
               <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
-              height="48" width="128" style={{margin: '0px 0px'}}/>
+              height="48" width="48" style={{margin: '0px 0px'}}/>
             </a>
           </Col>
           <Col xs="6" align="center">
