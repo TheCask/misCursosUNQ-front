@@ -11,6 +11,7 @@ import * as AuthAPI from '../services/AuthAPI'
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Button from 'reactstrap/lib/Button';
+import { userContext } from './UserContext';
 
 class SetUser extends ComponentWithErrorHandling {
 
@@ -42,9 +43,9 @@ class SetUser extends ComponentWithErrorHandling {
     this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
   }
 
-  async componentDidMount() {
-    AuthAPI.getGlobalUserByIdAsync(json => this.setState({globalUser: json.user, isLoading: false}), 
-      this.showError("get global profile"));
+  componentDidMount() {
+    let value = this.context;
+    this.setState({globalUser: value.globalUser, isLoading: false})
   }
 
   handleToggleCheckbox(event) {
@@ -133,8 +134,8 @@ class SetUser extends ComponentWithErrorHandling {
                 <Input type="text" name="fullName" id="fullName" value={globalUser.fullName || ''} disabled/>
               </FormGroup>
               <FormGroup>
-                <Label for="role">Role</Label>
-                <Input type="text" name="role" id="role" value={globalUser.registrations[0].roles.toString() || ''} disabled/>
+                <Label for="roles">Roles</Label>
+                <Input type="text" name="roles" id="roles" value={globalUser.registrations[0].roles.toString() || ''} disabled/>
               </FormGroup>
             </Col>
             <Col xs="2">
@@ -187,5 +188,5 @@ class SetUser extends ComponentWithErrorHandling {
       </AppNavbar>
   )}
 }
-
+SetUser.contextType = userContext;
 export default withRouter(SetUser);

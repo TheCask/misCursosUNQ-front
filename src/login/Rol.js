@@ -18,7 +18,7 @@ export default class Rol extends ComponentWithErrorHandling {
       <userContext.Consumer>
         { value => {
           let user = (value.appUser) ? value.appUser : null;
-          let roles = user ? user.roles.concat(['Guest']) : ['Guest'];
+          let roles = user ? user.roles : ['Guest'];
           return (
             user ?
             <Form inline>
