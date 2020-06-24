@@ -34,7 +34,7 @@ class StudentEdit extends ComponentWithErrorHandling {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      StudentAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), this.showError("get student details")) // TODO: replace null by error showing code
+      StudentAPI.getStudentByIdAsync(this.props.match.params.id, student => this.setState({item: student}), this.showError("get student details"))
     }
   }
 

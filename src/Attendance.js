@@ -73,7 +73,9 @@ class Attendance extends ComponentWithErrorHandling {
     let students = this.state.attendantStudentsIds;
     item['attendantStudents'] = students;
     this.setState({item: item});
-    LessonAPI.postLessonAsync(item, () => this.props.history.push('/courses'), this.showError("save lesson")); 
+    LessonAPI.postLessonAsync(item, 
+      () => this.props.history.push('/courses'), 
+      this.showError("save lesson")); 
   }
 
   toggleAttendance(stFileNumber) {

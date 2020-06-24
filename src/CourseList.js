@@ -14,6 +14,7 @@ class FullCourseList extends ComponentWithErrorHandling {
     return(
     <div>
         <AppNavbar>
+        {this.renderErrorModal()}
           <CourseListContainer
             courseListTitle = {'Courses'}
             onGetAll = { (handleSuccess, handleError) => CourseAPI.getCoursesAsync(handleSuccess, handleError) }
@@ -37,9 +38,9 @@ export class CourseListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
+    this.state = {...this.state, ...{courses: [], isLoading: true, targetId: '', coursesListTitle: 'Courses'}};
     this.title = this.props.courseListTitle;
     this.getIcon = this.props.getIcon
-    this.state = {courses: [], isLoading: true, targetId: ''};
     this.addButtonTo = props.addButtonTo;
     this.deleteButtonTo=props.deleteButtonTo;
     this.contextParams = props;
@@ -47,7 +48,8 @@ export class CourseListContainer extends ComponentWithErrorHandling {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({courses: json, isLoading: false}, null )); // TODO: replace null by error showing code
+    this.contextParams.onGetAll(json => this.setState({courses: json, isLoading: false}),
+      this.showError("get courses"));
   }
 
   remove(courseId) {
@@ -57,7 +59,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
         let updatedCourses = [...this.state.courses].filter(course => course.courseId !== courseId);
         this.setState({courses: updatedCourses, targetId: ''});
       },
-      null // TODO: replace null by error showing code
+      this.showError("delete course")
     );
   }
 
@@ -68,11 +70,12 @@ export class CourseListContainer extends ComponentWithErrorHandling {
   }
 
   render() {
-    const isLoading = this.state.isLoading;
+    const isLoading = false;
     if (isLoading) { return (<AppSpinner />) }
     const deleteCourseFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
+        {this.renderErrorModal()}
         <Container fluid>     
           <ButtonBar 
             entityType='course' 

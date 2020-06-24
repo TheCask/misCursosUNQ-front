@@ -85,7 +85,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
   }
 
   render() {
-    const isLoading = this.state.isLoading;
+    const {isLoading} = this.state;
     if (isLoading) { return (<AppSpinner />) }
     const deleteStudentFunction = () => {this.remove(this.state.targetId)};
     return (

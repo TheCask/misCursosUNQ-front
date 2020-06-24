@@ -42,7 +42,8 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({subjects: json, isLoading: false}, this.showError("get subjects") ));
+    this.contextParams.onGetAll(json => this.setState({subjects: json, isLoading: false}), 
+      this.showError("get subjects"));
   }
 
   remove(subjectId) {
@@ -76,6 +77,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
     const deleteSubjectFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
+        {this.renderErrorModal()}
         <Container fluid>
           <ButtonBar
             entityType = 'subject'

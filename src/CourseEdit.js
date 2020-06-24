@@ -12,8 +12,6 @@ import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import Collapsable from './Collapsable';
 
-
-
 class CourseEdit extends ComponentWithErrorHandling {
 
   emptyItem = {
@@ -46,9 +44,12 @@ class CourseEdit extends ComponentWithErrorHandling {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      CourseAPI.getCourseByIdAsync(this.props.match.params.id, course => this.setState({item: course}), this.showError("get course by ID")) 
+      CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
+        course => this.setState({item: course}), 
+        this.showError("get course by ID")) 
     }
-    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json}), this.showError("get subjects"));
+    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json}), 
+      this.showError("get subjects"));
   }
 
   handleChange(event) {
@@ -84,7 +85,9 @@ class CourseEdit extends ComponentWithErrorHandling {
     event.preventDefault();
     const {item} = this.state;
     if (item.subject.name === '') { this.setDefaultSubjectName() }
-    CourseAPI.postCourseAsync(item, () => this.props.history.push('/courses'), this.showError("save course"));
+    CourseAPI.postCourseAsync(item, 
+      () => this.props.history.push('/courses'), 
+      this.showError("save course"));
   }
 
   getFullCode(courseCode, subjectCode) {
@@ -98,6 +101,7 @@ class CourseEdit extends ComponentWithErrorHandling {
     
     return <div>
       <AppNavbar>
+      {this.renderErrorModal()}
         <Container fluid>
         <Form onSubmit={this.handleSubmit}>
           <Row xs="2">
