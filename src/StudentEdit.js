@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
+import { Container, Form, FormGroup, Input, ButtonGroup, Row, Col, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
@@ -62,39 +62,65 @@ class StudentEdit extends ComponentWithErrorHandling {
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
-          {title}
-          <FormGroup className="float-right">
-            <ButtonGroup>
+          <Row xs="2">
+            <Col>{title}</Col>
+            <Col>
+            <ButtonGroup className="float-right">
               <SaveButton entityId = {item.fileNumber} entityTypeCapName = "Student" />
               {' '}
               <CancelButton to = {"/students"} entityTypeCapName = "Student" />
             </ButtonGroup>
-          </FormGroup>
-            <FormGroup>
-              <Input type="number" min="0" max="2147483647" name="fileNumber" id="number" value={item.fileNumber || ''} required
-                    onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
-          </FormGroup>
-          <FormGroup>
-              <Input type="number" min="0" max="2147483647" name="dni" id="dni" value={item.personalData.dni || ''}
-                    onChange={this.handleChange} placeholder="DNI" required/>
-            </FormGroup>
-            <FormGroup>
-              <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
-                    onChange={this.handleChange} placeholder="First Name" required/>
-            </FormGroup>
-            <FormGroup>
-              <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
-                    onChange={this.handleChange} placeholder="Last Name" required/>
-            </FormGroup>
-            <FormGroup>
-              <Input type="email" name="email" id="email" value={item.personalData.email || ''}
-                    onChange={this.handleChange} placeholder="e Mail"/>
-          </FormGroup>
-          <FormGroup>
-              <Input type="tel" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''} 
-                      title="Separar característica y número con un guión. Ej. 0229-4787658"
-                      onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}"/>
-          </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs='2'>
+              <FormGroup>
+              <Label for="number">File Number</Label>
+                <Input type="number" min="0" max="2147483647" name="fileNumber" id="number" value={item.fileNumber || ''} required
+                      onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
+              </FormGroup>
+            </Col>
+            <Col xs='2'>
+              <FormGroup>
+                <Label for="dni">DNI</Label>
+                <Input type="number" min="0" max="2147483647" name="dni" id="dni" value={item.personalData.dni || ''}
+                      onChange={this.handleChange} placeholder="DNI" required/>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs='4'>
+              <FormGroup>
+                <Label for="firstName">First Name</Label>
+                <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
+                      onChange={this.handleChange} placeholder="First Name" required/>
+              </FormGroup>
+            </Col>
+            <Col xs='4'>
+              <FormGroup>
+                <Label for="lastName">Last Name</Label>
+                <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
+                      onChange={this.handleChange} placeholder="Last Name" required/>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs='4'>
+              <FormGroup>
+                <Label for="email">e Mail</Label>
+                <Input type="email" name="email" id="email" value={item.personalData.email || ''}
+                      onChange={this.handleChange} placeholder="e Mail"/>
+              </FormGroup>
+            </Col>
+            <Col xs='4'>
+              <FormGroup>
+                <Label for="cellPhone">Cell Phone</Label>
+                <Input type="tel" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''} 
+                        title="Separar característica y número con un guión. Ej. 0229-4787658"
+                        onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}"/>
+              </FormGroup>
+            </Col>
+          </Row>
           </Form>
         </Container>
       </AppNavbar>
