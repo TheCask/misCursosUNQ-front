@@ -1,6 +1,6 @@
 import React from 'react'; //{Component}
 import { withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup } from 'reactstrap';
+import { Container, Form, FormGroup, Input, ButtonGroup, Row, Col, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { UserListContainer } from './UserList'
 import SaveButton from './buttonBar/SaveButton'
@@ -55,36 +55,50 @@ class SubjectEdit extends ComponentWithErrorHandling {
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
-            {title}
-            <FormGroup className="float-right">
-              <ButtonGroup>
-                <SaveButton
-                  entityId = {item.code}
-                  entityTypeCapName = "Subject"
-                />
+          <Row xs="2">
+            <Col>{title}</Col>
+            <Col>
+              <ButtonGroup className="float-right">
+                <SaveButton entityId = {item.code} entityTypeCapName = "Subject" />
                 {' '}
-                <CancelButton
-                  to = {"/subjects"}
-                  entityTypeCapName = "Subject"
-                />
+                <CancelButton to = {"/subjects"} entityTypeCapName = "Subject" />
               </ButtonGroup>
-            </FormGroup>
+           </Col>
+          </Row>
+          <Row form>
+            <Col xs='3'>
+              <FormGroup>
+                <Label for="code">Subject Code</Label>
+                <Input type="text" name="code" id="code" value={item.code || ''} required
+                      onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs='4'>
             <FormGroup>
-              <Input type="text" name="code" id="code" value={item.code || ''} required
-                    onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
-            </FormGroup>
-            <FormGroup>
+              <Label for="name">Subject Name</Label>
               <Input type="text" name="name" id="name" value={item.name || ''} required
                     onChange={this.handleChange} placeholder="Subject Name"/>
             </FormGroup>
-            <FormGroup>
-              <Input type="text" name="acronym" id="acronym" value={item.acronym || ''} required
-                    onChange={this.handleChange} placeholder="Subject Acronym"/>
-            </FormGroup>
-            <FormGroup>
-              <Input type="url" name="programURL" id="programURL" value={item.programURL || ''}
-                onChange={this.handleChange} placeholder="URL to Subject's Program"/>
-            </FormGroup>
+            </Col>
+            <Col xs='2'>
+              <FormGroup>
+                <Label for="acronym">Acronym</Label>
+                <Input type="text" name="acronym" id="acronym" value={item.acronym || ''} required
+                      onChange={this.handleChange} placeholder="Subject Acronym"/>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row form>
+            <Col xs='6'>
+              <FormGroup>
+                <Label for="programURL">Program Link</Label>
+                <Input type="url" name="programURL" id="programURL" value={item.programURL || ''}
+                  onChange={this.handleChange} placeholder="URL to Subject's Program"/>
+              </FormGroup>
+            </Col>
+          </Row>
           </Form>
           {this.renderUsers()}
         </Container>
