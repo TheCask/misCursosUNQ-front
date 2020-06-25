@@ -13,6 +13,7 @@ import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import Collapsable from './Collapsable';
 import AppSpinner from './AppSpinner';
+import Log from './Log'
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -37,8 +38,8 @@ class CourseEdit extends ComponentWithErrorHandling {
     super(props);
     this.state = {...this.state, ...{
       item: this.emptyItem,
-      subjectList: [],
-      isLoading: true
+      subjectList: [], isLoading: true, 
+      alert: {on: false, color: '', message: ''}
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -89,8 +90,9 @@ class CourseEdit extends ComponentWithErrorHandling {
     const {item} = this.state;
     CourseAPI.postCourseAsync(item, 
       () => { 
-        this.showAlert('success', 'The Course has been saved!');
-         }, 
+        this.showSuccess('200', 'The Course has been saved!');
+        //this.props.history.push('/courses');
+      }, 
       this.showError("save course. Check if the course already exists based on code, subject, year and season"));
   }
 
@@ -103,12 +105,40 @@ class CourseEdit extends ComponentWithErrorHandling {
     return fullCode;
   }
 
-  showAlert(color, message) {
-    return (
-      <UncontrolledAlert color={color}>
-        {message}
-      </UncontrolledAlert>);
+  showSuccess = (errorCode, errorText) => {
+    this.setState({
+        isErrorModalOpen: true,
+        lastError: {
+            title: "Alright, everything worked...", 
+            shortDesc: "Successfully saved Course" ,
+            httpCode: errorCode,
+            errorText: errorText
+        }
+    })
   }
+
+  // saveAlert(color, message) {
+  //   const {alert} = this.state;
+  //   alert['on'] = true;
+  //   alert['color'] = color;
+  //   alert['message'] = message;
+  //   this.setState({alert: alert});
+    
+  // }
+
+  // renderAlert() {
+  //   const {alert} = this.state
+  //   Log.info(alert, "alert");
+  //   if (alert.on) {
+  //     alert['on'] = false;
+  //     this.setState({alert: alert})
+  //     return (
+  //       <UncontrolledAlert color={alert.color}>
+  //         {alert.message}
+  //       </UncontrolledAlert>
+  //     )
+  //   }
+  // }
 
   render() {
     const {item, isLoading} = this.state;

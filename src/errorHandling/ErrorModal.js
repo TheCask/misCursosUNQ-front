@@ -27,7 +27,7 @@ export default function ErrorModal (props) {
                 {isDetailShown ? details() : null }
             </ModalBody>
             <ModalFooter>
-                <Button color="danger" onClick={() => {props.toggle(); toggleShowDetails()}} id="modalCancel">
+                <Button color={httpCode === '200' ? 'success' : 'danger' } onClick={() => {props.toggle(); toggleShowDetails()}} id="modalCancel">
                     OK
                 </Button>
                 <Button color="secondary" onClick={toggleShowDetails} id="modalCancel">
