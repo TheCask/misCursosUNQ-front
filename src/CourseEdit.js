@@ -1,7 +1,8 @@
 import React from 'react'; //{Component}
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, Col, Row, Label } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, 
+  Col, Row, Label, UncontrolledAlert } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { StudentListContainer } from './StudentList'
 import { UserListContainer } from './UserList'
@@ -11,6 +12,7 @@ import * as CourseAPI from './services/CourseAPI';
 import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import Collapsable from './Collapsable';
+import AppSpinner from './AppSpinner';
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -36,6 +38,7 @@ class CourseEdit extends ComponentWithErrorHandling {
     this.state = {...this.state, ...{
       item: this.emptyItem,
       subjectList: [],
+      isLoading: true
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,9 +49,9 @@ class CourseEdit extends ComponentWithErrorHandling {
     if (this.props.match.params.id !== 'new') {
       CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
         course => this.setState({item: course}), 
-        this.showError("get course by ID")) 
+        this.showError("get course")) 
     }
-    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json}), 
+    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json, isLoading: false}), 
       this.showError("get subjects"));
   }
 
@@ -84,21 +87,34 @@ class CourseEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    if (item.subject.name === '') { this.setDefaultSubjectName() }
     CourseAPI.postCourseAsync(item, 
-      () => this.props.history.push('/courses'), 
-      this.showError("save course"));
+      () => { 
+        this.showAlert('success', 'The Course has been saved!');
+         }, 
+      this.showError("save course. Check if the course already exists based on code, subject, year and season"));
   }
 
   getFullCode(courseCode, subjectCode) {
-    const split = subjectCode.split('-')
-    return `${split[0]}-${courseCode}-${split[1]}`;
+    let fullCode = 'Full Code';
+    if (courseCode && subjectCode) {
+      const split = subjectCode.split('-');
+      fullCode = `${split[0]}-${courseCode}-${split[1]}`; 
+    }
+    return fullCode;
+  }
+
+  showAlert(color, message) {
+    return (
+      <UncontrolledAlert color={color}>
+        {message}
+      </UncontrolledAlert>);
   }
 
   render() {
-    const {item} = this.state;
+    const {item, isLoading} = this.state;
+    if (isLoading) { return <AppSpinner/> }
+    this.setDefaultSubjectName()
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
-    
     return <div>
       <AppNavbar>
       {this.renderErrorModal()}
@@ -114,13 +130,14 @@ class CourseEdit extends ComponentWithErrorHandling {
             </Col>
           </Row>
           <Row form>
-            <Col xs="3">
+            <Col xs="4">
               <FormGroup>
                 <Label for="fullCode">Full Code</Label>
-                <Input type="text" name="courseFullCode" id="fullCode" value={this.getFullCode(item.courseCode, item.subject.code) || ''} disabled/>
+                <Input type="text" name="courseFullCode" id="fullCode" disabled
+                  value={this.getFullCode(item.courseCode, item.subject.code) || ''}/>
               </FormGroup>
             </Col>
-            <Col xs="1">
+            <Col xs="2">
               <FormGroup>
                 <Label for="code">Code</Label>
                 <Input type="text" maxLength="5" name="courseCode" id="code" value={item.courseCode} required
@@ -139,7 +156,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             </Col>
           </Row>
           <Row form>
-            <Col xs="1">
+            <Col xs="2">
               <FormGroup>
                 <Label for="season">Season</Label>
                 <Input type="select" name="courseSeason" id="season" 
@@ -169,22 +186,21 @@ class CourseEdit extends ComponentWithErrorHandling {
                 <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
               </FormGroup>
             </Col>
-            <Col xs="2">
+            <Col xs="4">
               <FormGroup>
                 <Label for="location">Location</Label>
                 <Input type="text" maxLength="20" name="courseLocation" id="location" value={item.courseLocation || ''} 
                       onChange={this.handleChange} autoComplete="Course Location" placeholder="Location" required/>
               </FormGroup>
             </Col>
-          </Row>
-          <Row>
-            <Col xs="1">
+            <Col xs="2">
+              <Label for="lock">Toggle Lock</Label>
               <ButtonGroup size="sm">
-                <Button color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
+                <Button outline color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
                   <FontAwesomeIcon icon='lock-open' size="2x" id="lock"/>
                 </Button>
                 <UncontrolledTooltip placement="auto" target="isOpen"> Unlock Course </UncontrolledTooltip>
-                <Button color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
+                <Button outline color="danger" id="isClose" onClick={this.toggleIsOpen} disabled={!item.courseIsOpen}>
                   <FontAwesomeIcon icon='lock' size="2x" id="unlock"/>
                 </Button>
                 <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
@@ -261,10 +277,12 @@ class CourseEdit extends ComponentWithErrorHandling {
   }
 
   setDefaultSubjectName() {
-    let {item, subjectList} = {...this.state };
-    item['subject']['name'] = subjectList[0].name
-    item['subject']['code'] = subjectList[0].code
-    this.setState({item});
+    if (this.state.item.subject.name === '') { 
+      let {item, subjectList} = {...this.state };
+      item['subject']['name'] = subjectList[0].name
+      item['subject']['code'] = subjectList[0].code
+      this.setState({item});
+    }
   }
 }
 
