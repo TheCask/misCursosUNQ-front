@@ -19,7 +19,7 @@ export default function ErrorModal (props) {
 
     return <Modal isOpen={props.isOpen()} modalTransition={{ timeout: 1 }}
             toggle={props.toggle} size="lg" returnFocusAfterClose={false}>
-            <ModalHeader>
+            <ModalHeader color={httpCode === '200' ? 'success' : 'danger' }>
                 {title}
             </ModalHeader>
             <ModalBody>
@@ -30,9 +30,10 @@ export default function ErrorModal (props) {
                 <Button color={httpCode === '200' ? 'success' : 'danger' } onClick={() => {props.toggle(); toggleShowDetails()}} id="modalCancel">
                     OK
                 </Button>
+                {httpCode === '200' ? '' :
                 <Button color="secondary" onClick={toggleShowDetails} id="modalCancel">
                     Show Details
-                </Button>
+                </Button>}
             </ModalFooter>
         </Modal>;
 }

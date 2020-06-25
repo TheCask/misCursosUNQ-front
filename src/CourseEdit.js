@@ -17,12 +17,15 @@ import Log from './Log'
 
 class CourseEdit extends ComponentWithErrorHandling {
 
+  SeasonOptions = ['1C', '2C', '3C', '1T', '2T', '3T', '4T', '1S', '2S']
+  ShiftOptions = ['Mañana', 'Tarde', 'Noche']
+
   emptyItem = {
     courseCode: '',
-    courseShift: 'Mañana',
+    courseShift: '',
     courseIsOpen: true,
     courseYear: 2020,
-    courseSeason: '1C',
+    courseSeason: '',
     courseLocation: '',
     subject: {
       code: '',
@@ -117,33 +120,12 @@ class CourseEdit extends ComponentWithErrorHandling {
     })
   }
 
-  // saveAlert(color, message) {
-  //   const {alert} = this.state;
-  //   alert['on'] = true;
-  //   alert['color'] = color;
-  //   alert['message'] = message;
-  //   this.setState({alert: alert});
-    
-  // }
-
-  // renderAlert() {
-  //   const {alert} = this.state
-  //   Log.info(alert, "alert");
-  //   if (alert.on) {
-  //     alert['on'] = false;
-  //     this.setState({alert: alert})
-  //     return (
-  //       <UncontrolledAlert color={alert.color}>
-  //         {alert.message}
-  //       </UncontrolledAlert>
-  //     )
-  //   }
-  // }
-
   render() {
     const {item, isLoading} = this.state;
     if (isLoading) { return <AppSpinner/> }
     this.setDefaultSubjectName()
+    this.setDefaultShift()
+    this.setDefaultSeason()
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
     return <div>
       <AppNavbar>
@@ -191,8 +173,7 @@ class CourseEdit extends ComponentWithErrorHandling {
                 <Label for="season">Season</Label>
                 <Input type="select" name="courseSeason" id="season" 
                       value={item.courseSeason} onChange={this.handleChange} required>
-                        <option>{'1C'}</option>
-                        <option>{'2C'}</option>
+                        {this.seasonsOptions()}
                 </Input>
                 <UncontrolledTooltip placement="auto" target="season"> Select Season </UncontrolledTooltip>
               </FormGroup>
@@ -209,9 +190,7 @@ class CourseEdit extends ComponentWithErrorHandling {
                 <Label for="shift">Shift</Label>
                 <Input type="select" name="courseShift" id="shift" 
                 value={item.courseShift} onChange={this.handleChange} required>
-                    <option>Mañana</option>
-                    <option>Tarde</option>
-                    <option>Noche</option>
+                    {this.shiftOptions()}
                 </Input>
                 <UncontrolledTooltip placement="auto" target="shift"> Select Shift </UncontrolledTooltip>
               </FormGroup>
@@ -306,11 +285,41 @@ class CourseEdit extends ComponentWithErrorHandling {
     )
   }
 
+  seasonsOptions() {
+    return ( this.SeasonOptions.map(sn => {
+      return (<option key={sn}>{sn}</option>) 
+    })
+    )
+  }
+
+  shiftOptions() {
+    return ( this.ShiftOptions.map(sf => {
+      return (<option key={sf}>{sf}</option>) 
+    })
+    )
+  }
+
   setDefaultSubjectName() {
     if (this.state.item.subject.name === '') { 
       let {item, subjectList} = {...this.state };
       item['subject']['name'] = subjectList[0].name
       item['subject']['code'] = subjectList[0].code
+      this.setState({item});
+    }
+  }
+
+  setDefaultSeason() {
+    if (this.state.item.courseSeason === '') { 
+      let {item} = {...this.state };
+      item['courseSeason'] = this.SeasonOptions[0];
+      this.setState({item});
+    }
+  }
+
+  setDefaultShift() {
+    if (this.state.item.courseShift === '') { 
+      let {item} = {...this.state };
+      item['courseShift'] = this.ShiftOptions[0];
       this.setState({item});
     }
   }
