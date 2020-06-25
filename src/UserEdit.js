@@ -10,6 +10,11 @@ import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandli
 
 class UserEdit extends ComponentWithErrorHandling {
 
+  CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
+  GradeOptions = ['', 'A', 'B']
+  ContractOptions = ['', 'Contratado/a', 'Interino/a', 'Ordinario/a']
+  DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva']
+  
   emptyItem = {
       personalData: {
           dni: '',
@@ -20,10 +25,10 @@ class UserEdit extends ComponentWithErrorHandling {
       },
       jobDetail: {
           cuitNumber: '',
-          category: ' ',
-          grade: ' ',
-          dedication: ' ',
-          contractRelation: ' ',
+          category: '',
+          grade: '',
+          dedication: '',
+          contractRelation: '',
           aditionalHours: 0,
           cvURL: '',
           lastUpdate: '',
@@ -147,15 +152,8 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="category">Category</Label>
               <Input type="select" name="jobDetail.category" id="category" value={item.jobDetail.category}
-                    onChange={this.handleChange} placeholder="Category">
-                    <option> </option>
-                    <option>Auxiliar</option>
-                    <option>Instructor/a</option>
-                    <option>Adjunto/a</option>
-                    <option>Asociado/a</option>
-                    <option>Titular</option>
-                    <option>Emérito/a</option>
-                    <option>Consulto/a</option>
+                    onChange={this.handleChange}>
+                    {this.categoryOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="category"> Select Category </UncontrolledTooltip>
             </FormGroup>
@@ -164,10 +162,8 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="grade">Grade</Label>
               <Input type="select" name="jobDetail.grade" id="grade" value={item.jobDetail.grade}
-                    onChange={this.handleChange} placeholder="Grade">
-                    <option> </option>
-                    <option>A</option>
-                    <option>B</option>
+                    onChange={this.handleChange}>
+                    {this.gradeOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="grade"> Select Grade </UncontrolledTooltip>
             </FormGroup>
@@ -176,11 +172,8 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="dedication">Dedication</Label>
               <Input type="select" name="jobDetail.dedication" id="dedication" value={item.jobDetail.dedication}
-                    onChange={this.handleChange} placeholder="Dedication">
-                    <option> </option>
-                    <option>Parcial</option>
-                    <option>Semi Exclusiva</option>
-                    <option>Exclusiva</option>
+                    onChange={this.handleChange}>
+                    {this.dedicationOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="dedication"> Select Dedication </UncontrolledTooltip>
             </FormGroup>
@@ -189,11 +182,8 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
             <Label for="relation">Contract Relation</Label>
               <Input type="select" name="jobDetail.contractRelation" id="relation" value={item.jobDetail.contractRelation}
-                    onChange={this.handleChange} placeholder="Contract Relation">
-                    <option> </option>
-                    <option>Contratado/a</option>
-                    <option>Interino/a</option>
-                    <option>Ordinario/a</option>
+                    onChange={this.handleChange}>
+                    {this.contractOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="relation"> Select Contract Relation </UncontrolledTooltip>
             </FormGroup>
@@ -202,7 +192,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="aditional">Aditional Hours</Label>
               <Input type="number" name="jobDetail.aditionalHours" id="aditional" value={item.jobDetail.aditionalHours}
-                    onChange={this.handleChange} placeholder="Aditional Hours"/>
+                    onChange={this.handleChange}/>
             </FormGroup>
             </Col>
           </Row>
@@ -232,7 +222,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="update">Last CV Update</Label>
               <Input type="date" name="jobDetail.lastUpdate" id="update" value={item.jobDetail.lastUpdate || ''}
-                    onChange={this.handleChange} placeholder="CV Last Update" disabled/>
+                    onChange={this.handleChange} disabled/>
             </FormGroup>
             </Col>
           </Row>
@@ -240,6 +230,30 @@ class UserEdit extends ComponentWithErrorHandling {
         </Container>
       </AppNavbar>
   )}
+
+  categoryOptions() {
+    return ( this.CategoryOptions.map(ct => {
+      return (<option key={ct}>{ct}</option>) 
+    }))
+  }
+
+  gradeOptions() {
+    return ( this.GradeOptions.map(gd => {
+      return (<option key={gd}>{gd}</option>) 
+    }))
+  }
+
+  contractOptions() {
+    return ( this.ContractOptions.map(ct => {
+      return (<option key={ct}>{ct}</option>) 
+    }))
+  }
+
+  dedicationOptions() {
+    return ( this.DedicationOptions.map(dc => {
+      return (<option key={dc}>{dc}</option>) 
+    }))
+  }
 }
 
 export default withRouter(UserEdit);

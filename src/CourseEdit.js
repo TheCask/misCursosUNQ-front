@@ -2,7 +2,7 @@ import React from 'react'; //{Component}
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, 
-  Col, Row, Label, UncontrolledAlert } from 'reactstrap';
+  Col, Row, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { StudentListContainer } from './StudentList'
 import { UserListContainer } from './UserList'
@@ -13,7 +13,6 @@ import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import Collapsable from './Collapsable';
 import AppSpinner from './AppSpinner';
-import Log from './Log'
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -281,22 +280,19 @@ class CourseEdit extends ComponentWithErrorHandling {
     const subjectList = this.state.subjectList
     return ( subjectList.map(sj => {
       return (<option key={sj.code}>{sj.name}</option>) 
-    })
-    )
+    }))
   }
 
   seasonsOptions() {
     return ( this.SeasonOptions.map(sn => {
       return (<option key={sn}>{sn}</option>) 
-    })
-    )
+    }))
   }
 
   shiftOptions() {
     return ( this.ShiftOptions.map(sf => {
       return (<option key={sf}>{sf}</option>) 
-    })
-    )
+    }))
   }
 
   setDefaultSubjectName() {
