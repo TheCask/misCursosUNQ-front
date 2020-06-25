@@ -15,6 +15,7 @@ class ButtonBar extends Component {
     this.disableButtonAvailability = this.disableButtonAvailability.bind(this);
     this.entityType = props.entityType;
     this.addButtonTo = props.addButtonTo;
+    this.renderEditButton = props.renderEditButton;
     this.deleteButtonTo = props.deleteButtonTo;
   }
 
@@ -46,10 +47,13 @@ class ButtonBar extends Component {
           <AddButton 
                   entityTypeCapName = {entityTypeCap} 
                   to = {this.addButtonTo} />
+          {this.renderEditButton ?
           <EditButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}
                   to = {`/${route}/${targetId}`} />
+                  : null
+          }
           <DetailButton
                   entityTypeCapName = {entityTypeCap}
                   targetId = {targetId}

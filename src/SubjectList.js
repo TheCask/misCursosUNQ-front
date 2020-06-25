@@ -22,6 +22,7 @@ class FullSubjectList extends ComponentWithErrorHandling {
           "Please change subject from courses before trying to delete."
         ]}
         addButtonTo = {`/subject/new`}
+        renderEditButton = {true}
         deleteButtonTo = {'/subjects'}
         />
       </AppNavbar>
@@ -36,6 +37,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
     this.state = {...this.state, ...{subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}}; 
     this.title = this.props.subjectListTitle;
     this.addButtonTo = props.addButtonTo;
+    this.renderEditButton = props.renderEditButton;
     this.deleteButtonTo = props.deleteButtonTo;
     this.contextParams = props;
   }
@@ -86,6 +88,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
             disallowDelete = {this.disallowsDelete(this.state.targetId)}
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
+            renderEditButton = {this.renderEditButton}
             deleteButtonTo = {this.deleteButtonTo}
           />
           <h3>{this.title}</h3>

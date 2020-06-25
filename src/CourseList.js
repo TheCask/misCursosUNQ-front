@@ -26,6 +26,7 @@ class FullCourseList extends ComponentWithErrorHandling {
               'Students will lose their attendance to this course'
             ]}
             addButtonTo = {`/course/new`}
+            renderEditButton = {true}
             deleteButtonTo = {'./'} //required by delete button
           />
         </AppNavbar>
@@ -42,6 +43,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
     this.title = this.props.courseListTitle;
     this.getIcon = this.props.getIcon
     this.addButtonTo = props.addButtonTo;
+    this.renderEditButton = props.renderEditButton;
     this.deleteButtonTo=props.deleteButtonTo;
     this.contextParams = props;
   }
@@ -83,6 +85,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
             deleteEntityFunction = {deleteCourseFunction} 
             consequenceList = {this.contextParams.onDeleteConsequenceList} 
             addButtonTo = {this.addButtonTo}
+            renderEditButton = {this.renderEditButton}
             deleteButtonTo={this.deleteButtonTo} // required by delete button
           />  
           <h3>{this.title}</h3>

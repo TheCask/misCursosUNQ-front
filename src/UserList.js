@@ -20,6 +20,7 @@ class FullUserList extends ComponentWithErrorHandling {
           onSearch = {(page, text, handleSuccess, handleError) => UserAPI.searchUsersAsync(page, text, handleSuccess, handleError)}
           renderSearch = {true}
           addButtonTo = {'/user/new'}
+          renderEditButton = {true}
           deleteButtonTo = {'/users'}
           entityType = 'user'
           applyDisallowDeleteFunction = {true}
@@ -46,6 +47,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
       users: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
     this.title = this.props.userListTitle;
     this.addButtonTo = props.addButtonTo;
+    this.renderEditButton = props.renderEditButton;
     this.deleteButtonTo = props.deleteButtonTo;
     this.entityType = props.entityType;
     this.contextParams = props;
@@ -125,6 +127,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 disallowDelete = {this.applyDisallowDeleteFunction ? this.disallowsDelete(this.state.targetId) : false}
                 consequenceList = {this.contextParams.onDeleteConsequenceList}
                 addButtonTo = {this.addButtonTo}
+                renderEditButton = {this.renderEditButton}
                 deleteButtonTo = {this.deleteButtonTo}
                 onDisableDeleteTitle = {this.onDisableDeleteTitle}
                 onDisableDeleteBody = {this.onDisableDeleteBody}

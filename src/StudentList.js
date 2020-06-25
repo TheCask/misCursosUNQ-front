@@ -18,6 +18,7 @@ class FullStudentList extends ComponentWithErrorHandling {
           <StudentListContainer 
             studentListTitle = {'Students'}
             addButtonTo = {`/student/new`}
+            renderEditButton = {true}
             onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
             onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
             onSearch = {(page, text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(page, text, handleSuccess, handleError)}
@@ -42,6 +43,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
       students: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
     this.title = this.props.studentListTitle;
     this.addButtonTo = props.addButtonTo;
+    this.renderEditButton = props.renderEditButton;
     this.contextParams = props;
     this.renderSearch = props.renderSearch
     this.handleChange = this.handleChange.bind(this)
@@ -108,6 +110,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
                 deleteEntityFunction = {deleteStudentFunction} 
                 consequenceList = {this.contextParams.onDeleteConsequenceList}
                 addButtonTo = {this.addButtonTo}
+                renderEditButton = {this.renderEditButton}
               />
             </Col>
           </Row>
