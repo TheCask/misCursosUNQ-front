@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export const CancelButton = (props) =>
     <Button size="sm" color="secondary" tag={Link} to ={props.to} id ={`backTo${props.entityTypeCapName}s`} >
         <UncontrolledTooltip placement="auto" target = {`backTo${props.entityTypeCapName}s`}>
-            {`Discard and Back to ${props.entityTypeCapName}s`}
+            {props.entityTypeCapName ? `Discard and Back to ${props.entityTypeCapName}s` : 'Discard and Back Home'}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon='backward' size="2x"/>
     </Button>

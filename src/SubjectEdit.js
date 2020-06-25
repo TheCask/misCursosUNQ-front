@@ -75,7 +75,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
             </Col>
           </Row>
           <Row form>
-            <Col xs='4'>
+            <Col xs='6'>
             <FormGroup>
               <Label for="name">Subject Name</Label>
               <Input type="text" name="name" id="name" value={item.name || ''} required

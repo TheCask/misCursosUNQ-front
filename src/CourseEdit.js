@@ -203,6 +203,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             </Col>
             <Col xs="2">
               <Label for="lock">Toggle Lock</Label>
+              <FormGroup>
               <ButtonGroup size="sm">
                 <Button outline color="success" id="isOpen" onClick={this.toggleIsOpen} disabled={item.courseIsOpen}>
                   <FontAwesomeIcon icon='lock-open' size="2x" id="lock"/>
@@ -213,6 +214,7 @@ class CourseEdit extends ComponentWithErrorHandling {
                 </Button>
                 <UncontrolledTooltip placement="auto" target="isClose"> Lock Course </UncontrolledTooltip>
               </ButtonGroup>
+              </FormGroup>
             </Col>
           </Row>
         </Form>

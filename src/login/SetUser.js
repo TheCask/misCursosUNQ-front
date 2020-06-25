@@ -16,22 +16,23 @@ import { userContext } from './UserContext';
 class SetUser extends ComponentWithErrorHandling {
 
   user = {
-    username: "",
+    birthDate: "",
+    data: {}, // not used
     email: "",
     firstName: "",
     fullName: "", // Autoconstruct lastName, firstName
+    imageUrl: "",
     lastName: "",
     middleName: "", // Not Used
     mobilePhone: "",
     passwordChangeRequired: false,
-    birthDate: "",
     preferredLanguages: [], // this property always concats to the list (PATCH method bug on FusionAuth)
     timezone: "Etc/GMT-3", // not change
     twoFactorDelivery: "None", // not used
     twoFactorEnabled: false, // not used
-    usernameStatus: "ACTIVE", // not used
-    verified: true // only show
-}
+    usernameStatus: "", // not used
+    username: ""
+  }
 
   constructor(props) {
     super(props);
@@ -55,6 +56,18 @@ class SetUser extends ComponentWithErrorHandling {
     this.setState({globalUser: user})
   }
 
+  showSuccess = (errorCode, errorText) => {
+    this.setState({
+        isErrorModalOpen: true,
+        lastError: {
+            title: "Alright, everything worked...", 
+            shortDesc: "Successfully saved Profile" ,
+            httpCode: errorCode,
+            errorText: errorText
+        }
+    })
+  }
+
   handleChange(event) {
     const {name, value} = event.target;
     let user = this.state.globalUser;
@@ -73,7 +86,11 @@ class SetUser extends ComponentWithErrorHandling {
     event.preventDefault();
     const {globalUser} = this.state;
     // save the change in FusionAuth
-    AuthAPI.postGlobalUserAsync(globalUser, () => this.props.history.push('/profile'), 
+    AuthAPI.postGlobalUserAsync(globalUser, 
+      () => {
+        this.showSuccess('200', 'Your Profile has been saved!');
+      //() => this.props.history.push('/profile');
+      }, 
       this.showError("save global profile"));
   }
 
@@ -86,6 +103,7 @@ class SetUser extends ComponentWithErrorHandling {
         errorDetail="Make sure you are signed in before try to access this profile edit page"/>
         :
       <AppNavbar>
+        {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
           <Row xs="2">
@@ -94,7 +112,7 @@ class SetUser extends ComponentWithErrorHandling {
               <ButtonGroup className="float-right">
                 <SaveButton entityId = {globalUser} entityTypeCapName = "User"/>
                 {' '}
-                <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
+                <CancelButton to = {"/"} />
               </ButtonGroup>
             </Col>
           </Row>
