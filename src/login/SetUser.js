@@ -42,6 +42,7 @@ class SetUser extends ComponentWithErrorHandling {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
+    this.toggleResetPsw = this.toggleResetPsw.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +51,13 @@ class SetUser extends ComponentWithErrorHandling {
   }
 
   handleToggleCheckbox(event) {
+    let newValue = !this.state.globalUser.passwordChangeRequired;
+    let user = this.state.globalUser;
+    user['passwordChangeRequired'] = newValue;
+    this.setState({globalUser: user})
+  }
+
+  toggleResetPsw(event) {
     let newValue = !this.state.globalUser.passwordChangeRequired;
     let user = this.state.globalUser;
     user['passwordChangeRequired'] = newValue;
@@ -106,8 +114,20 @@ class SetUser extends ComponentWithErrorHandling {
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
-          <Row xs="2">
+          <Row xs="4">
             <Col>{title}</Col>
+            <Col className="float-left">
+                <Button disabled color="white" size="sm" id="emailCheckBt">
+                  {globalUser.verified ? 
+                    <FontAwesomeIcon id='emailCheck' icon='user-check' color="green" size="2x"/>
+                    : <FontAwesomeIcon id='emailCheck' icon='user-times' color="red" size="2x"/>
+                  }
+                </Button>
+                <UncontrolledTooltip placement="auto" target="emailCheck">
+                  {globalUser.verified ? 'Verified User' : 'Unverified User'}
+                </UncontrolledTooltip>
+            </Col>
+            <Col></Col>
             <Col>
               <ButtonGroup className="float-right">
                 <SaveButton entityId = {globalUser} entityTypeCapName = "User"/>
@@ -141,7 +161,7 @@ class SetUser extends ComponentWithErrorHandling {
                       onChange={this.handleChange} placeholder="Username" required />
               </FormGroup>
             </Col>
-            <Col xs="4">
+            <Col xs="4">  
               <FormGroup>
                 <Label for="email">Mail</Label>
                 <Input type="email" maxLength="50" name="email" id="email" value={globalUser.email || ''}
@@ -169,37 +189,36 @@ class SetUser extends ComponentWithErrorHandling {
                       title="Formato AAAA-MM-DD. Ej. 2003-07-25" pattern="\w{4}-\w{2}-\w{2}" required
                       onChange={this.handleChange} placeholder="Fecha de Nacimiento"/>
               </FormGroup>
-              <Label for="emailCheck">Verified</Label>
-              <Button block disabled color="white" size="sm">
-                  {globalUser.verified ? 
-                    <FontAwesomeIcon id='emailCheck' icon='user-check' color="green" size="2x"/>
-                    : <FontAwesomeIcon id='emailCheck' icon='user-times' color="red" size="2x"/>
+              <FormGroup>
+                <Label for="pswReset">Reset Password</Label>
+                <Button block color={globalUser.passwordChangeRequired ? "danger" : "secondary"} 
+                  outline id="pswReset" onClick={this.toggleResetPsw}>
+                  {globalUser.passwordChangeRequired ?
+                    <><FontAwesomeIcon icon='key' size="lg" id="pswResetIcon"/>
+                    <FontAwesomeIcon icon="exclamation" size="lg" transform="right-10"/></>
+                    : <FontAwesomeIcon icon='key' size="lg" id="pswResetIcon"/>
                   }
-                  <UncontrolledTooltip placement="auto" target="emailCheck">
-                    {globalUser.verified ? 'Verified User' : 'Unverified User'}
+                </Button>
+                {globalUser.passwordChangeRequired ?
+                  <UncontrolledTooltip placement="auto" target="pswReset"> 
+                    Disable Reset Password in Next Login 
+                  </UncontrolledTooltip> :
+                  <UncontrolledTooltip placement="auto" target="pswReset"> 
+                    Enable Reset Password in Next Login 
                   </UncontrolledTooltip>
-              </Button>
+                }
+              </FormGroup>
             </Col>
           </Row>
           <br></br>
           <Row>
-            <Col xs="3">
-              {/* <FormGroup>
+            {/* <Col xs="3">
+              <FormGroup>
                 <Label for="imageURL">Image URL</Label>
                 <Input type="text" name="imageURL" id="imageURL" value={globalUser.imageUrl || ""}
                   onChange={this.handleChange} placeholder="Image URL" />
-              </FormGroup> */}
-              <FormGroup check inline>
-                <Label check for="passwordChangeRequired">
-                <Input type="checkbox" name="passwordChangeRequired" id="passwordChangeRequired" checked={globalUser.passwordChangeRequired || ''}
-                      onChange={this.handleToggleCheckbox} label="Change Password in Next Login">
-                </Input> Change Password
-                </Label>
-                <UncontrolledTooltip placement="auto" target="passwordChangeRequired">
-                  Check this if you want to change your password in next login.
-                </UncontrolledTooltip>
               </FormGroup>
-            </Col>
+            </Col> */}
           </Row>
           </Form>
         </Container>
