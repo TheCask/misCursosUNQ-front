@@ -18,19 +18,19 @@ export default class Rol extends ComponentWithErrorHandling {
       <userContext.Consumer>
         { value => {
           let user = (value.appUser) ? value.appUser : null;
-          let roles = user ? user.roles : ['Guest'];
+          let roles = user ? user.roles : [''];
           return (
             user ?
             <Form inline>
             <FormGroup>
-            <FontAwesomeIcon color="darkred" icon='user-tag' size="lg" id="rolIcon" style={{marginRight:"10"}}/>
-            <CustomInput style={{backgroundColor:"rgba(155, 155, 155, 0.4)", color:"black"}} type="select" name="rol" id="rol" label="Rol" 
-              value={value.actualRol || ''} onChange={ () => { value.chooseRol(document.getElementById("rol").value); } }>
-                {this.rolesOptions(roles)}
-            </CustomInput>
-            <UncontrolledTooltip placement="auto" target="rol">
-              Select current Rol
-            </UncontrolledTooltip>
+              <FontAwesomeIcon color="darkred" icon='user-tag' size="lg" id="rolIcon" style={{marginRight:"10"}}/>
+              <CustomInput style={{backgroundColor:"rgba(155, 155, 155, 0.4)", color:"black"}} type="select" name="rol" id="rol" label="Rol" 
+                value={value.actualRol || ''} onChange={ () => { value.chooseRol(document.getElementById("rol").value); } }>
+                  {this.rolesOptions(roles)}
+              </CustomInput>
+              <UncontrolledTooltip placement="auto" target="rol">
+                Select current Rol
+              </UncontrolledTooltip>
             </FormGroup>
             </Form>
             : "")

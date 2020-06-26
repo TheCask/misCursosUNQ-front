@@ -13,6 +13,7 @@ import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import Collapsable from './Collapsable';
 import AppSpinner from './AppSpinner';
+import { userContext } from './login/UserContext';
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -139,6 +140,7 @@ class CourseEdit extends ComponentWithErrorHandling {
     if (isLoading) { return <AppSpinner/> }
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail);
+    let actualRol = this.context.actualRol;
     return <div>
       <AppNavbar>
       {this.renderErrorModal()}
@@ -148,7 +150,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
             <ButtonGroup className="float-right">
-              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail}/>
+              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
               <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
             </ButtonGroup>
             </Col>
@@ -243,14 +245,14 @@ class CourseEdit extends ComponentWithErrorHandling {
         <Container fluid>
           {item.courseId ? 
             <Collapsable entityTypeCapName={'Students'} >
-              {this.renderStudents(onlyDetail)}
+              {this.renderStudents(onlyDetail, actualRol)}
             </Collapsable> : ''
           }
         </Container>
         <Container fluid>
           {item.courseId ?
             <Collapsable entityTypeCapName={'Teachers'}>
-              {this.renderTeachers(onlyDetail)}
+              {this.renderTeachers(onlyDetail, actualRol)}
             </Collapsable> : ''
           }
         </Container>
@@ -258,7 +260,7 @@ class CourseEdit extends ComponentWithErrorHandling {
     </div>
   }
 
-  renderStudents(onlyDetail) {
+  renderStudents(onlyDetail, actualRol) {
     const courseId = this.props.match.params.id;
     if (courseId !== 'new') {
       return (
@@ -273,12 +275,15 @@ class CourseEdit extends ComponentWithErrorHandling {
           addButtonTo = {`/course/${courseId}/addStudents`}
           renderSearch = { false }
           renderButtonBar = {!onlyDetail}
+          renderAddButton = {actualRol === 'Cycle Coordinator' || actualRol ===  'Teacher'}
+          renderDeleteButton = {actualRol === 'Cycle Coordinator' || actualRol === 'Teacher'}
+          renderEditButton= {false}
         />
       );
     }
   }
 
-  renderTeachers(onlyDetail) {
+  renderTeachers(onlyDetail, actualRol) {
     const courseId = this.props.match.params.id;
     if (courseId !== 'new') {
       return (
@@ -294,6 +299,9 @@ class CourseEdit extends ComponentWithErrorHandling {
           applyDisallowDeleteFunction = { false }
           renderSearch = { false }
           renderButtonBar = {!onlyDetail}
+          renderAddButton = {actualRol === 'Cycle Coordinator'}
+          renderDeleteButton = {actualRol === 'Cycle Coordinator'}
+          renderEditButton= {false}
         />
       );
     }
@@ -350,4 +358,5 @@ class CourseEdit extends ComponentWithErrorHandling {
   }
 }
 
+CourseEdit.contextType = userContext;
 export default withRouter(CourseEdit);

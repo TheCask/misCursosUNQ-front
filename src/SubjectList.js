@@ -5,7 +5,7 @@ import AppNavbar from './AppNavbar';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-
+import { userContext } from './login/UserContext';
 
 class FullSubjectList extends ComponentWithErrorHandling {
   render() {
@@ -22,7 +22,10 @@ class FullSubjectList extends ComponentWithErrorHandling {
           "Please change subject from courses before trying to delete."
         ]}
         addButtonTo = {`/subject/new`}
+        renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
         renderEditButton = {true}
+        renderAddButton = {true}
+        renderDeleteButton = {true}
         deleteButtonTo = {'/subjects'}
         />
       </AppNavbar>
@@ -37,7 +40,10 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
     this.state = {...this.state, ...{subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}}; 
     this.title = this.props.subjectListTitle;
     this.addButtonTo = props.addButtonTo;
+    this.renderButtonBar = props.renderButtonBar;
     this.renderEditButton = props.renderEditButton;
+    this.renderAddButton = props.renderAddButton;
+    this.renderDeleteButton = props.renderDeleteButton;
     this.deleteButtonTo = props.deleteButtonTo;
     this.contextParams = props;
   }
@@ -81,6 +87,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
       <div>
         {this.renderErrorModal()}
         <Container fluid>
+          {this.renderButtonBar ?
           <ButtonBar
             entityType = 'subject'
             targetId={this.state.targetId} 
@@ -89,8 +96,10 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
             consequenceList = {this.contextParams.onDeleteConsequenceList}
             addButtonTo = {this.addButtonTo}
             renderEditButton = {this.renderEditButton}
+            renderAddButton = {this.renderAddButton}
+            renderDeleteButton = {this.renderDeleteButton}
             deleteButtonTo = {this.deleteButtonTo}
-          />
+          /> : ''}
           <h3>{this.title}</h3>
           <Table hover className="mt-4">
             <SubjectListHeaders/>
@@ -140,4 +149,5 @@ const SubjectListItem = props =>
     <td style={{whiteSpace: 'nowrap'}}>{props.subject.programURL || ''}</td>
   </tr>;
 
+FullSubjectList.contextType = userContext;
 export default FullSubjectList;

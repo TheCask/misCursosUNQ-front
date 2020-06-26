@@ -7,6 +7,7 @@ import SaveButton from './buttonBar/SaveButton'
 import CancelButton from './buttonBar/CancelButton'
 import * as SubjectAPI from './services/SubjectAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+import { userContext } from './login/UserContext';
 
 
 class SubjectEdit extends ComponentWithErrorHandling {
@@ -63,6 +64,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
     let newSubject = this.props.match.params.id === 'new';
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail, newSubject);
+    let actualRol = this.context.actualRol;
     return (
       <AppNavbar>
         {this.renderErrorModal()}
@@ -72,7 +74,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
               <ButtonGroup className="float-right">
-                <SaveButton entityId = {item.code} entityTypeCapName = "Subject" disabled={onlyDetail}/>
+                <SaveButton entityId = {item.code} entityTypeCapName = "Subject" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
                 {' '}
                 <CancelButton to = {"/subjects"} entityTypeCapName = "Subject" />
               </ButtonGroup>
@@ -113,12 +115,12 @@ class SubjectEdit extends ComponentWithErrorHandling {
             </Col>
           </Row>
           </Form>
-          {this.renderUsers(onlyDetail)}
+          {this.renderUsers(onlyDetail, actualRol)}
         </Container>
       </AppNavbar>
     )};
 
-  renderUsers(onlyDetail) {
+  renderUsers(onlyDetail, actualRol) {
     const subjectId = this.props.match.params.id;
     if (subjectId !== 'new') {
       return (
@@ -132,10 +134,13 @@ class SubjectEdit extends ComponentWithErrorHandling {
           addButtonTo = {`/subject/${subjectId}/addCoordinators`}
           entityType = 'coordinator'
           renderButtonBar = {!onlyDetail}
+          renderAddButton = {actualRol === 'Cycle Coordinator'}
+          renderDeleteButton = {actualRol === 'Cycle Coordinator'}
+          renderEditButton= {false}
         />
       );
     }
   }
 }
-
+SubjectEdit.contextType = userContext;
 export default withRouter(SubjectEdit);

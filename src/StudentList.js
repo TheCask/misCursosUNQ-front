@@ -7,6 +7,7 @@ import ButtonBar from './buttonBar/ButtonBar';
 import * as StudentAPI from './services/StudentAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { userContext } from './login/UserContext';
 
 
 class FullStudentList extends ComponentWithErrorHandling {
@@ -19,7 +20,9 @@ class FullStudentList extends ComponentWithErrorHandling {
             studentListTitle = {'Students'}
             addButtonTo = {`/student/new`}
             renderEditButton = {true}
-            renderButtonBar = {true}
+            renderAddButton = {true}
+            renderDeleteButton = {true}
+            renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
             onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
             onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
             onSearch = {(page, text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(page, text, handleSuccess, handleError)}
@@ -45,6 +48,8 @@ export class StudentListContainer extends ComponentWithErrorHandling {
     this.title = this.props.studentListTitle;
     this.addButtonTo = props.addButtonTo;
     this.renderButtonBar = props.renderButtonBar;
+    this.renderAddButton = props.renderAddButton;
+    this.renderDeleteButton = props.renderDeleteButton;
     this.renderEditButton = props.renderEditButton;
     this.contextParams = props;
     this.renderSearch = props.renderSearch
@@ -114,6 +119,8 @@ export class StudentListContainer extends ComponentWithErrorHandling {
                 consequenceList = {this.contextParams.onDeleteConsequenceList}
                 addButtonTo = {this.addButtonTo}
                 renderEditButton = {this.renderEditButton}
+                renderAddButton = {this.renderAddButton}
+                renderDeleteButton = {this.renderDeleteButton}
               /> : '' }
             </Col>
           </Row>
@@ -183,4 +190,5 @@ const SearchField = props =>
     </InputGroupAddon>
   </InputGroup>;
 
+FullStudentList.contextType = userContext;
 export default FullStudentList;

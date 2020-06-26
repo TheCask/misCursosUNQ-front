@@ -5,7 +5,7 @@ import {userContext} from './UserContext';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 
 const config = require('./authConfig');
-
+//onClick={user ? localStorage.setItem('rol', '') : value.actualRol}
 export default class LogInOut extends ComponentWithErrorHandling {
 
   render() {
@@ -16,7 +16,8 @@ export default class LogInOut extends ComponentWithErrorHandling {
           let message = (user) ? 'Sign Out' : 'Sign In';
           let path = (user) ? '/logout' : '/login';
           return (
-            <Button size="lg" color="rgba(20, 0, 0, 0.40)" href={`http://localhost:${config.serverPort}` + path} id="signInOut">
+            <Button size="lg" color="rgba(20, 0, 0, 0.40)" id="signInOut"
+              href={`http://localhost:${config.serverPort}` + path} >
               <UncontrolledTooltip placement="auto" target="signInOut">
                 {message}
               </UncontrolledTooltip>

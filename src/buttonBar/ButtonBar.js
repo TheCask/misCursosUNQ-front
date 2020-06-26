@@ -15,7 +15,10 @@ class ButtonBar extends Component {
     this.disableButtonAvailability = this.disableButtonAvailability.bind(this);
     this.entityType = props.entityType;
     this.addButtonTo = props.addButtonTo;
+    this.renderAddButton = props.renderAddButton;
+    this.renderDeleteButton = props.renderDeleteButton;
     this.renderEditButton = props.renderEditButton;
+    this.renderAddAndDeleteButtons = props.renderAddAndDeleteButtons;
     this.deleteButtonTo = props.deleteButtonTo;
   }
 
@@ -44,25 +47,31 @@ class ButtonBar extends Component {
     return (
       <div className="float-right">
         <ButtonGroup inline="true">
+          {this.renderAddButton ?
           <AddButton 
-                  entityTypeCapName = {entityTypeCap} 
-                  to = {this.addButtonTo} />
+            entityTypeCapName = {entityTypeCap} 
+            to = {this.addButtonTo} />
+            : null
+          }
           {this.renderEditButton ?
           <EditButton
-                  entityTypeCapName = {entityTypeCap}
-                  targetId = {targetId}
-                  to = {`/${route}/${targetId}`} />
-                  : null
+            entityTypeCapName = {entityTypeCap}
+            targetId = {targetId}
+            to = {`/${route}/${targetId}`} />
+            : null
           }
           <DetailButton
-                  entityTypeCapName = {entityTypeCap}
-                  targetId = {targetId}
-                  to = {`/${route}/${targetId}/detail`} />
+            entityTypeCapName = {entityTypeCap}
+            targetId = {targetId}
+            to = {`/${route}/${targetId}/detail`} />
+          {this.renderDeleteButton ?
           <DeleteButton
-                  entityTypeCapName = {entityTypeCap}
-                  targetId = {targetId}
-                  onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} 
-                  to = {this.deleteButtonTo}/>
+            entityTypeCapName = {entityTypeCap}
+            targetId = {targetId}
+            onClick = {() => {this.setState({modalTargetId: targetId}); this.toggleModal()}} 
+            to = {this.deleteButtonTo}/>
+            : null
+          }
           <BBModal
             fade={false}
             isOpen = {() => this.state.modal}

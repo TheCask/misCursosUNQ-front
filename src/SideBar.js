@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {userContext} from './login/UserContext';
 
 const sidebarItems = [
-  {name: 'Home', link: '/', icon: 'home', restrictedTo:['Guest', 'Teacher', 'Cycle Coordinator'] },
-  {name: 'Courses', link: '/courses', icon: 'chalkboard', restrictedTo:['Teacher', 'Cycle Coordinator']},
+  {name: 'Home', link: '/', icon: 'home', restrictedTo:['', 'Guest', 'Teacher', 'Cycle Coordinator'] },
+  {name: 'Courses', link: '/courses', icon: 'chalkboard', restrictedTo:['', 'Guest', 'Teacher', 'Cycle Coordinator']},
   {name: 'Users', link: '/users', icon: 'chalkboard-teacher', restrictedTo:['Cycle Coordinator']},
   {name: 'Subjects', link: '/subjects', icon: 'university', restrictedTo:['Cycle Coordinator']},
   {name: 'Students', link: '/students', icon: 'user-graduate', restrictedTo:['Cycle Coordinator']},
-  {name: 'GitHub', link: 'https://github.com/TheCask/misCursosUNQ-front.git/', icon: ['fab', 'github'], restrictedTo:['Guest', 'Teacher', 'Cycle Coordinator']}
+  {name: 'GitHub', link: 'https://github.com/TheCask/misCursosUNQ-front.git/', icon: ['fab', 'github'], restrictedTo:['', 'Guest', 'Teacher', 'Cycle Coordinator']}
 ];
 // roles.some(role => item.restrictedTo.includes(role)) ?
 export default class SideBar extends Component {
@@ -18,7 +18,7 @@ export default class SideBar extends Component {
       <userContext.Consumer>
         { value => { 
           let user = (value.appUser) ? value.appUser : null;
-          let role = user ? value.actualRol : 'Guest';
+          let role = user ? value.actualRol : '';
           return (
             //paddingRight: '40px'
             <Navbar dark style={{height: '100%', margin: '0px', alignItems: 'start', backgroundColor: 'rgb(88, 14, 14)', opacity: 0.7, }}> 

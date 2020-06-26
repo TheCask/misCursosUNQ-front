@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Button from 'reactstrap/lib/Button';
 import { userContext } from './UserContext';
 
-class SetUser extends ComponentWithErrorHandling {
+class Profile extends ComponentWithErrorHandling {
 
   user = {
     birthDate: "",
@@ -225,5 +225,5 @@ class SetUser extends ComponentWithErrorHandling {
       </AppNavbar>
   )}
 }
-SetUser.contextType = userContext;
-export default withRouter(SetUser);
+Profile.contextType = userContext;
+export default withRouter(Profile);

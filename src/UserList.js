@@ -7,6 +7,7 @@ import ButtonBar from './buttonBar/ButtonBar';
 import * as UserAPI from './services/UserAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { userContext } from './login/UserContext';
 
 class FullUserList extends ComponentWithErrorHandling {
   render() {
@@ -19,9 +20,11 @@ class FullUserList extends ComponentWithErrorHandling {
           onDelete = {(userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
           onSearch = {(page, text, handleSuccess, handleError) => UserAPI.searchUsersAsync(page, text, handleSuccess, handleError)}
           renderSearch = {true}
-          renderButtonBar = {true}
-          addButtonTo = {'/user/new'}
           renderEditButton = {true}
+          renderAddButton = {true}
+          renderDeleteButton = {true}
+          renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
+          addButtonTo = {'/user/new'}
           deleteButtonTo = {'/users'}
           entityType = 'user'
           applyDisallowDeleteFunction = {true}
@@ -48,6 +51,9 @@ export class UserListContainer extends ComponentWithErrorHandling {
       users: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
     this.title = this.props.userListTitle;
     this.addButtonTo = props.addButtonTo;
+    this.renderButtonBar = props.renderButtonBar;
+    this.renderAddButton = props.renderAddButton;
+    this.renderDeleteButton = props.renderDeleteButton;
     this.renderEditButton = props.renderEditButton;
     this.deleteButtonTo = props.deleteButtonTo;
     this.entityType = props.entityType;
@@ -57,7 +63,6 @@ export class UserListContainer extends ComponentWithErrorHandling {
     this.onDisableDeleteTitle = props.onDisableDeleteTitle;
     this.onDisableDeleteBody = props.onDisableDeleteBody;
     this.renderSearch = props.renderSearch;
-    this.renderButtonBar = props.renderButtonBar;
     this.handleChange = this.handleChange.bind(this);
     this.doSearch = this.doSearch.bind(this);
  }
@@ -131,6 +136,8 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 consequenceList = {this.contextParams.onDeleteConsequenceList}
                 addButtonTo = {this.addButtonTo}
                 renderEditButton = {this.renderEditButton}
+                renderAddButton = {this.renderAddButton}
+                renderDeleteButton = {this.renderDeleteButton}
                 deleteButtonTo = {this.deleteButtonTo}
                 onDisableDeleteTitle = {this.onDisableDeleteTitle}
                 onDisableDeleteBody = {this.onDisableDeleteBody}
@@ -205,4 +212,5 @@ const SearchField = props =>
     </InputGroupAddon>
   </InputGroup>;
 
+FullUserList.contextType = userContext;
 export default FullUserList;

@@ -17,7 +17,7 @@ import SubjectEdit from './SubjectEdit';
 import FullUserList from './UserList';
 import UserEdit from './UserEdit';
 import * as Detail from './Details'
-import SetUser from './login/SetUser';
+import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
 import AppSpinner from './AppSpinner';
 //import EvaluationPage from './Evaluation';
@@ -46,7 +46,7 @@ class App extends ComponentWithErrorHandling {
     AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
       this.showError("get app user"));
     
-    const rehydrate = localStorage.getItem('rol') || '';
+    const rehydrate = localStorage.getItem('rol') || 'Guest';
     this.setState({actualRol: rehydrate});
   }
 
@@ -84,7 +84,7 @@ class App extends ComponentWithErrorHandling {
             <Route path='/subject/:id' exact={true} component={SubjectEdit}/>
             <Route path='/subject/:id/detail' component={Detail.SubjectDetail}/>
             <Route path='/users' component={FullUserList}/>
-            <Route path='/profile' component={SetUser}/>
+            <Route path='/profile' component={Profile}/>
             <Route path='/user/:id' exact={true} component={UserEdit}/>
             <Route path='/user/:id/detail' component={Detail.UserDetail}/>
             <Route path='/experimenting' component={EXPERIMENTING}/>

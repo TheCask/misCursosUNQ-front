@@ -4,20 +4,25 @@ import { Container, Table, Button, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from './AppSpinner'
 import AppNavbar from './AppNavbar'
+import AccessError from './AccessError';
 import ButtonBar from './buttonBar/ButtonBar';
 import * as CourseAPI from './services/CourseAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-
+import { userContext } from './login/UserContext';
+import Log from './Log'
 
 class FullCourseList extends ComponentWithErrorHandling {
   render() {
+    let rol = this.context.actualRol
+    Log.info(rol, "ROL")
+    let getCoursesByRol = this.rolCourses(rol)
     return(
-    <div>
+      <div>
         <AppNavbar>
         {this.renderErrorModal()}
           <CourseListContainer
             courseListTitle = {'Courses'}
-            onGetAll = { (handleSuccess, handleError) => CourseAPI.getCoursesAsync(handleSuccess, handleError) }
+            onGetAll = {getCoursesByRol}
             onDelete = { (courseId, handleSuccess, handleError) => CourseAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
             onDeleteConsequenceList = {[
               'The course will no longer be available',
@@ -27,10 +32,70 @@ class FullCourseList extends ComponentWithErrorHandling {
             ]}
             addButtonTo = {`/course/new`}
             renderEditButton = {true}
+            renderAddButton = {this.renderAddButton(rol)}
+            renderDeleteButton = {this.renderDeleteButton(rol)}
+            renderButtonBar = {this.renderButtonBar(rol)}
+            disableAttendanceBt = {this.disableAttendanceBt(rol)}
             deleteButtonTo = {'./'} //required by delete button
           />
         </AppNavbar>
       </div>
+    )
+  }
+
+  renderButtonBar(rol) {
+    switch (rol) {
+      case 'Cycle Coordinator': return true
+      case 'Teacher': return true
+      case 'Guest': return false
+      default: return false
+    }
+  }
+
+  disableAttendanceBt(rol) {
+    return rol !== 'Teacher'
+  }
+
+  renderAddButton(rol) {
+    switch (rol) {
+      case 'Cycle Coordinator': return true
+      case 'Teacher': return false
+      case 'Guest': return false
+      default: return false
+    }
+  }
+
+  renderDeleteButton(rol) {
+    switch (rol) {
+      case 'Cycle Coordinator': return true
+      case 'Teacher': return false
+      case 'Guest': return false
+      default: return false
+    }
+  }
+
+  rolCourses(rol) {
+    let rolCourses
+    switch (rol) {
+      case 'Teacher': rolCourses = (handleSuccess, handleError) => 
+        CourseAPI.getCoursesAsync(handleSuccess, handleError)
+      break;
+      case 'Cycle Coordinator': rolCourses = (handleSuccess, handleError) => 
+        CourseAPI.getCoursesAsync(handleSuccess, handleError)
+      break;
+      case 'Guest': rolCourses = (handleSuccess, handleError) => 
+        CourseAPI.getCoursesAsync(handleSuccess, handleError)
+      break;
+      default: rolCourses = (handleSuccess, handleError) => 
+      CourseAPI.getCoursesAsync(handleSuccess, handleError)
+    }
+    return rolCourses;
+  }
+
+  accessError() {
+    return ( 
+      <AccessError errorCode="User Not Logged" 
+        errorDetail="Make sure you are signed in before try to access this profile edit page"/>
     )
   }
 }
@@ -39,11 +104,17 @@ export class CourseListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...{courses: [], isLoading: true, targetId: '', coursesListTitle: 'Courses'}};
+    this.state = {...this.state, 
+      ...{courses: [], isLoading: true, targetId: '', 
+      coursesListTitle: 'Courses'}};
     this.title = this.props.courseListTitle;
     this.getIcon = this.props.getIcon
     this.addButtonTo = props.addButtonTo;
     this.renderEditButton = props.renderEditButton;
+    this.renderButtonBar = props.renderButtonBar;
+    this.renderAddButton = props.renderAddButton;
+    this.renderDeleteButton = props.renderDeleteButton;
+    this.disableAttendanceBt = props.disableAttendanceBt;
     this.deleteButtonTo=props.deleteButtonTo;
     this.contextParams = props;
   }
@@ -78,16 +149,19 @@ export class CourseListContainer extends ComponentWithErrorHandling {
     return (
       <div>
         {this.renderErrorModal()}
-        <Container fluid>     
+        <Container fluid>
+          { this.renderButtonBar ?
           <ButtonBar 
-            entityType='course' 
+            entityType='course'
             targetId = {this.state.targetId} 
             deleteEntityFunction = {deleteCourseFunction} 
             consequenceList = {this.contextParams.onDeleteConsequenceList} 
             addButtonTo = {this.addButtonTo}
             renderEditButton = {this.renderEditButton}
+            renderAddButton = {this.renderAddButton}
+            renderDeleteButton = {this.renderDeleteButton}
             deleteButtonTo={this.deleteButtonTo} // required by delete button
-          />  
+          /> : '' }
           <h3>{this.title}</h3>
           <Table hover className="mt-4"> 
             <CourseListHeaders />
@@ -98,6 +172,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
                 styleFunction = {(courseId) => this.setSelectedRowColor(courseId)}
                 getIconFunction = {(subjectCode, courseId) => this.getCourseIcon(subjectCode, courseId)}
                 booleanFormatterFunction = {(boolean) => this.formatYESoNO(boolean)}
+                disableAttendanceBt = {this.disableAttendanceBt}
               />
             </tbody>
           </Table>
@@ -151,6 +226,7 @@ const CourseList = props => {
         style = {props.styleFunction(course.courseId)}
         getIconFunction = {getIconFunction}
         booleanFormatter = {booleanFormatterFunction}
+        disableAttendanceBt = {props.disableAttendanceBt}
       />
     )
   });
@@ -189,7 +265,8 @@ const CourseListItem = props => {
       <td style={{whiteSpace: 'nowrap'}}>{props.course.students.length || 0}</td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.lessons.length || 0 }</td>
       <td>
-        <Button size="sm" color="success" outline block tag={Link} to={`/course/${props.course.courseId}/lessons`} id={"attendance_" + props.course.courseId}>
+        <Button size="sm" color="success" outline block tag={Link} to={`/course/${props.course.courseId}/lessons`} 
+          id={"attendance_" + props.course.courseId} disabled={props.disableAttendanceBt}>
           <UncontrolledTooltip placement="auto" target={"attendance_" + props.course.courseId}>
             Take Attendance
           </UncontrolledTooltip>         
@@ -199,5 +276,5 @@ const CourseListItem = props => {
     </tr>
   )
 }
-
+FullCourseList.contextType = userContext;
 export default FullCourseList;
