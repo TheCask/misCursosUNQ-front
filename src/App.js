@@ -69,21 +69,24 @@ class App extends ComponentWithErrorHandling {
         <Router>
           <Switch>
             <Route path='/' exact={true} component={Home}/>
-            <Route path='/courses' exact={true} component={FullCourseList}/>
+            <Route path='/courses' component={FullCourseList}/>
             <Route path='/course/:id/lessons' component={Attendance}/>
             <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>
             <Route path='/course/:id/addTeachers' component={AddTeachersToCourse}/>
             {/* <Route path='/course/:id/evaluations' component={EvaluationPage}/> */}
-            <Route path='/course/:id' component={CourseEdit}/>
-            <Route path='/students' exact={true} component={FullStudentList}/>
-            <Route path='/student/:id' component={StudentEdit}/>
-            <Route path='/subjects' exact={true} component={FullSubjectList}/>
+            <Route path='/course/:id' exact={true} component={CourseEdit}/>
+            <Route path='/course/:id/detail' component={Detail.CourseDetail}/>
+            <Route path='/students' component={FullStudentList}/>
+            <Route path='/student/:id' exact={true} component={StudentEdit}/>
+            <Route path='/student/:id/detail' component={Detail.StudentDetail}/>
+            <Route path='/subjects' component={FullSubjectList}/>
             <Route path='/subject/:id/addCoordinators' component={AddCoordinatorsToSubject}/>
-            <Route path='/subject/:id' component={SubjectEdit}/>
-            <Route path='/users' exact={true} component={FullUserList}/>
-            <Route path='/profile' exact={true} component={SetUser}/>
+            <Route path='/subject/:id' exact={true} component={SubjectEdit}/>
+            <Route path='/subject/:id/detail' component={Detail.SubjectDetail}/>
+            <Route path='/users' component={FullUserList}/>
+            <Route path='/profile' component={SetUser}/>
             <Route path='/user/:id' exact={true} component={UserEdit}/>
-            <Route path='/user/:id/detail' exact={true} component={Detail.UserDetail}/>
+            <Route path='/user/:id/detail' component={Detail.UserDetail}/>
             <Route path='/experimenting' component={EXPERIMENTING}/>
   {/*           <Route path='/evaluation' component={EvaluationPage}/> */}
 

@@ -30,6 +30,7 @@ class StudentEdit extends ComponentWithErrorHandling {
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onlyDetail = props.onlyDetail || false;
   }
 
   async componentDidMount() {
@@ -55,10 +56,19 @@ class StudentEdit extends ComponentWithErrorHandling {
     StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.showError("save student")); // TODO: replace null by error showing code
   }
 
+  chooseTitle(onlyDetail, newStudent) {
+    let title = ''
+    if (onlyDetail) { title = 'Student Details' }
+    else if (newStudent) { title = 'Add Student'}
+    else { title = 'Edit Student'}
+    return <h2 className="float-left">{title}</h2>;
+  }
+
   render() {
     const {item} = this.state;
-    let newStudent = this.props.match.params.id === 'new'
-    const title = <h2 className="float-left">{!newStudent ? 'Edit Student' : 'Add Student'}</h2>;
+    let newStudent = this.props.match.params.id === 'new';
+    let onlyDetail = this.onlyDetail;
+    let title = this.chooseTitle(onlyDetail, newStudent);
     return (
       <AppNavbar>
         {this.renderErrorModal()}
@@ -68,7 +78,7 @@ class StudentEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
             <ButtonGroup className="float-right">
-              <SaveButton entityId = {item.fileNumber} entityTypeCapName = "Student" />
+              <SaveButton entityId = {item.fileNumber} entityTypeCapName = "Student" disabled={onlyDetail}/>
               {' '}
               <CancelButton to = {"/students"} entityTypeCapName = "Student" />
             </ButtonGroup>
@@ -79,14 +89,14 @@ class StudentEdit extends ComponentWithErrorHandling {
               <FormGroup>
               <Label for="number">File Number</Label>
                 <Input type="number" min="0" max="2147483647" name="fileNumber" id="number" value={item.fileNumber || ''} required
-                      onChange={this.handleChange} placeholder="File Number" disabled={!newStudent}/>
+                      onChange={this.handleChange} placeholder="File Number" disabled={!newStudent || onlyDetail}/>
               </FormGroup>
             </Col>
             <Col xs='2'>
               <FormGroup>
                 <Label for="dni">DNI</Label>
                 <Input type="number" min="0" max="2147483647" name="dni" id="dni" value={item.personalData.dni || ''}
-                      onChange={this.handleChange} placeholder="DNI" required/>
+                      onChange={this.handleChange} placeholder="DNI" required disabled={onlyDetail}/>
               </FormGroup>
             </Col>
           </Row>
@@ -95,14 +105,14 @@ class StudentEdit extends ComponentWithErrorHandling {
               <FormGroup>
                 <Label for="firstName">First Name</Label>
                 <Input type="text" name="firstName" id="firstName" value={item.personalData.firstName || ''}
-                      onChange={this.handleChange} placeholder="First Name" required/>
+                      onChange={this.handleChange} placeholder="First Name" required disabled={onlyDetail}/>
               </FormGroup>
             </Col>
             <Col xs='4'>
               <FormGroup>
                 <Label for="lastName">Last Name</Label>
                 <Input type="text" name="lastName" id="lastName" value={item.personalData.lastName || ''}
-                      onChange={this.handleChange} placeholder="Last Name" required/>
+                      onChange={this.handleChange} placeholder="Last Name" required disabled={onlyDetail}/>
               </FormGroup>
             </Col>
           </Row>
@@ -111,14 +121,14 @@ class StudentEdit extends ComponentWithErrorHandling {
               <FormGroup>
                 <Label for="email">e Mail</Label>
                 <Input type="email" name="email" id="email" value={item.personalData.email || ''}
-                      onChange={this.handleChange} placeholder="e Mail"/>
+                      onChange={this.handleChange} placeholder="e Mail" disabled={onlyDetail}/>
               </FormGroup>
             </Col>
             <Col xs='4'>
               <FormGroup>
                 <Label for="cellPhone">Cell Phone</Label>
                 <Input type="tel" name="cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''} 
-                        title="Separar característica y número con un guión. Ej. 0229-4787658"
+                        title="Separar característica y número con un guión. Ej. 0229-4787658" disabled={onlyDetail}
                         onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}"/>
               </FormGroup>
             </Col>

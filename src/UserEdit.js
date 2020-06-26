@@ -1,4 +1,4 @@
-import React from 'react'; //{Component}
+import React from 'react';
 import {withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
 import AppNavbar from './AppNavbar';
@@ -81,12 +81,18 @@ class UserEdit extends ComponentWithErrorHandling {
     UserAPI.postUserAsync(item, () => this.props.history.push('/users'), this.showError("save user"));
   }
 
+  chooseTitle(onlyDetail) {
+    let title = ''
+    if (onlyDetail) { title = 'User Details' }
+    else if (this.props.match.params.id === 'new') { title = 'Add User'}
+    else { title = 'Edit User'}
+    return <h2 className="float-left">{title}</h2>;
+  }
+
   render() {
     const {item} = this.state;
-    let newUser = this.props.match.params.id === 'new'
-    let title = <h2 className="float-left">{!newUser ? 'Edit User' : 'Add User'}</h2>;
     let onlyDetail = this.onlyDetail;
-    title = <h2 className="float-left">{onlyDetail ? 'User Details' : title}</h2>;
+    let title = this.chooseTitle(onlyDetail);
     return (
       <AppNavbar>
         {this.renderErrorModal()}

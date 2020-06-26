@@ -25,11 +25,14 @@ class SubjectEdit extends ComponentWithErrorHandling {
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onlyDetail = props.onlyDetail || false;
   }
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      SubjectAPI.getSubjectByIdAsync(this.props.match.params.id, subject => this.setState({item: subject}), this.showError("get subject"));
+      SubjectAPI.getSubjectByIdAsync(this.props.match.params.id, 
+        subject => this.setState({item: subject}), 
+        this.showError("get subject"));
     }
   }
 
@@ -43,13 +46,23 @@ class SubjectEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    SubjectAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), this.showError("save subject"));
+    SubjectAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), 
+    this.showError("save subject"));
+  }
+
+  chooseTitle(onlyDetail, newSubject) {
+    let title = ''
+    if (onlyDetail) { title = 'Subject Details' }
+    else if (newSubject) { title = 'Add Subject'}
+    else { title = 'Edit Subject'}
+    return <h2 className="float-left">{title}</h2>;
   }
 
   render() {
     const {item} = this.state;
-    let newSubject = this.props.match.params.id === 'new'
-    const title = <h2 className="float-left">{!newSubject ? 'Edit Subject' : 'Add Subject'}</h2>;
+    let newSubject = this.props.match.params.id === 'new';
+    let onlyDetail = this.onlyDetail;
+    let title = this.chooseTitle(onlyDetail, newSubject);
     return (
       <AppNavbar>
         {this.renderErrorModal()}
@@ -59,7 +72,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
               <ButtonGroup className="float-right">
-                <SaveButton entityId = {item.code} entityTypeCapName = "Subject" />
+                <SaveButton entityId = {item.code} entityTypeCapName = "Subject" disabled={onlyDetail}/>
                 {' '}
                 <CancelButton to = {"/subjects"} entityTypeCapName = "Subject" />
               </ButtonGroup>
@@ -70,7 +83,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
               <FormGroup>
                 <Label for="code">Subject Code</Label>
                 <Input type="text" name="code" id="code" value={item.code || ''} required
-                      onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject}/>
+                      onChange={this.handleChange} placeholder="Subject Code" disabled={!newSubject || onlyDetail}/>
               </FormGroup>
             </Col>
           </Row>
@@ -79,14 +92,14 @@ class SubjectEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="name">Subject Name</Label>
               <Input type="text" name="name" id="name" value={item.name || ''} required
-                    onChange={this.handleChange} placeholder="Subject Name"/>
+                    onChange={this.handleChange} placeholder="Subject Name" disabled={onlyDetail}/>
             </FormGroup>
             </Col>
             <Col xs='2'>
               <FormGroup>
                 <Label for="acronym">Acronym</Label>
                 <Input type="text" name="acronym" id="acronym" value={item.acronym || ''} required
-                      onChange={this.handleChange} placeholder="Subject Acronym"/>
+                      onChange={this.handleChange} placeholder="Subject Acronym" disabled={onlyDetail}/>
               </FormGroup>
             </Col>
           </Row>
@@ -95,17 +108,17 @@ class SubjectEdit extends ComponentWithErrorHandling {
               <FormGroup>
                 <Label for="programURL">Program Link</Label>
                 <Input type="url" name="programURL" id="programURL" value={item.programURL || ''}
-                  onChange={this.handleChange} placeholder="URL to Subject's Program"/>
+                  onChange={this.handleChange} placeholder="URL to Subject's Program" disabled={onlyDetail}/>
               </FormGroup>
             </Col>
           </Row>
           </Form>
-          {this.renderUsers()}
+          {this.renderUsers(onlyDetail)}
         </Container>
       </AppNavbar>
     )};
 
-  renderUsers() {
+  renderUsers(onlyDetail) {
     const subjectId = this.props.match.params.id;
     if (subjectId !== 'new') {
       return (
@@ -118,6 +131,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
           ]}
           addButtonTo = {`/subject/${subjectId}/addCoordinators`}
           entityType = 'coordinator'
+          renderButtonBar = {!onlyDetail}
         />
       );
     }

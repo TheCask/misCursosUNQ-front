@@ -19,6 +19,7 @@ class FullStudentList extends ComponentWithErrorHandling {
             studentListTitle = {'Students'}
             addButtonTo = {`/student/new`}
             renderEditButton = {true}
+            renderButtonBar = {true}
             onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
             onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
             onSearch = {(page, text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(page, text, handleSuccess, handleError)}
@@ -43,6 +44,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
       students: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
     this.title = this.props.studentListTitle;
     this.addButtonTo = props.addButtonTo;
+    this.renderButtonBar = props.renderButtonBar;
     this.renderEditButton = props.renderEditButton;
     this.contextParams = props;
     this.renderSearch = props.renderSearch
@@ -104,6 +106,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
                   : null}
               </Col>
             <Col>
+              { this.renderButtonBar ?
               <ButtonBar
                 entityType='student' 
                 targetId = {this.state.targetId} 
@@ -111,7 +114,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
                 consequenceList = {this.contextParams.onDeleteConsequenceList}
                 addButtonTo = {this.addButtonTo}
                 renderEditButton = {this.renderEditButton}
-              />
+              /> : '' }
             </Col>
           </Row>
           <Table hover className="mt-4"> 

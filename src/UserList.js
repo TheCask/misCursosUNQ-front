@@ -19,6 +19,7 @@ class FullUserList extends ComponentWithErrorHandling {
           onDelete = {(userId, handleSuccess, handleError) => UserAPI.deleteUserAsync(userId, handleSuccess, handleError)}
           onSearch = {(page, text, handleSuccess, handleError) => UserAPI.searchUsersAsync(page, text, handleSuccess, handleError)}
           renderSearch = {true}
+          renderButtonBar = {true}
           addButtonTo = {'/user/new'}
           renderEditButton = {true}
           deleteButtonTo = {'/users'}
@@ -55,9 +56,10 @@ export class UserListContainer extends ComponentWithErrorHandling {
     this.applyDisallowDeleteFunction = props.applyDisallowDeleteFunction;
     this.onDisableDeleteTitle = props.onDisableDeleteTitle;
     this.onDisableDeleteBody = props.onDisableDeleteBody;
-    this.renderSearch = props.renderSearch
-    this.handleChange = this.handleChange.bind(this)
-    this.doSearch = this.doSearch.bind(this)
+    this.renderSearch = props.renderSearch;
+    this.renderButtonBar = props.renderButtonBar;
+    this.handleChange = this.handleChange.bind(this);
+    this.doSearch = this.doSearch.bind(this);
  }
 
   componentDidMount() {
@@ -120,6 +122,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 : null}
             </Col>
             <Col>
+              { this.renderButtonBar ?
               <ButtonBar 
                 entityType = {this.entityType}
                 targetId = {this.state.targetId} 
@@ -131,7 +134,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 deleteButtonTo = {this.deleteButtonTo}
                 onDisableDeleteTitle = {this.onDisableDeleteTitle}
                 onDisableDeleteBody = {this.onDisableDeleteBody}
-              />
+              /> : '' }
             </Col>
           </Row>    
           <Table hover className="mt-4"> 
