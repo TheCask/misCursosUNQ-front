@@ -16,6 +16,7 @@ import FullSubjectList from './SubjectList';
 import SubjectEdit from './SubjectEdit';
 import FullUserList from './UserList';
 import UserEdit from './UserEdit';
+import * as Detail from './Details'
 import SetUser from './login/SetUser';
 import * as AuthAPI from './services/AuthAPI';
 import AppSpinner from './AppSpinner';
@@ -81,7 +82,8 @@ class App extends ComponentWithErrorHandling {
             <Route path='/subject/:id' component={SubjectEdit}/>
             <Route path='/users' exact={true} component={FullUserList}/>
             <Route path='/profile' exact={true} component={SetUser}/>
-            <Route path='/user/:id' component={UserEdit}/>
+            <Route path='/user/:id' exact={true} component={UserEdit}/>
+            <Route path='/user/:id/detail' exact={true} component={Detail.UserDetail}/>
             <Route path='/experimenting' component={EXPERIMENTING}/>
   {/*           <Route path='/evaluation' component={EvaluationPage}/> */}
 

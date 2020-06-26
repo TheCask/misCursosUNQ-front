@@ -223,14 +223,18 @@ class CourseEdit extends ComponentWithErrorHandling {
         </Form>
         </Container>
         <Container fluid>
-          <Collapsable entityTypeCapName={'Students'} >
-            {this.renderStudents()}
-          </Collapsable>
+          {item.courseId ? 
+            <Collapsable entityTypeCapName={'Students'} >
+              {this.renderStudents()}
+            </Collapsable> : ''
+          }
         </Container>
         <Container fluid>
-          <Collapsable entityTypeCapName={'Teachers'}>
-            {this.renderTeachers()}
-          </Collapsable>
+          {item.courseId ?
+            <Collapsable entityTypeCapName={'Teachers'}>
+              {this.renderTeachers()}
+            </Collapsable> : ''
+          }
         </Container>
       </AppNavbar>
     </div>

@@ -7,7 +7,6 @@ import CancelButton from './buttonBar/CancelButton'
 import * as UserAPI from './services/UserAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 
-
 class UserEdit extends ComponentWithErrorHandling {
 
   CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
@@ -46,11 +45,14 @@ class UserEdit extends ComponentWithErrorHandling {
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onlyDetail = props.onlyDetail || false;
   }
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      UserAPI.getUserByIdAsync(this.props.match.params.id, user => this.setState({item: user}), this.showError("get user info"));
+      UserAPI.getUserByIdAsync(this.props.match.params.id, 
+        user => this.setState({item: user}), 
+        this.showError("get user info"));
     }
   }
 
@@ -82,7 +84,9 @@ class UserEdit extends ComponentWithErrorHandling {
   render() {
     const {item} = this.state;
     let newUser = this.props.match.params.id === 'new'
-    const title = <h2 className="float-left">{!newUser ? 'Edit User' : 'Add User'}</h2>;
+    let title = <h2 className="float-left">{!newUser ? 'Edit User' : 'Add User'}</h2>;
+    let onlyDetail = this.onlyDetail;
+    title = <h2 className="float-left">{onlyDetail ? 'User Details' : title}</h2>;
     return (
       <AppNavbar>
         {this.renderErrorModal()}
@@ -92,7 +96,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
               <ButtonGroup className="float-right">
-                <SaveButton entityId = {item.userId} entityTypeCapName = "User"/>
+                <SaveButton entityId = {item.userId} entityTypeCapName = "User" disabled={onlyDetail}/>
                 {' '}
                 <CancelButton to = {"/users"} entityTypeCapName = "User"/>
               </ButtonGroup>
@@ -103,21 +107,21 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="dni">DNI Number</Label>
               <Input type="number"  min="0" max="2147483647" name="personalData.dni" id="dni" value={item.personalData.dni}
-                    onChange={this.handleChange} placeholder="DNI" required/>
+                    onChange={this.handleChange} placeholder="DNI" required disabled={onlyDetail}/>
             </FormGroup>
             </Col>
             <Col xs="5">
             <FormGroup>
               <Label for="firstName">First Name</Label>
               <Input type="text" maxLength="50" name="personalData.firstName" id="firstName" value={item.personalData.firstName}
-                    onChange={this.handleChange} placeholder="First Name" required/>
+                    onChange={this.handleChange} placeholder="First Name" required disabled={onlyDetail}/>
             </FormGroup>
             </Col>
             <Col xs="5">
             <FormGroup>
               <Label for="lastName">Last Name</Label>
               <Input type="text" maxLength="50" name="personalData.lastName" id="lastName" value={item.personalData.lastName}
-                    onChange={this.handleChange} placeholder="Last Name" required/>
+                    onChange={this.handleChange} placeholder="Last Name" required disabled={onlyDetail}/>
             </FormGroup>
             </Col>
           </Row>
@@ -126,8 +130,8 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="email">Mail</Label>
               <Input type="text" maxLength="50" name="personalData.email" id="email" value={item.personalData.email}
-                    title="Formato admitido: usuario@servidor.dom"
-                    onChange={this.handleChange} placeholder="e Mail" pattern="^.*@.*\..*$" required/>
+                    title="Formato admitido: usuario@servidor.dom" required disabled={onlyDetail}
+                    onChange={this.handleChange} placeholder="e Mail" pattern="^.*@.*\..*$"/>
             </FormGroup>
             </Col>
             <Col xs="4">
@@ -135,14 +139,14 @@ class UserEdit extends ComponentWithErrorHandling {
               <Label for="cellPhone">Cell Phone</Label>
               <Input type="tel" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone}
                     title="Separar característica y número con un guión (no incluir 15 al inicio). Ej. 0229-4787658"
-                    onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}" required/>
+                    onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}" required disabled={onlyDetail}/>
             </FormGroup>
             </Col>
             <Col xs="3">
             <FormGroup>
               <Label for="cuitNumber">CUIT/CUIL</Label>
               <Input type="text" name="jobDetail.cuitNumber" id="cuitNumber" value={item.jobDetail.cuitNumber || ''}
-                    title="Separar con guiones. Ej. 20-12345678-3"
+                    title="Separar con guiones. Ej. 20-12345678-3" disabled={onlyDetail}
                     onChange={this.handleChange} placeholder="Cuit Number" pattern="\d{2}-\d{8}-\d"/>
             </FormGroup>
             </Col>
@@ -152,7 +156,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="category">Category</Label>
               <Input type="select" name="jobDetail.category" id="category" value={item.jobDetail.category}
-                    onChange={this.handleChange}>
+                    onChange={this.handleChange} disabled={onlyDetail}>
                     {this.categoryOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="category"> Select Category </UncontrolledTooltip>
@@ -162,7 +166,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="grade">Grade</Label>
               <Input type="select" name="jobDetail.grade" id="grade" value={item.jobDetail.grade}
-                    onChange={this.handleChange}>
+                    onChange={this.handleChange} disabled={onlyDetail}>
                     {this.gradeOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="grade"> Select Grade </UncontrolledTooltip>
@@ -172,7 +176,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="dedication">Dedication</Label>
               <Input type="select" name="jobDetail.dedication" id="dedication" value={item.jobDetail.dedication}
-                    onChange={this.handleChange}>
+                    onChange={this.handleChange} disabled={onlyDetail}>
                     {this.dedicationOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="dedication"> Select Dedication </UncontrolledTooltip>
@@ -182,7 +186,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
             <Label for="relation">Contract Relation</Label>
               <Input type="select" name="jobDetail.contractRelation" id="relation" value={item.jobDetail.contractRelation}
-                    onChange={this.handleChange}>
+                    onChange={this.handleChange} disabled={onlyDetail}>
                     {this.contractOptions()}
               </Input>
               <UncontrolledTooltip placement="auto" target="relation"> Select Contract Relation </UncontrolledTooltip>
@@ -192,7 +196,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="aditional">Aditional Hours</Label>
               <Input type="number" name="jobDetail.aditionalHours" id="aditional" value={item.jobDetail.aditionalHours}
-                    onChange={this.handleChange}/>
+                    onChange={this.handleChange} disabled={onlyDetail}/>
             </FormGroup>
             </Col>
           </Row>
@@ -200,14 +204,14 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="gradeTitles">Grade Titles</Label>
               <Input type="text" maxLength="200" name="jobDetail.gradeTitles" id="gradeTitles" value={item.jobDetail.gradeTitles || ''}
-                    onChange={this.handleChange} placeholder="Grade Titles"/>
+                    onChange={this.handleChange} placeholder="Grade Titles" disabled={onlyDetail}/>
             </FormGroup>
           </Row>
           <Row form xs="1">
             <FormGroup>
               <Label for="posGradeTitles">Posgrade Titles</Label>
               <Input type="text" maxLength="200" name="jobDetail.posGradeTitles" id="posGradeTitles" value={item.jobDetail.posGradeTitles || ''}
-                    onChange={this.handleChange} placeholder="Posgrade Titles"/>
+                    onChange={this.handleChange} placeholder="Posgrade Titles" disabled={onlyDetail}/>
             </FormGroup>
           </Row>
           <Row form>
@@ -215,7 +219,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <FormGroup>
               <Label for="cvUrl">CV Link</Label>
               <Input type="url" name="jobDetail.cvURL" id="cvUrl" value={item.jobDetail.cvURL || ''}
-                    onChange={this.handleChange} placeholder="CV URL"/>
+                    onChange={this.handleChange} placeholder="CV URL" disabled={onlyDetail}/>
             </FormGroup>
             </Col>
             <Col xs="3">
