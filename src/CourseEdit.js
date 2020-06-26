@@ -52,10 +52,16 @@ class CourseEdit extends ComponentWithErrorHandling {
     if (this.props.match.params.id !== 'new') {
       CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
         course => this.setState({item: course}), 
-        this.showError("get course")) 
+        this.showError("get course"));
     }
-    SubjectAPI.getSubjectsAsync(json => this.setState({subjectList: json, isLoading: false}), 
-      this.showError("get subjects"));
+    SubjectAPI.getSubjectsAsync(json => { 
+      this.setState({subjectList: json}); 
+      this.setDefaultSeason();
+      this.setDefaultShift();
+      this.setDefaultSubjectName();
+      }, 
+      this.showError("get subjects"))
+      .then(this.setState({isLoading: false}));
   }
 
   handleChange(event) {
@@ -122,9 +128,6 @@ class CourseEdit extends ComponentWithErrorHandling {
   render() {
     const {item, isLoading} = this.state;
     if (isLoading) { return <AppSpinner/> }
-    this.setDefaultSubjectName()
-    this.setDefaultShift()
-    this.setDefaultSeason()
     const title = <h2 className="float-left">{item.courseId ? 'Edit Course' : 'Add Course'} </h2>;
     return <div>
       <AppNavbar>
@@ -298,8 +301,8 @@ class CourseEdit extends ComponentWithErrorHandling {
   }
 
   setDefaultSubjectName() {
-    if (this.state.item.subject.name === '') { 
-      let {item, subjectList} = {...this.state };
+    let {item, subjectList} = {...this.state };
+    if (item.subject.name === '') {
       item['subject']['name'] = subjectList[0].name
       item['subject']['code'] = subjectList[0].code
       this.setState({item});
@@ -307,17 +310,17 @@ class CourseEdit extends ComponentWithErrorHandling {
   }
 
   setDefaultSeason() {
-    if (this.state.item.courseSeason === '') { 
-      let {item} = {...this.state };
-      item['courseSeason'] = this.SeasonOptions[0];
+    let {item} = {...this.state };
+    if (item.courseSeason === '') { 
+      item['courseSeason'] = this.SeasonOptions[1];
       this.setState({item});
     }
   }
 
   setDefaultShift() {
-    if (this.state.item.courseShift === '') { 
-      let {item} = {...this.state };
-      item['courseShift'] = this.ShiftOptions[0];
+    let {item} = {...this.state };
+    if (item.courseShift === '') { 
+      item['courseShift'] = this.ShiftOptions[1];
       this.setState({item});
     }
   }
