@@ -1,4 +1,4 @@
-import React from 'react'; //{Component}
+import React from 'react';
 import AppNavbar from './AppNavbar';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'; //{Component}
+import React, { Component } from 'react';
 import UserEdit from './UserEdit'
 import StudentEdit from './StudentEdit'
 import SubjectEdit from './SubjectEdit'

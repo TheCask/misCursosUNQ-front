@@ -1,4 +1,4 @@
-import React from 'react'; //{Component}
+import React from 'react';
 import { Container, Table, InputGroup, Button, Input, 
   InputGroupAddon, Col, Row, UncontrolledTooltip } from 'reactstrap';
 import AppSpinner from './AppSpinner';

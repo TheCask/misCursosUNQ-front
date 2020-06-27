@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
@@ -7,8 +7,9 @@ import DetailButton from './buttonBar/DetailButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as SubjectAPI from './services/SubjectAPI';
 import * as UserAPI from './services/UserAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
 
-class AddCoordinatorsToSubject extends Component {
+class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
 
   emptyItem = {
     subjectCode: '',
@@ -34,11 +35,11 @@ class AddCoordinatorsToSubject extends Component {
     SubjectAPI.getSubjectCoordinatorsAsync(item.subjectCode, json => {
       this.setCoordinatorsAndIds(json)
     },
-    null); // TODO: replace null by error showing code
+    this.showError("get coordinators"));
     UserAPI.getUsersAsync(json => {
       this.setState({allUsers: json, isLoading: false})
       },
-      null); // TODO: replace null by error showing code
+      this.showError("get users"));
   }
 
   async handleSubmit(event) {
@@ -51,7 +52,7 @@ class AddCoordinatorsToSubject extends Component {
     SubjectAPI.updateSubjectCoordinatorsAsync(item.subjectCode, 
       item.coordinators, 
       () => this.props.history.push(`/subject/${item.subjectCode}`), 
-      null); // TODO: replace null by error showing code
+      this.showError("update coordinators"));
   }
 
   toggleAssignment(usUserId) {

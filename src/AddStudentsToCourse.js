@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
 import AppSpinner from './AppSpinner';
 import AppNavbar from './AppNavbar';
@@ -7,8 +7,9 @@ import DetailButton from './buttonBar/DetailButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as CourseAPI from './services/CourseAPI';
 import * as StudentAPI from './services/StudentAPI';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
 
-class AddStudentsToCourse extends Component {
+class AddStudentsToCourse extends ComponentWithErrorHandling {
 
   emptyItem = {
     courseCode: '',
@@ -39,12 +40,12 @@ class AddStudentsToCourse extends Component {
     this.setState({isLoading: true});
     CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
       json => this.setState({item: json}), 
-      null); // TODO: replace null by error showing code
+      this.showError("get course"));
     StudentAPI.getStudentsAsync(json => {
       this.collectStudentsIds(this.state.item.students);
       this.setState({allStudents: json, isLoading: false})
       },
-      null); // TODO: replace null by error showing code
+      this.showError("get students"));
   }
 
   async handleSubmit(event) {
@@ -57,7 +58,7 @@ class AddStudentsToCourse extends Component {
     this.setState({item: item})
     CourseAPI.postCourseAsync(item,
       () => this.props.history.push(`/course/${item.courseId}`),
-      null); // TODO: replace null by error showing code
+      this.showError("save course"));
   }
 
   toggleInscription(stFileNumber) {

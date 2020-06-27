@@ -18,7 +18,7 @@ export default class LogInOut extends ComponentWithErrorHandling {
           return (
             <Button size="lg" color="rgba(20, 0, 0, 0.40)" id="signInOut"
               href={`http://localhost:${config.serverPort}` + path}
-              onClick={ () => { localStorage.setItem('rol', '') }}>
+              onClick={ () => { localStorage.setItem('rol', 'Guest') }}>
               <UncontrolledTooltip placement="auto" target="signInOut">
                 {message}
               </UncontrolledTooltip>

@@ -1,4 +1,4 @@
-import React from 'react'; //{Component}
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, ButtonGroup, Row, Col, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
