@@ -10,7 +10,6 @@ import * as CourseAPI from './services/CourseAPI';
 import * as UserAPI from './services/UserAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import { userContext } from './login/UserContext';
-import Log from './Log'
 
 class FullCourseList extends ComponentWithErrorHandling {
   render() {
@@ -76,10 +75,12 @@ class FullCourseList extends ComponentWithErrorHandling {
 
   rolCourses(rol) {
     let rolCourses
-    let email = this.context.globalUser.email
     switch (rol) {
-      case 'Teacher': rolCourses = (handleSuccess, handleError) => 
-        UserAPI.getUserCoursesByEmailAsync(email, handleSuccess, handleError)
+      case 'Teacher': { 
+        let email = this.context.globalUser ? this.context.globalUser.email : '';
+        rolCourses = (handleSuccess, handleError) => 
+          UserAPI.getUserCoursesByEmailAsync(email, handleSuccess, handleError);
+      }
       break;
       case 'Cycle Coordinator': rolCourses = (handleSuccess, handleError) => 
         CourseAPI.getCoursesAsync(handleSuccess, handleError)
