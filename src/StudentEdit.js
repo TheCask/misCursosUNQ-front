@@ -53,7 +53,9 @@ class StudentEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    StudentAPI.postStudentAsync(item, () => this.props.history.push('/students'), this.showError("save student")); // TODO: replace null by error showing code
+    StudentAPI.postStudentAsync(item, 
+      () => this.props.history.push('/students'), 
+      this.showError("save student"));
   }
 
   chooseTitle(onlyDetail, newStudent) {
@@ -80,7 +82,7 @@ class StudentEdit extends ComponentWithErrorHandling {
             <ButtonGroup className="float-right">
               <SaveButton entityId = {item.fileNumber} entityTypeCapName = "Student" disabled={onlyDetail}/>
               {' '}
-              <CancelButton to = {"/students"} entityTypeCapName = "Student" />
+              <CancelButton onClick={() => this.props.history.goBack()} />
             </ButtonGroup>
             </Col>
           </Row>

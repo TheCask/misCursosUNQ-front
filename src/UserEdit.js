@@ -78,7 +78,9 @@ class UserEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    UserAPI.postUserAsync(item, () => this.props.history.push('/users'), this.showError("save user"));
+    UserAPI.postUserAsync(item, 
+      () => this.props.history.push('/users'), 
+      this.showError("save user"));
   }
 
   chooseTitle(onlyDetail) {
@@ -104,7 +106,7 @@ class UserEdit extends ComponentWithErrorHandling {
               <ButtonGroup className="float-right">
                 <SaveButton entityId = {item.userId} entityTypeCapName = "User" disabled={onlyDetail}/>
                 {' '}
-                <CancelButton to = {"/users"} entityTypeCapName = "User"/>
+                <CancelButton onClick={() => this.props.history.goBack()} />
               </ButtonGroup>
           </Col>
           </Row>

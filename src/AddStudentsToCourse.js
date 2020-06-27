@@ -37,7 +37,9 @@ class AddStudentsToCourse extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    CourseAPI.getCourseByIdAsync(this.props.match.params.id, json => this.setState({item: json}), null);
+    CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
+      json => this.setState({item: json}), 
+      null); // TODO: replace null by error showing code
     StudentAPI.getStudentsAsync(json => {
       this.collectStudentsIds(this.state.item.students);
       this.setState({allStudents: json, isLoading: false})
@@ -53,7 +55,9 @@ class AddStudentsToCourse extends Component {
     item['students'] = students
     item['lessons'] = []
     this.setState({item: item})
-    CourseAPI.postCourseAsync(item, () => this.props.history.push(`/course/${item.courseId}`), null); // TODO: replace null by error showing code
+    CourseAPI.postCourseAsync(item,
+      () => this.props.history.push(`/course/${item.courseId}`),
+      null); // TODO: replace null by error showing code
   }
 
   toggleInscription(stFileNumber) {

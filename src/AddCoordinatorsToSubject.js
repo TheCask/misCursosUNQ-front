@@ -48,8 +48,10 @@ class AddCoordinatorsToSubject extends Component {
     let coordinators = this.state.subjectCoordinatorsIds
     item['coordinators'] = coordinators
     this.setState({item: item})
-    SubjectAPI.updateSubjectCoordinatorsAsync(item.subjectCode, item.coordinators, 
-      () => this.props.history.push(`/subject/${item.subjectCode}`), null); // TODO: replace null by error showing code
+    SubjectAPI.updateSubjectCoordinatorsAsync(item.subjectCode, 
+      item.coordinators, 
+      () => this.props.history.push(`/subject/${item.subjectCode}`), 
+      null); // TODO: replace null by error showing code
   }
 
   toggleAssignment(usUserId) {

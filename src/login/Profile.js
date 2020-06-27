@@ -95,10 +95,7 @@ class Profile extends ComponentWithErrorHandling {
     const {globalUser} = this.state;
     // save the change in FusionAuth
     AuthAPI.postGlobalUserAsync(globalUser, 
-      () => {
-        this.showSuccess('200', 'Your Profile has been saved!');
-      //() => this.props.history.push('/profile');
-      }, 
+      () => { this.showSuccess('200', 'Your Profile has been saved!'); }, 
       this.showError("save global profile"));
   }
 
@@ -132,7 +129,7 @@ class Profile extends ComponentWithErrorHandling {
               <ButtonGroup className="float-right">
                 <SaveButton entityId = {globalUser} entityTypeCapName = "User"/>
                 {' '}
-                <CancelButton to = {"/"} />
+                <CancelButton onClick={() => this.props.history.goBack()} />
               </ButtonGroup>
             </Col>
           </Row>

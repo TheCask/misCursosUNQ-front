@@ -99,10 +99,7 @@ class CourseEdit extends ComponentWithErrorHandling {
     event.preventDefault();
     const {item} = this.state;
     CourseAPI.postCourseAsync(item, 
-      () => { 
-        this.showSuccess('200', 'The Course has been saved!');
-        //this.props.history.push('/courses');
-      }, 
+      () => { this.showSuccess('200', 'The Course has been saved!'); }, 
       this.showError("save course. Check if the course already exists based on code, subject, year and season"));
   }
 
@@ -151,7 +148,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col>
             <ButtonGroup className="float-right">
               <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
-              <CancelButton to = {"/courses"} entityTypeCapName = "Course" />
+              <CancelButton onClick={() => this.props.history.goBack()} />
             </ButtonGroup>
             </Col>
           </Row>

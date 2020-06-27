@@ -53,7 +53,9 @@ class AddTeachersToCourse extends Component {
     item['teachers'] = teachers
     item['lessons'] = []
     this.setState({item: item})
-    CourseAPI.postCourseAsync(item, () => this.props.history.push(`/course/${item.courseId}`), null); // TODO: replace null by error showing code
+    CourseAPI.postCourseAsync(item, 
+      () => this.props.history.push(`/course/${item.courseId}`), 
+      null); // TODO: replace null by error showing code
   }
 
   toggleAssignment(usUserId) {

@@ -47,8 +47,9 @@ class SubjectEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    SubjectAPI.postSubjectAsync(item, () => this.props.history.push('/subjects'), 
-    this.showError("save subject"));
+    SubjectAPI.postSubjectAsync(item, 
+      () => this.props.history.push('/subjects'), 
+      this.showError("save subject"));
   }
 
   chooseTitle(onlyDetail, newSubject) {
@@ -76,7 +77,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
               <ButtonGroup className="float-right">
                 <SaveButton entityId = {item.code} entityTypeCapName = "Subject" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
                 {' '}
-                <CancelButton to = {"/subjects"} entityTypeCapName = "Subject" />
+                <CancelButton onClick={() => this.props.history.goBack()} />
               </ButtonGroup>
            </Col>
           </Row>
