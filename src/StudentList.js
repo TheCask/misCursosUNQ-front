@@ -30,7 +30,8 @@ class FullStudentList extends ComponentWithErrorHandling {
             onDeleteConsequenceList = {[
               "The student will no longer be available.",
               "The student will be removed of every current course as well as any previous he ever took.",
-              "The student's attendance to any lesson (current or previous) will be removed."
+              "The student's attendance to any lesson (current or previous) will be removed.",
+              "The student's califications in any evaluation (current or previous) will be removed"
             ]}
             />
         </AppNavbar>

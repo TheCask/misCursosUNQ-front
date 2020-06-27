@@ -29,3 +29,11 @@ export async function searchUsersAsync(page, text, handleSuccess, handleError) {
     const response = await fetch(`/api/users/search?text=${text}&page=${page}`)
     BackAPI.handleGet(response, handleSuccess, handleError)
 }
+
+// USER COURSES
+
+// getAllByCourseId
+export async function getUserCoursesByEmailAsync(userEmail, handleSuccess, handleError){
+    const response = await fetch(`/api/user/${userEmail}/courses/`);
+    BackAPI.handleGet(response, handleSuccess, handleError)
+}
