@@ -13,16 +13,22 @@ import { userContext } from './login/UserContext';
 import Log from './Log'
 
 class FullCourseList extends ComponentWithErrorHandling {
+
+  constructor(props) {
+    super(props);
+    this.state = {...this.state };
+    this.actualRol = 'Guest';
+  };
+
   render() {
-    let rol = this.context.actualRol
-    let getCoursesByRol = this.rolCourses(rol)
+    this.actualRol = this.context.actualRol;
     return(
       <div>
         <AppNavbar>
         {this.renderErrorModal()}
           <CourseListContainer
             courseListTitle = {'Courses'}
-            onGetAll = {getCoursesByRol}
+            onGetAll = {this.rolCourses()}
             onDelete = { (courseId, handleSuccess, handleError) => CourseAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
             onDeleteConsequenceList = {[
               'The course will no longer be available',
@@ -32,10 +38,10 @@ class FullCourseList extends ComponentWithErrorHandling {
             ]}
             addButtonTo = {`/course/new`}
             renderEditButton = {true}
-            renderAddButton = {this.renderAddButton(rol)}
-            renderDeleteButton = {this.renderDeleteButton(rol)}
-            renderButtonBar = {this.renderButtonBar(rol)}
-            disableAttendanceBt = {this.disableAttendanceBt(rol)}
+            renderAddButton = {this.renderAddButton()}
+            renderDeleteButton = {this.renderDeleteButton()}
+            renderButtonBar = {this.renderButtonBar()}
+            disableAttendanceBt = {this.disableAttendanceBt()}
             deleteButtonTo = {'./'} //required by delete button
           />
         </AppNavbar>
@@ -43,8 +49,8 @@ class FullCourseList extends ComponentWithErrorHandling {
     )
   }
 
-  renderButtonBar(rol) {
-    switch (rol) {
+  renderButtonBar() {
+    switch (this.actualRol) {
       case 'Cycle Coordinator': return true
       case 'Teacher': return true
       case 'Guest': return false
@@ -52,12 +58,12 @@ class FullCourseList extends ComponentWithErrorHandling {
     }
   }
 
-  disableAttendanceBt(rol) {
-    return rol !== 'Teacher'
+  disableAttendanceBt() {
+    return this.actualRol !== 'Teacher'
   }
 
-  renderAddButton(rol) {
-    switch (rol) {
+  renderAddButton() {
+    switch (this.actualRol) {
       case 'Cycle Coordinator': return true
       case 'Teacher': return false
       case 'Guest': return false
@@ -65,8 +71,8 @@ class FullCourseList extends ComponentWithErrorHandling {
     }
   }
 
-  renderDeleteButton(rol) {
-    switch (rol) {
+  renderDeleteButton() {
+    switch (this.actualRol) {
       case 'Cycle Coordinator': return true
       case 'Teacher': return false
       case 'Guest': return false
@@ -74,10 +80,9 @@ class FullCourseList extends ComponentWithErrorHandling {
     }
   }
 
-  rolCourses(rol) {
+  rolCourses() {
     let rolCourses
-    Log.info(rol,"ROL")
-    switch (rol) {
+    switch (this.actualRol) {
       case 'Teacher': { 
         let email = this.context.globalUser ? this.context.globalUser.email : '';
         rolCourses = (handleSuccess, handleError) => 
@@ -146,8 +151,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
   }
 
   render() {
-    const isLoading = false;
-    if (isLoading) { return (<AppSpinner />) }
+    if (this.state.isLoading) { return (<AppSpinner />) }
     const deleteCourseFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
@@ -280,4 +284,5 @@ const CourseListItem = props => {
   )
 }
 FullCourseList.contextType = userContext;
+CourseListContainer.contextType = userContext;
 export default FullCourseList;
