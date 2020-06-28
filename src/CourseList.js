@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Table, Button, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,7 +10,6 @@ import * as CourseAPI from './services/CourseAPI';
 import * as UserAPI from './services/UserAPI';
 import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
 import { userContext } from './login/UserContext';
-import Log from './Log'
 
 class FullCourseList extends ComponentWithErrorHandling {
 
@@ -95,7 +94,7 @@ class FullCourseList extends ComponentWithErrorHandling {
       case 'Guest': rolCourses = (handleSuccess, handleError) => 
         CourseAPI.getCoursesAsync(handleSuccess, handleError)
       break;
-      default: rolCourses = (handleSuccess, handleError) => handleError
+      default: rolCourses = () => this.accessError()
     }
     return rolCourses;
   }
@@ -103,7 +102,7 @@ class FullCourseList extends ComponentWithErrorHandling {
   accessError() {
     return ( 
       <AccessError errorCode="User Not Logged" 
-        errorDetail="Make sure you are signed in before try to access this profile edit page"/>
+        errorDetail="Make sure you are signed in before try to access this page"/>
     )
   }
 }
@@ -151,7 +150,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
   }
 
   render() {
-    if (this.state.isLoading) { return (<AppSpinner />) }
+    if (false) { return (<AppSpinner />) }
     const deleteCourseFunction = () => {this.remove(this.state.targetId)};
     return (
       <div>
