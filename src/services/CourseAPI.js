@@ -59,3 +59,11 @@ export async function getCourseLessonsAsync(courseId, handleSuccess, handleError
     const response = await fetch(`/api/course/${courseId}/lessons`);
     BackAPI.handleGet(response, handleSuccess, handleError)
 }
+
+// COURSE EVALUATIONS
+
+// post
+export async function postCourseEvaluationAsync(courseId, evaluationJson, handleSuccess, handleError){
+    const response = await fetch(`/api/course/${courseId}/evaluation`, BackAPI.postInit(evaluationJson));
+    BackAPI.handlePostOrDelete(response, handleSuccess, handleError);
+}

@@ -21,6 +21,7 @@ import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
 import AppSpinner from './AppSpinner';
 //import EvaluationPage from './Evaluation';
+import EvaluationPage from './EvaluationPage';
 import EXPERIMENTING from './EXPERIMENTING';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -73,7 +74,7 @@ class App extends ComponentWithErrorHandling {
             <Route path='/course/:id/lessons' component={Attendance}/>
             <Route path='/course/:id/addStudents' component={AddStudentsToCourse}/>
             <Route path='/course/:id/addTeachers' component={AddTeachersToCourse}/>
-            {/* <Route path='/course/:id/evaluations' component={EvaluationPage}/> */}
+            <Route path='/course/:id/evaluations' component={EvaluationPage}/>
             <Route path='/course/:id' exact={true} component={CourseEdit}/>
             <Route path='/course/:id/detail' component={Detail.CourseDetail}/>
             <Route path='/students' component={FullStudentList}/>
