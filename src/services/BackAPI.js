@@ -5,8 +5,8 @@ export async function handleGet(response, handleSuccess, handleError) {
     else { handleError(response.status, response.statusText) }
 }
 
-export function handlePostOrDelete(response, handleSuccess, handleError) {
-    if (response.status >= 200 && response.status <= 299) { handleSuccess() } 
+export async function handlePostOrDelete(response, handleSuccess, handleError) {
+    if (response.status >= 200 && response.status <= 299) { handleSuccess(await response.json()) } 
     else { handleError(response.status, response.statusText) }
 }
 

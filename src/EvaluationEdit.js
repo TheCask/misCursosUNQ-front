@@ -1,0 +1,158 @@
+import React, { useState, useEffect } from 'react';
+import AppNavbar from './AppNavbar';
+import { Container, Form, Input, InputGroup, InputGroupAddon,ButtonGroup} from 'reactstrap';
+import Col from 'reactstrap/lib/Col';
+import Row from 'reactstrap/lib/Row';
+import { Button, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import AppSpinner from './AppSpinner';
+import Log from './Log';
+import CRUDSaveButton from './CRUDButtonBar/CRUDSaveButton';
+import CRUDEditButton from './CRUDButtonBar/CRUDEditButton';
+import CRUDDeleteButton from './CRUDButtonBar/CRUDDeleteButton';
+import * as CourseAPI from './services/CourseAPI';
+
+
+export default function EvaluationEdit(props){
+
+    const [filterValue, setFilterValue] = useState('');
+
+    function newEvalInstance() {
+        return {
+            evaluationId: '',
+            instanceName: 'TP ',
+            califications: []
+        }
+    }
+
+    Log.info("EvaEdit");
+
+    /* useEffect(() => {
+        setEvaluations(props.evaluations);
+    }, [props.evaluations]); */
+
+    function setRowColor (itemId) {
+        if (props.currEvalInstance.evaluationId === itemId) {
+        return {backgroundColor:'#F0FFF0'}
+        }
+    }
+
+    function onClickFunc(evalId){
+        return () => {
+            props.onSelectFunc(evalId);
+        }
+    }
+
+    function handleEvalSubmit(event, evalInstance) {
+        event.preventDefault();
+        CourseAPI.postCourseEvaluationAsync(
+            props.courseId, 
+            evalInstance, 
+            (res) => {
+                Log.info(res, "POST SUCCEDED");
+                props.reloadCourse();     /// NEEDED??????
+            }, 
+            props.showError("save evaluation"));
+    }
+
+    function getInnerPropValue(baseObj, subPropString){
+        const subProps = subPropString.split(".");
+        const lastPropName = subProps.pop(); // elimina del array y retorna el ultimo 
+        let propRef = baseObj;
+        subProps.forEach(subprop => {
+          propRef = propRef[subprop];
+        });
+        return propRef[lastPropName];
+    }
+
+    function isEvalSelected() { 
+        return props.currEvalInstance && props.currEvalInstance.evaluationId !== '';
+    }
+
+    const tableRender = (evalList) => {
+
+        const filteredFields = ["instanceName"];
+        let filteredList = evalList;
+        if (filterValue !== '')
+            filteredList = evalList.filter( ev => 
+                filteredFields.some( k => {
+                    Log.info(getInnerPropValue(ev, k), "getInnerPropValue(ev, k)");
+                    return getInnerPropValue(ev, k) ? getInnerPropValue(ev, k).toString().toLowerCase().includes(filterValue.toLowerCase()) : false
+                
+                })             
+        )
+
+        return (
+            <Table hover className="mt-4" >
+                <thead>
+                    <tr>
+                        <th width="100%">Instance Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredList.map( (ev, index) => 
+                        <tr style={setRowColor(ev.evaluationId)}
+                            key={index} 
+                            id={ev.evaluationId} 
+                            onClick={onClickFunc(ev.evaluationId)} 
+                        >
+                            <td style={{whiteSpace: 'nowrap'}}>{ev.instanceName || ''}</td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>)
+    };
+
+    return (
+        <>
+        <Row>
+            <Col md={9}>
+                <InputGroup>
+                    <Input 
+                        placeholder={"Search evaluation by name"} 
+                        value={filterValue} 
+                        onChange={(event) => setFilterValue(event.target.value)} 
+                        disabled = {props.evaluations.length === 0}
+                        />
+                    <InputGroupAddon addonType="append">
+                        <Button color="secondary" onClick={() => setFilterValue('')} >Clear</Button>
+                    </InputGroupAddon>
+                </InputGroup>
+            </Col>
+            <Col>
+                <ButtonGroup style={{ padding: "0em", float: "right"}}>
+                    <CRUDEditButton 
+                        operationType='Add'
+                        behavior = {{ onProceed: handleEvalSubmit }}  // requires either {onClick: <myFunc>} or {to: <'/my/link'>' tag={Link}} 
+                        onClick = {() => {}}
+                        entityTypeCapName = {'Evaluation'}
+                        isDisabled = {false}
+                        getEntity = {newEvalInstance()}
+                        />
+                    <CRUDEditButton 
+                        operationType='Edit'
+                        behavior = {{ onProceed: handleEvalSubmit }}  // requires either {onClick: <myFunc>} or {to: <'/my/link'>' tag={Link}} 
+                        onClick = {() => {}}
+                        entityTypeCapName = {'Evaluation'}
+                        isDisabled = {!isEvalSelected()}
+                        getEntity = {props.currEvalInstance}
+                        />
+                </ButtonGroup>
+            </Col>
+        </Row>
+
+
+
+
+
+
+        
+        {/* <EvaluationPicker 
+            evaluations = {currCourse.evaluations}
+            onSelectFunc = {setCurrEvalInstanceById}
+            currEvalInstance = {currEvalInstance}
+            /> */}
+
+        {tableRender(props.evaluations)}
+        </>
+    )
+}
