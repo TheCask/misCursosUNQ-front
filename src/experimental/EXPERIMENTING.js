@@ -1,5 +1,5 @@
 import React,{ useState, Component } from 'react';
-import ErrorBoundary from './errorHandling/ErrorBoundary';
+import ErrorBoundary from '../errorHandling/ErrorBoundary';
 
 export default class GrandParent extends Component {
 

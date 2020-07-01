@@ -1,11 +1,11 @@
 import React from 'react';
 import {withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
-import AppNavbar from './AppNavbar';
-import SaveButton from './buttonBar/SaveButton'
-import CancelButton from './buttonBar/CancelButton'
-import * as UserAPI from './services/UserAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+import AppNavbar from '../AppNavbar';
+import SaveButton from '../buttons/SaveButton'
+import CancelButton from '../buttons/CancelButton'
+import * as UserAPI from '../services/UserAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 
 class UserEdit extends ComponentWithErrorHandling {
 

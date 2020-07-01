@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar';
 import { Container, Form, Input, ButtonGroup} from 'reactstrap';
 import Col from 'reactstrap/lib/Col';
 import Row from 'reactstrap/lib/Row';
 import { Button, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
-import AppSpinner from './AppSpinner';
-import Log from './Log';
-import CRUDSaveButton from './CRUDButtonBar/CRUDSaveButton';
-import CRUDEditButton from './CRUDButtonBar/CRUDEditButton';
-import CRUDDeleteButton from './CRUDButtonBar/CRUDDeleteButton';
-import * as CourseAPI from './services/CourseAPI';
+import AppSpinner from '../auxiliar/AppSpinner';
+import Log from '../auxiliar/Log';
+import CRUDSaveButton from '../CRUDButtonBar/CRUDSaveButton';
+import CRUDEditButton from '../CRUDButtonBar/CRUDEditButton';
+import CRUDDeleteButton from '../CRUDButtonBar/CRUDDeleteButton';
+import * as CourseAPI from '../services/CourseAPI';
 import EvaluationEdit from './EvaluationEdit';
 import CalificationEdit from './CalificationEdit';
 

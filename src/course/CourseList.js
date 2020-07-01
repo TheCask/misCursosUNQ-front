@@ -2,14 +2,15 @@ import React  from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Table, Button, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import AppSpinner from './AppSpinner'
-import AppNavbar from './AppNavbar'
-import AccessError from './AccessError';
-import ButtonBar from './buttonBar/ButtonBar';
-import * as CourseAPI from './services/CourseAPI';
-import * as UserAPI from './services/UserAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-import { userContext } from './login/UserContext';
+import AppSpinner from '../auxiliar/AppSpinner'
+import AppNavbar from '../AppNavbar'
+import AccessError from '../errorHandling/AccessError';
+import ButtonBar from '../buttons/ButtonBar';
+import * as CourseAPI from '../services/CourseAPI';
+import * as UserAPI from '../services/UserAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import { userContext } from '../login/UserContext';
+import * as IconRepo from '../auxiliar/IconRepo'
 
 class FullCourseList extends ComponentWithErrorHandling {
 
@@ -149,6 +150,8 @@ export class CourseListContainer extends ComponentWithErrorHandling {
     }
   }
 
+  formatYESoNO(boolean) { return boolean===false ? 'No' : 'Yes'; }
+
   render() {
     if (false) { return (<AppSpinner />) }
     const deleteCourseFunction = () => {this.remove(this.state.targetId)};
@@ -176,9 +179,10 @@ export class CourseListContainer extends ComponentWithErrorHandling {
                 courses = {this.state.courses}
                 courseOnClickFunction = {(courseId) =>  {this.setState({targetId: courseId})}}
                 styleFunction = {(courseId) => this.setSelectedRowColor(courseId)}
-                getIconFunction = {(subjectCode, courseId) => this.getCourseIcon(subjectCode, courseId)}
+                getIconFunction = {(subjectCode) => IconRepo.getCourseIcon(subjectCode)}
                 booleanFormatterFunction = {(boolean) => this.formatYESoNO(boolean)}
                 disableAttendanceBt = {this.disableAttendanceBt}
+                targetId = {this.state.targetId}
               />
             </tbody>
           </Table>
@@ -186,43 +190,12 @@ export class CourseListContainer extends ComponentWithErrorHandling {
       </div>
     );
   }
-
-  formatYESoNO(boolean) { return boolean===false ? 'No' : 'Yes'; }
-
-  getCourseIcon(subjectCode, courseId) {
-    if(courseId === this.state.targetId) {
-      switch(subjectCode.split("-")[0]) {
-        case "80000":
-          return (<> <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="left-10 up-10"/>
-                    <FontAwesomeIcon icon='book-reader' size="1x" color="darkred" transform="right-10 up-10"/>
-                    <FontAwesomeIcon icon='pencil-alt' size="1x" color="darkred" transform="left-10 down-10"/>
-                    <FontAwesomeIcon icon='graduation-cap' size="1x" color="darkred" transform="right-10 down-10"/> </>);
-        case "80005":
-          return (<> <FontAwesomeIcon icon='bug' size="1x" color="black" transform="left-10 up-10"/>
-                    <FontAwesomeIcon icon='microchip' size="1x" color="black" transform="right-10 up-10"/>
-                    <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
-                    <FontAwesomeIcon icon='project-diagram' size="1x" color="black" transform="right-10 down-10"/> </>);
-        case "80003":
-          return (<> <FontAwesomeIcon icon='brain' size="1x" color="darkblue" transform="left-10 up-10"/>
-                    <FontAwesomeIcon icon='shapes' size="1x" color="darkblue" transform="right-10 up-10"/>
-                    <FontAwesomeIcon icon='infinity' size="1x" color="darkblue" transform="left-10 down-10"/>
-                    <FontAwesomeIcon icon='calculator' size="1x" color="darkblue" transform="right-10 down-10"/> </>);
-        case "80004":
-          return (<> <FontAwesomeIcon icon='thermometer-half' size="1x" color="darkgreen" transform="left-10 up-10"/>
-                    <FontAwesomeIcon icon='atom' size="1x" color="darkgreen" transform="right-10 up-10"/>
-                    <FontAwesomeIcon icon='flask' size="1x" color="darkgreen" transform="left-10 down-10"/>
-                    <FontAwesomeIcon icon='magnet' size="1x" color="darkgreen" transform="right-10 down-10"/> </>);
-        default: return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="2x" color="gray"/>
-      }
-    }
-    else { return ''}  
-  }
 }
   
 const CourseList = props => {
   return props.courses.map( (course, index) => {
     const courseOnClickFunction = () => props.courseOnClickFunction(course.courseId);
-    const getIconFunction = (subjectCode, courseId) => props.getIconFunction(subjectCode, courseId);
+    const getIconFunction = (subjectCode) => props.getIconFunction(subjectCode);
     const booleanFormatterFunction = (boolean) => props.booleanFormatterFunction(boolean); 
     return (
       <CourseListItem
@@ -233,6 +206,7 @@ const CourseList = props => {
         getIconFunction = {getIconFunction}
         booleanFormatter = {booleanFormatterFunction}
         disableAttendanceBt = {props.disableAttendanceBt}
+        showIcon = {props.targetId === course.courseId }
       />
     )
   });
@@ -258,7 +232,7 @@ const CourseListItem = props => {
     <tr onClick={props.courseOnClickFunction} id={props.course.courseId} style={props.style}> 
       <td style={{textAlign: 'center'}}> 
         <span className="fa-layers fa-fw" style={{marginLeft: '-50px', marginRight: '-50px'}}>
-          { props.getIconFunction(props.course.subject.code, props.course.courseId) || '' }
+          { props.showIcon ? props.getIconFunction(props.course.subject.code) : '' }
         </span>
       </td>
       <td style={{whiteSpace: 'nowrap'}}>{props.course.courseCode || ''}</td>

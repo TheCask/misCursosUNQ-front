@@ -4,25 +4,25 @@ import {userContext} from './login/UserContext';
 // LOCAL
 import './App.css';
 import Home from './Home';
-import FullCourseList from './CourseList';
-import CourseEdit from './CourseEdit';
-import AddStudentsToCourse from './AddStudentsToCourse';
-import AddTeachersToCourse from './AddTeachersToCourse';
-import AddCoordinatorsToSubject from './AddCoordinatorsToSubject'
-import Attendance from './Attendance';
-import FullStudentList from './StudentList';
-import StudentEdit from './StudentEdit';
-import FullSubjectList from './SubjectList';
-import SubjectEdit from './SubjectEdit';
-import FullUserList from './UserList';
-import UserEdit from './UserEdit';
-import * as Detail from './Details'
+import FullCourseList from './course/CourseList';
+import CourseEdit from './course/CourseEdit';
+import AddStudentsToCourse from './course/AddStudentsToCourse';
+import AddTeachersToCourse from './course/AddTeachersToCourse';
+import AddCoordinatorsToSubject from './subject/AddCoordinatorsToSubject'
+import Attendance from './course/Attendance';
+import FullStudentList from './student/StudentList';
+import StudentEdit from './student/StudentEdit';
+import FullSubjectList from './subject/SubjectList';
+import SubjectEdit from './subject/SubjectEdit';
+import FullUserList from './user/UserList';
+import UserEdit from './user/UserEdit';
+import * as Detail from './auxiliar/Details'
 import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
-import AppSpinner from './AppSpinner';
-//import EvaluationPage from './Evaluation';
-import EvaluationPage from './EvaluationPage';
-import EXPERIMENTING from './EXPERIMENTING';
+import AppSpinner from './auxiliar/AppSpinner';
+//import EvaluationPage from './evaluations/Evaluation';
+import EvaluationPage from './evaluations/EvaluationPage';
+import EXPERIMENTING from './experimental/EXPERIMENTING';
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
-import AppSpinner from './AppSpinner';
-import AppNavbar from './AppNavbar';
+import AppSpinner from '../auxiliar/AppSpinner';
+import AppNavbar from '../AppNavbar';
 import { Link } from 'react-router-dom';
-import DetailButton from './buttonBar/DetailButton';
+import DetailButton from '../buttons/DetailButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as SubjectAPI from './services/SubjectAPI';
-import * as UserAPI from './services/UserAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
+import * as SubjectAPI from '../services/SubjectAPI';
+import * as UserAPI from '../services/UserAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 
 class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
 

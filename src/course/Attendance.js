@@ -2,11 +2,11 @@ import React from 'react';
 import { Button, ButtonGroup, Container, Table, Form, UncontrolledTooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import AppNavbar from './AppNavbar';
-import AppSpinner from './AppSpinner';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-import * as CourseAPI from './services/CourseAPI';
-import * as LessonAPI from './services/LessonAPI';
+import AppNavbar from '../AppNavbar';
+import AppSpinner from '../auxiliar/AppSpinner';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import * as CourseAPI from '../services/CourseAPI';
+import * as LessonAPI from '../services/LessonAPI';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 

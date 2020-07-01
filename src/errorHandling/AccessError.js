@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Jumbotron } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar';
 
 export default class LogInOut extends Component {
 

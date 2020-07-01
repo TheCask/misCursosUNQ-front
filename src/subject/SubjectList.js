@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container, Table } from 'reactstrap';
-import AppSpinner from './AppSpinner';
-import AppNavbar from './AppNavbar';
-import ButtonBar from './buttonBar/ButtonBar';
-import * as SubjectAPI from './services/SubjectAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-import { userContext } from './login/UserContext';
+import AppSpinner from '../auxiliar/AppSpinner';
+import AppNavbar from '../AppNavbar';
+import ButtonBar from '../buttons/ButtonBar';
+import * as SubjectAPI from '../services/SubjectAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import { userContext } from '../login/UserContext';
 
 class FullSubjectList extends ComponentWithErrorHandling {
   render() {

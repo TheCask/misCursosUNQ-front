@@ -3,10 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, Card, CardFooter, CardHeader, CardImg,
   ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
-import AccessError from '../AccessError';
-import AppSpinner from '../AppSpinner';
-import SaveButton from '../buttonBar/SaveButton'
-import CancelButton from '../buttonBar/CancelButton'
+import AccessError from '../errorHandling/AccessError';
+import AppSpinner from '../auxiliar/AppSpinner';
+import SaveButton from '../buttons/SaveButton'
+import CancelButton from '../buttons/CancelButton'
 import * as AuthAPI from '../services/AuthAPI'
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

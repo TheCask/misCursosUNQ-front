@@ -1,13 +1,13 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Container, Form, FormGroup, Input, ButtonGroup, Row, Col, Label } from 'reactstrap';
-import AppNavbar from './AppNavbar';
-import { UserListContainer } from './UserList'
-import SaveButton from './buttonBar/SaveButton'
-import CancelButton from './buttonBar/CancelButton'
-import * as SubjectAPI from './services/SubjectAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-import { userContext } from './login/UserContext';
+import AppNavbar from '../AppNavbar';
+import { UserListContainer } from '../user/UserList'
+import SaveButton from '../buttons/SaveButton'
+import CancelButton from '../buttons/CancelButton'
+import * as SubjectAPI from '../services/SubjectAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import { userContext } from '../login/UserContext';
 
 
 class SubjectEdit extends ComponentWithErrorHandling {

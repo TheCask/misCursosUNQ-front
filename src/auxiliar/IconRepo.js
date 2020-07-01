@@ -47,3 +47,29 @@ export default function getIcon(operationType, entityTypeCapName) {
 
     }
 }
+
+export function getCourseIcon(subjectCode) {
+    switch(subjectCode.split("-")[0]) {
+    case "80000":
+        return (<> <FontAwesomeIcon icon='book' size="1x" color="darkred" transform="left-10 up-10"/>
+                <FontAwesomeIcon icon='book-reader' size="1x" color="darkred" transform="right-10 up-10"/>
+                <FontAwesomeIcon icon='pencil-alt' size="1x" color="darkred" transform="left-10 down-10"/>
+                <FontAwesomeIcon icon='graduation-cap' size="1x" color="darkred" transform="right-10 down-10"/> </>);
+    case "80005":
+        return (<> <FontAwesomeIcon icon='bug' size="1x" color="black" transform="left-10 up-10"/>
+                <FontAwesomeIcon icon='microchip' size="1x" color="black" transform="right-10 up-10"/>
+                <FontAwesomeIcon icon='laptop-code' size="1x" color="black" transform="left-10 down-10"/>
+                <FontAwesomeIcon icon='project-diagram' size="1x" color="black" transform="right-10 down-10"/> </>);
+    case "80003":
+        return (<> <FontAwesomeIcon icon='brain' size="1x" color="darkblue" transform="left-10 up-10"/>
+                <FontAwesomeIcon icon='shapes' size="1x" color="darkblue" transform="right-10 up-10"/>
+                <FontAwesomeIcon icon='infinity' size="1x" color="darkblue" transform="left-10 down-10"/>
+                <FontAwesomeIcon icon='calculator' size="1x" color="darkblue" transform="right-10 down-10"/> </>);
+    case "80004":
+        return (<> <FontAwesomeIcon icon='thermometer-half' size="1x" color="darkgreen" transform="left-10 up-10"/>
+                <FontAwesomeIcon icon='atom' size="1x" color="darkgreen" transform="right-10 up-10"/>
+                <FontAwesomeIcon icon='flask' size="1x" color="darkgreen" transform="left-10 down-10"/>
+                <FontAwesomeIcon icon='magnet' size="1x" color="darkgreen" transform="right-10 down-10"/> </>);
+    default: return <FontAwesomeIcon icon={['fas', 'chalkboard']} size="2x" color="gray"/>
+    }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import CourseEvaluations from './CourseEvaluations';
 
 

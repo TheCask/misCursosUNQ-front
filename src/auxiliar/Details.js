@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import UserEdit from './UserEdit'
-import StudentEdit from './StudentEdit'
-import SubjectEdit from './SubjectEdit'
-import CourseEdit from './CourseEdit'
+import UserEdit from '../user/UserEdit'
+import StudentEdit from '../student/StudentEdit'
+import SubjectEdit from '../subject/SubjectEdit'
+import CourseEdit from '../course/CourseEdit'
 
 export class UserDetail extends Component {
   render() {

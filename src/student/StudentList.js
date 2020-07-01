@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container, Table, InputGroup, Button, Input, 
   InputGroupAddon, Col, Row, UncontrolledTooltip } from 'reactstrap';
-import AppSpinner from './AppSpinner';
-import AppNavbar from './AppNavbar';
-import ButtonBar from './buttonBar/ButtonBar';
-import * as StudentAPI from './services/StudentAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
+import AppSpinner from '../auxiliar/AppSpinner';
+import AppNavbar from '../AppNavbar';
+import ButtonBar from '../buttons/ButtonBar';
+import * as StudentAPI from '../services/StudentAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { userContext } from './login/UserContext';
+import { userContext } from '../login/UserContext';
 
 
 class FullStudentList extends ComponentWithErrorHandling {

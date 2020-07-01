@@ -3,17 +3,17 @@ import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, 
   Col, Row, Label } from 'reactstrap';
-import AppNavbar from './AppNavbar';
-import { StudentListContainer } from './StudentList'
-import { UserListContainer } from './UserList'
-import SaveButton from './buttonBar/SaveButton'
-import CancelButton from './buttonBar/CancelButton'
-import * as CourseAPI from './services/CourseAPI';
-import * as SubjectAPI from './services/SubjectAPI';
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling'
-import Collapsable from './Collapsable';
-import AppSpinner from './AppSpinner';
-import { userContext } from './login/UserContext';
+import AppNavbar from '../AppNavbar';
+import { StudentListContainer } from '../student/StudentList'
+import { UserListContainer } from '../user/UserList'
+import SaveButton from '../buttons/SaveButton'
+import CancelButton from '../buttons/CancelButton'
+import * as CourseAPI from '../services/CourseAPI';
+import * as SubjectAPI from '../services/SubjectAPI';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import Collapsable from '../buttons/Collapsable';
+import AppSpinner from '../auxiliar/AppSpinner';
+import { userContext } from '../login/UserContext';
 
 class CourseEdit extends ComponentWithErrorHandling {
 
