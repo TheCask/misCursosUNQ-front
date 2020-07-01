@@ -41,20 +41,12 @@ class Profile extends ComponentWithErrorHandling {
       globalUser: this.user, isLoading: true};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
     this.toggleResetPsw = this.toggleResetPsw.bind(this);
   }
 
   componentDidMount() {
     let value = this.context;
     this.setState({globalUser: value.globalUser, isLoading: false})
-  }
-
-  handleToggleCheckbox(event) {
-    let newValue = !this.state.globalUser.passwordChangeRequired;
-    let user = this.state.globalUser;
-    user['passwordChangeRequired'] = newValue;
-    this.setState({globalUser: user})
   }
 
   toggleResetPsw(event) {
@@ -103,6 +95,7 @@ class Profile extends ComponentWithErrorHandling {
     const {globalUser, isLoading} = this.state;
     const title = <h2 className="float-left">{globalUser ? 'Edit Profile' : ''}</h2>;
     if (isLoading) { return (<AppSpinner/>) }
+    if (!globalUser) { localStorage.setItem('rol', 'Guest') }
     return (
       (!globalUser) ? <AccessError errorCode="User Not Logged" 
         errorDetail="Make sure you are signed in before try to access this profile edit page"/>

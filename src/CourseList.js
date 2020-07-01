@@ -82,7 +82,7 @@ class FullCourseList extends ComponentWithErrorHandling {
   rolCourses() {
     let rolCourses
     switch (this.actualRol) {
-      case 'Teacher': { 
+      case 'Teacher': {
         let email = this.context.globalUser ? this.context.globalUser.email : '';
         rolCourses = (handleSuccess, handleError) => 
           UserAPI.getUserCoursesByEmailAsync(email, handleSuccess, handleError);
