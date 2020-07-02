@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import AppNavbar from '../AppNavbar';
-import { Container, Form, Input, InputGroup, InputGroupAddon,ButtonGroup} from 'reactstrap';
+import React, { useState } from 'react';
+import {  Input, InputGroup, InputGroupAddon,ButtonGroup} from 'reactstrap';
 import Col from 'reactstrap/lib/Col';
 import Row from 'reactstrap/lib/Row';
-import { Button, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
-import AppSpinner from '../auxiliar/AppSpinner';
+import { Button, Table } from 'reactstrap';
 import Log from '../auxiliar/Log';
-import CRUDSaveButton from '../CRUDButtonBar/CRUDSaveButton';
 import CRUDEditButton from '../CRUDButtonBar/CRUDEditButton';
 import CRUDDeleteButton from '../CRUDButtonBar/CRUDDeleteButton';
 import * as CourseAPI from '../services/CourseAPI';
@@ -52,6 +49,17 @@ export default function EvaluationEdit(props){
                 props.reloadCourse();     /// NEEDED??????
             }, 
             props.showError("save evaluation"));
+    }
+
+    function handleEvalDelete(event, evalInstance) {
+        event.preventDefault();
+        CourseAPI.deleteCourseEvaluationAsync(
+            evalInstance.evaluationId, 
+            (res) => {
+                Log.info(res, "DELETE SUCCEDED");
+                props.reloadCourse();     /// NEEDED??????
+            }, 
+            props.showError("delete evaluation"));
     }
 
     function getInnerPropValue(baseObj, subPropString){
@@ -133,6 +141,15 @@ export default function EvaluationEdit(props){
                         behavior = {{ onProceed: handleEvalSubmit }}  // requires either {onClick: <myFunc>} or {to: <'/my/link'>' tag={Link}} 
                         onClick = {() => {}}
                         entityTypeCapName = {'Evaluation'}
+                        isDisabled = {!isEvalSelected()}
+                        getEntity = {props.currEvalInstance}
+                        />
+                    <CRUDDeleteButton
+                        operationType='Delete'
+                        behavior = {{ onProceed: handleEvalDelete }}  // requires either {onClick: <myFunc>} or {to: <'/my/link'>' tag={Link}} 
+                        onClick = {() => {}}
+                        entityTypeCapName = {'Evaluation'}
+                        consequences={['Every student calification corresponding to this evaluation instance will be permanently deleted.', "This evaluation will be deleted."]}
                         isDisabled = {!isEvalSelected()}
                         getEntity = {props.currEvalInstance}
                         />

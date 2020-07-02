@@ -67,3 +67,9 @@ export async function postCourseEvaluationAsync(courseId, evaluationJson, handle
     const response = await fetch(`/api/course/${courseId}/evaluation`, BackAPI.postInit(evaluationJson));
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError);
 }
+
+// delete
+export async function deleteCourseEvaluationAsync(evaluationId, handleSuccess, handleError){
+    const response = await fetch(`/api/evaluation/${evaluationId}/`, BackAPI.deleteInit())
+    BackAPI.handlePostOrDelete(response, handleSuccess, handleError) 
+}
