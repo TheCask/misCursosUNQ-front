@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+#login config
+/login/authConfig.js
+
 # testing
 /coverage
 
