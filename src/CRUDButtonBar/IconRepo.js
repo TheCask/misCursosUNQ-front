@@ -42,6 +42,13 @@ export default function getIcon(operationType, entityTypeCapName) {
 
                 default : return <FontAwesomeIcon icon='edit' size="2x" style={{ width: "1em"}}/>
             }
+            
+        case 'Delete' :
+
+            switch (entityTypeCapName) {
+
+                default : return <FontAwesomeIcon icon='trash-alt' size="2x"/>
+            }
 
         default : return (<FontAwesomeIcon icon='plus-circle' size="2x" style={{ width: "1em"}}/>)
 
