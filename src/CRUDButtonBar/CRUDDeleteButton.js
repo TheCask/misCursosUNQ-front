@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Button, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input } from 'reactstrap';
+import { Button, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import getIcon from './IconRepo';
+import getIcon from '../auxiliar/IconRepo';
 
 export default function CRUDDeleteButton(props){
     /*
@@ -19,10 +19,6 @@ export default function CRUDDeleteButton(props){
     )
 
     const toggle = () => {setModal(!modal)};
-
-    function handleChange(event){
-        setEntity({...entity, instanceName: event.target.value});
-    }
 
     function handleSubmit(event){
         props.behavior.onProceed(event, entity);
