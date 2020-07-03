@@ -112,7 +112,7 @@ export default function EvaluationEdit(props){
                 <thead>
                     <tr>
                         <th width="100%">Instance Name</th>
-                        <th {...tdStyle} width="100%">Avgerage</th>
+                        <th {...tdStyle} width="100%">Average</th>
                         <th {...tdStyle} width="100%">Califs.</th>
                     </tr>
                 </thead>
