@@ -222,12 +222,14 @@ const CourseListHeaders = () =>
       <th width="3%">Shift</th>
       <th width="2%">Open</th>
       <th width="1%">Students</th>
+      <th width="1%">Evaluations</th>
       <th width="1%">Lessons</th>
       <th width="1%">Attendance</th>
     </tr>
   </thead>
 
 const CourseListItem = props => {
+  const tdStyle = {whiteSpace: 'nowrap', textAlign: 'center'};
   return (
     <tr onClick={props.courseOnClickFunction} id={props.course.courseId} style={props.style}> 
       <td style={{textAlign: 'center'}}> 
@@ -235,15 +237,24 @@ const CourseListItem = props => {
           { props.showIcon ? props.getIconFunction(props.course.subject.code) : '' }
         </span>
       </td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.courseCode || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.subject.acronym || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>
+      <td style={tdStyle}>{props.course.courseCode || ''}</td>
+      <td style={tdStyle}>{props.course.subject.acronym || ''}</td>
+      <td style={tdStyle}>
         {props.course.courseSeason || ''}{' '}{props.course.courseYear || ''}
       </td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.courseShift || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.students.length || 0}</td>
-      <td style={{whiteSpace: 'nowrap'}}>{props.course.lessons.length || 0 }</td>
+      <td style={tdStyle}>{props.course.courseShift || ''}</td>
+      <td style={tdStyle}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
+      <td style={tdStyle}>{props.course.students.length || 0}</td>
+      <td style={tdStyle}>{
+          <Button size="sm" color="secondary" outline block tag={Link} to={`/course/${props.course.courseId}/evaluations`} 
+            id={"attendance_" + props.course.courseId} disabled={false} >
+            <UncontrolledTooltip placement="auto" target={"attendance_" + props.course.courseId}>
+              
+            </UncontrolledTooltip>         
+            {props.course.evaluations.length || 0}
+          </Button>
+      }</td>
+      <td style={tdStyle}>{props.course.lessons.length || 0 }</td>
       <td>
         <Button size="sm" color="success" outline block tag={Link} to={`/course/${props.course.courseId}/lessons`} 
           id={"attendance_" + props.course.courseId} disabled={props.disableAttendanceBt}>

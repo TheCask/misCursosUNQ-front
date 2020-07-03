@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Input, InputGroup, InputGroupAddon,ButtonGroup} from 'reactstrap';
+import {  Input, InputGroup, InputGroupAddon,ButtonGroup, Badge} from 'reactstrap';
 import Col from 'reactstrap/lib/Col';
 import Row from 'reactstrap/lib/Row';
 import { Button, Table } from 'reactstrap';
@@ -89,11 +89,31 @@ export default function EvaluationEdit(props){
                 })             
         )
 
+        function isValidNote(note){
+            return note && !isNaN(note);
+        }
+
+        function countValidNotes(califications){
+            return califications.reduce((acc, currCal)=> isValidNote(currCal.note) ? (acc + 1) : acc, 0)
+        }
+
+        function sumValidNotes(califications){
+            return califications.reduce((acc, currCal)=> isValidNote(currCal.note) ? (acc + currCal.note) : acc, 0)
+        }
+
+        function avgValidNotes(califications){
+            return sumValidNotes(califications)/countValidNotes(califications)
+        }
+
+        const tdStyle = {whiteSpace: 'nowrap', textAlign: 'center'};
+
         return (
             <Table hover className="mt-4" >
                 <thead>
                     <tr>
                         <th width="100%">Instance Name</th>
+                        <th {...tdStyle} width="100%">Avgerage</th>
+                        <th {...tdStyle} width="100%">Califs.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,6 +124,14 @@ export default function EvaluationEdit(props){
                             onClick={onClickFunc(ev.evaluationId)} 
                         >
                             <td style={{whiteSpace: 'nowrap'}}>{ev.instanceName || ''}</td>
+                            <td style={tdStyle}>
+                                {avgValidNotes(ev.califications)}
+                            </td>
+                            <td style={tdStyle}>
+                                <Badge color="primary" pill>
+                                    {countValidNotes(ev.califications)}
+                                </Badge>
+                            </td>
                         </tr>
                     )}
                 </tbody>

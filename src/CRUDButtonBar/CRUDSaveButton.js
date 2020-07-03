@@ -14,7 +14,9 @@ const CRUDSaveButton = (props) =>
             size="sm" 
             color="primary"
             type="submit"
-            disabled = {props.isDisabled || false} >
+            disabled = {props.isDisabled || false} 
+            tabIndex={0}
+            >
         <UncontrolledTooltip placement="auto" target={`save_${props.entityTypeCapName}`}>
             {`Save ${props.entityTypeCapName}`}
         </UncontrolledTooltip>

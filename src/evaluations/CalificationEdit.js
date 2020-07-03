@@ -141,7 +141,7 @@ export default function CalificationEdit(props){
                         disabled = {!isEvalSelected()}
                         />
                     <InputGroupAddon addonType="append">
-                        <Button color="secondary" onClick={() => setFilterValue('')} >Clear</Button>
+                        <Button color="secondary" onClick={() => setFilterValue('')} tabIndex={-1} >Clear</Button>
                     </InputGroupAddon>
                 </InputGroup>
                 </Col>
@@ -149,6 +149,7 @@ export default function CalificationEdit(props){
                     <ButtonGroup style={{ padding: "0em", float: "right"}}>
                     <CRUDSaveButton
                         behavior = {{type: "submit"}}
+                        tabIndex={-1}
                         entityTypeCapName = {'Calification'}
                         isDisabled = {!isEvalSelected() || !dirty}
                         />

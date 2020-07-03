@@ -21,9 +21,8 @@ export default class AppNavbar extends ComponentWithErrorHandling {
 
   render() {
     return (
-      <div>
-        <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.20)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}> 
-          <Col xs="3" align="left">            
+        <div>
+      <Navbar style={{backgroundColor:"rgba(20, 0, 0, 0.20)", boxShadow: 'rgba(80, 0, 0, 0.42) 0px 3px 8px'}}>
             <a href="http://ciclointroductoriocyt.web.unq.edu.ar">
             <img className="app-logo" alt="applogo" src={logoApp}
               height="32" width="32" style={{margin: '0px 15px 0px 0px'}}/>
@@ -32,16 +31,12 @@ export default class AppNavbar extends ComponentWithErrorHandling {
               <img className="unq-logo" alt="unqlogo" src={logoUNQ} 
               height="32" width="32" style={{margin: '0px 0px'}}/>
             </a>
-          </Col>
-          <Col xs="6" align="center">
-            <Greeting/>
-          </Col>
-          <Col xs="2" align="right">
-            <Rol/>
-          </Col>
-          <Col xs="1" align="right">
-            <LogInOut/>
-          </Col>
+            <Row float="right">
+
+              <Rol/>
+              <Greeting/>
+              <LogInOut/>
+            </Row>
         </Navbar>
         <Container fluid style={{margin: '0px', height: '100vh'}}>
           <Row style={{height: 'inherit'}}>
