@@ -8,6 +8,8 @@ import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Log from '../auxiliar/Log'
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 
 class CsvUsersImport extends ComponentWithErrorHandling {
 
@@ -82,7 +84,15 @@ class CsvUsersImport extends ComponentWithErrorHandling {
 
   render() {
     let title = <h2 className="float-left">Add Users from CSV File</h2>
-    return (
+
+
+
+
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      : 
       <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
@@ -115,32 +125,32 @@ class CsvUsersImport extends ComponentWithErrorHandling {
         </Container>
       </AppNavbar>
   )}
-
+  
   emptyItem = {
     isActive: true,
     personalData: {
-        dni: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        cellPhone: '' 
+      dni: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      cellPhone: '' 
     },
     jobDetail: {
-        cuitNumber: '',
-        category: '',
-        grade: '',
-        dedication: '',
-        contractRelation: '',
-        aditionalHours: 0,
-        cvURL: '',
-        lastUpdate: '',
-        gradeTitles: '',
-        posGradeTitles: ''
+      cuitNumber: '',
+      category: '',
+      grade: '',
+      dedication: '',
+      contractRelation: '',
+      aditionalHours: 0,
+      cvURL: '',
+      lastUpdate: '',
+      gradeTitles: '',
+      posGradeTitles: ''
     },
     coordinatedSubjects: [],
     taughtCourses: []
   };
-
+  
   parserConfig = {
     delimiter: "",  // auto-detect
     newline: "",  // auto-detect
@@ -168,4 +178,5 @@ class CsvUsersImport extends ComponentWithErrorHandling {
   }
 }
 
+CsvUsersImport.contextType = userContext;
 export default withRouter(CsvUsersImport);

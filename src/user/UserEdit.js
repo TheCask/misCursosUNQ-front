@@ -1,14 +1,15 @@
 import React from 'react';
 import {withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup, Label, 
-  UncontrolledTooltip, Row, Col, Button } from 'reactstrap';
+import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, Row, Col, Button } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 import SaveButton from '../buttons/SaveButton'
 import CancelButton from '../buttons/CancelButton'
 import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
+  
 class UserEdit extends ComponentWithErrorHandling {
 
   CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
@@ -102,11 +103,17 @@ class UserEdit extends ComponentWithErrorHandling {
   }
 
   render() {
+    
     const {item} = this.state;
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail);
-    return (
-      <AppNavbar>
+   
+    this.actualRol = this.context.actualRol;
+    
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      : <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
           <Form onSubmit={this.handleSubmit}>
@@ -277,7 +284,7 @@ class UserEdit extends ComponentWithErrorHandling {
         </Container>
       </AppNavbar>
   )}
-
+  
   categoryOptions() {
     return ( this.CategoryOptions.map(ct => {
       return (<option key={ct}>{ct}</option>) 
@@ -289,13 +296,13 @@ class UserEdit extends ComponentWithErrorHandling {
       return (<option key={gd}>{gd}</option>) 
     }))
   }
-
+  
   contractOptions() {
     return ( this.ContractOptions.map(ct => {
       return (<option key={ct}>{ct}</option>) 
     }))
   }
-
+  
   dedicationOptions() {
     return ( this.DedicationOptions.map(dc => {
       return (<option key={dc}>{dc}</option>) 
@@ -303,4 +310,5 @@ class UserEdit extends ComponentWithErrorHandling {
   }
 }
 
+UserEdit.contextType = userContext;
 export default withRouter(UserEdit);

@@ -8,11 +8,23 @@ import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 
 class FullUserList extends ComponentWithErrorHandling {
+
+
+
+
+  
+  
+  
+  
   render() {
-    return(
-      <AppNavbar>
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      : <AppNavbar>
         {this.renderErrorModal()}
         <UserListContainer 
           userListTitle = {'Users'}
@@ -44,77 +56,77 @@ class FullUserList extends ComponentWithErrorHandling {
 }
 
 export class UserListContainer extends ComponentWithErrorHandling {
-
+  
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
       users: [], isLoading: true, targetId: '', searchText: '', pageNo: 1}};
-    this.title = this.props.userListTitle;
-    this.addButtonTo = props.addButtonTo;
-    this.renderButtonBar = props.renderButtonBar;
-    this.renderAddButton = props.renderAddButton;
-    this.renderDeleteButton = props.renderDeleteButton;
-    this.renderEditButton = props.renderEditButton;
-    this.deleteButtonTo = props.deleteButtonTo;
-    this.entityType = props.entityType;
-    this.contextParams = props;
-    this.disallowDelete = props.disallowDelete;
-    this.applyDisallowDeleteFunction = props.applyDisallowDeleteFunction;
-    this.onDisableDeleteTitle = props.onDisableDeleteTitle;
-    this.onDisableDeleteBody = props.onDisableDeleteBody;
-    this.renderSearch = props.renderSearch;
-    this.handleChange = this.handleChange.bind(this);
-    this.doSearch = this.doSearch.bind(this);
- }
-
-  componentDidMount() {
-    this.setState({isLoading: true});
-    this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}), 
-      this.showError("get users info"));
- }
-
-  remove(userId) {
-    this.contextParams.onDelete(
-      userId, 
-      () => {
-        let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
-        this.setState({users: updatedUsers, targetId: ''});
-     },
-      this.showError("remove user"));
-  }
-
-  doSearch() {
-    this.setState({isLoading: true});
-    this.contextParams.onSearch(
-      this.state.pageNo,
-      this.state.searchText,
-      json => this.setState({users: json, isLoading: false}),
-      this.showError("search users"));
-  }
-
-  handleChange(event) {
-    const {name, value} = event.target;
-    this.setState({[name]: value});
-  }
-
-  disallowsDelete(userId) {
-    const targetUser = this.state.users.find(user => user.userId === userId)
-    return (targetUser && (targetUser.taughtCourses.length > 0 || 
-        targetUser.coordinatedSubjects.length > 0 || !targetUser.isActive))
-  } 
-
-  setSelectedRowColor(rowId) {
-    if (rowId === this.state.targetId) {
-      return {backgroundColor:'#F0F8FF'}
+      this.title = this.props.userListTitle;
+      this.addButtonTo = props.addButtonTo;
+      this.renderButtonBar = props.renderButtonBar;
+      this.renderAddButton = props.renderAddButton;
+      this.renderDeleteButton = props.renderDeleteButton;
+      this.renderEditButton = props.renderEditButton;
+      this.deleteButtonTo = props.deleteButtonTo;
+      this.entityType = props.entityType;
+      this.contextParams = props;
+      this.disallowDelete = props.disallowDelete;
+      this.applyDisallowDeleteFunction = props.applyDisallowDeleteFunction;
+      this.onDisableDeleteTitle = props.onDisableDeleteTitle;
+      this.onDisableDeleteBody = props.onDisableDeleteBody;
+      this.renderSearch = props.renderSearch;
+      this.handleChange = this.handleChange.bind(this);
+      this.doSearch = this.doSearch.bind(this);
     }
-  }
-
-  render() {
-    const isLoading = this.state.isLoading;
-    if (isLoading) {return (<AppSpinner/>)}
-    const deleteUserFunction = () => {this.remove(this.state.targetId)};
-    return (
-      <div>
+    
+    componentDidMount() {
+      this.setState({isLoading: true});
+      this.contextParams.onGetAll(json => this.setState({users: json, isLoading: false}), 
+      this.showError("get users info"));
+    }
+    
+    remove(userId) {
+      this.contextParams.onDelete(
+        userId, 
+        () => {
+          let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
+          this.setState({users: updatedUsers, targetId: ''});
+        },
+        this.showError("remove user"));
+      }
+      
+      doSearch() {
+        this.setState({isLoading: true});
+        this.contextParams.onSearch(
+          this.state.pageNo,
+          this.state.searchText,
+          json => this.setState({users: json, isLoading: false}),
+          this.showError("search users"));
+        }
+        
+        handleChange(event) {
+          const {name, value} = event.target;
+          this.setState({[name]: value});
+        }
+        
+        disallowsDelete(userId) {
+          const targetUser = this.state.users.find(user => user.userId === userId)
+          return (targetUser && (targetUser.taughtCourses.length > 0 || 
+            targetUser.coordinatedSubjects.length > 0 || !targetUser.isActive))
+          } 
+          
+          setSelectedRowColor(rowId) {
+            if (rowId === this.state.targetId) {
+              return {backgroundColor:'#F0F8FF'}
+            }
+          }
+          
+          render() {
+            const isLoading = this.state.isLoading;
+            if (isLoading) {return (<AppSpinner/>)}
+            const deleteUserFunction = () => {this.remove(this.state.targetId)};
+            return (
+              <div>
         {this.renderErrorModal()}
         <Container fluid>
           <Row xs="4">
@@ -141,7 +153,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 deleteButtonTo = {this.deleteButtonTo}
                 onDisableDeleteTitle = {this.onDisableDeleteTitle}
                 onDisableDeleteBody = {this.onDisableDeleteBody}
-              /> : '' }
+                /> : '' }
             </Col>
           </Row>    
           <Table hover className="mt-4"> 
@@ -151,7 +163,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 users = {this.state.users}
                 userOnClickFunction = {(userId) => {this.setState({targetId: userId})}}
                 styleFunction = {(userId) => this.setSelectedRowColor(userId)}
-              />
+                />
             </tbody>
           </Table>
         </Container>
@@ -179,16 +191,16 @@ const UserList = props => {
     const userOnClickFunction = () => props.userOnClickFunction(user.userId);
     return (
       <UserListItem
-        key = {index}
-        user = {user} 
-        userOnClickFunction = {userOnClickFunction} 
-        style = {props.styleFunction(user.userId)}
+      key = {index}
+      user = {user} 
+      userOnClickFunction = {userOnClickFunction} 
+      style = {props.styleFunction(user.userId)}
       />
-    )
-  });
-}
-
-const UserListItem = props =>
+      )
+    });
+  }
+  
+  const UserListItem = props =>
   <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style} key={props.user.userId}>
     <td>
       {!props.user.isActive ?
@@ -207,7 +219,7 @@ const UserListItem = props =>
   </tr>;
 
 const SearchField = props =>
-  <InputGroup>
+<InputGroup>
     <Input type="text" name="searchText" id="searchInput" placeholder="Type to search Users ..."
       value={props.searchText} onChange={props.handleChange}/>
     <InputGroupAddon addonType="append">

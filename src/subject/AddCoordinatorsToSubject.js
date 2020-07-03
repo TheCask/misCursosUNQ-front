@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as SubjectAPI from '../services/SubjectAPI';
 import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 
 class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
 
@@ -84,8 +86,13 @@ class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
   render() {
     const {isLoading} = this.state;
     if (isLoading) { return <AppSpinner /> }
-    const targetId = this.state.currentUserId
-    return (
+    const targetId = this.state.currentUserId;
+
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      : 
       <div>
         <AppNavbar>
           <Container fluid> 
@@ -116,7 +123,7 @@ class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
                   userOnClickFunction = {(userId) => {this.toggleAssignment(userId)}}
                   styleFunction = {(userId) => this.setRowColor(userId)}
                   setIconFunction = {(userId) => this.setRowIcon(userId)}
-                />
+                  />
               </tbody>
             </Table>
           </Container>
@@ -124,14 +131,14 @@ class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
       </div>
     );
   }
-
+  
   setRowIcon(userId) {
     if (this.state.subjectCoordinatorsIds.find(us => us.userId === userId)) {
       return <FontAwesomeIcon icon='check' size="2x" color='#90EE90'/>
     }
     else { return <FontAwesomeIcon icon='times' size="2x" color='#CD5C5C' /> } 
   }
-
+  
   setRowColor(rowId) {
     if (this.state.subjectCoordinatorsIds.find(us => us.userId === rowId)) {
       return {backgroundColor:'#F0FFF0'}
@@ -160,17 +167,17 @@ const UserList = props => {
     const setIconFunction = (userId) => props.setIconFunction(userId);
     return (
       <UserListItem
-        key = {index}
-        user = {user} 
-        userOnClickFunction = {userOnClickFunction} 
-        style = {props.styleFunction(user.userId)}
-        setIconFunction = {setIconFunction}
+      key = {index}
+      user = {user} 
+      userOnClickFunction = {userOnClickFunction} 
+      style = {props.styleFunction(user.userId)}
+      setIconFunction = {setIconFunction}
       />
-    )
-  });
-}
-
-const UserListItem = props =>
+      )
+    });
+  }
+  
+  const UserListItem = props =>
   <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style}>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
@@ -182,4 +189,5 @@ const UserListItem = props =>
     <td style={{textAlign: 'center'}}> {props.setIconFunction(props.user.userId)}</td>
   </tr>;
 
+AddCoordinatorsToSubject.contextType = userContext;
 export default AddCoordinatorsToSubject;
