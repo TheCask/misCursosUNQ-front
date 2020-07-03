@@ -4,6 +4,8 @@ import { Container, Form, FormGroup, Input, ButtonGroup, Row, Col, Label } from 
 import AppNavbar from '../AppNavbar';
 import SaveButton from '../buttons/SaveButton'
 import CancelButton from '../buttons/CancelButton'
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 import * as StudentAPI from '../services/StudentAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 
@@ -71,7 +73,11 @@ class StudentEdit extends ComponentWithErrorHandling {
     let newStudent = this.props.match.params.id === 'new';
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail, newStudent);
-    return (
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      :
       <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
@@ -140,5 +146,5 @@ class StudentEdit extends ComponentWithErrorHandling {
       </AppNavbar>
     )}
 }
-
+StudentEdit.contextType = userContext;
 export default withRouter(StudentEdit);

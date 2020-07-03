@@ -17,12 +17,16 @@ class FullCourseList extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {...this.state };
-    this.actualRol = 'Guest';
   };
 
   render() {
     this.actualRol = this.context.actualRol;
-    return(
+    return ((!(this.actualRol === 'Guest' || 
+      this.actualRol === 'Teacher' || 
+        this.actualRol === 'Cycle Coordinator'))  ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      :
       <div>
         <AppNavbar>
         {this.renderErrorModal()}

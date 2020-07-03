@@ -8,12 +8,13 @@ import { StudentListContainer } from '../student/StudentList'
 import { UserListContainer } from '../user/UserList'
 import SaveButton from '../buttons/SaveButton'
 import CancelButton from '../buttons/CancelButton'
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 import * as CourseAPI from '../services/CourseAPI';
 import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import Collapsable from '../buttons/Collapsable';
 import AppSpinner from '../auxiliar/AppSpinner';
-import { userContext } from '../login/UserContext';
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -137,8 +138,12 @@ class CourseEdit extends ComponentWithErrorHandling {
     if (isLoading) { return <AppSpinner/> }
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail);
-    let actualRol = this.context.actualRol;
-    return <div>
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol === 'Guest' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      : 
+      <div>
       <AppNavbar>
       {this.renderErrorModal()}
         <Container fluid>
@@ -147,7 +152,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col>{title}</Col>
             <Col>
             <ButtonGroup className="float-right">
-              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
+              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || this.actualRol !== 'Cycle Coordinator'}/>
               <CancelButton onClick={() => this.props.history.goBack()} />
             </ButtonGroup>
             </Col>
@@ -242,19 +247,20 @@ class CourseEdit extends ComponentWithErrorHandling {
         <Container fluid>
           {item.courseId ? 
             <Collapsable entityTypeCapName={'Students'} >
-              {this.renderStudents(onlyDetail, actualRol)}
+              {this.renderStudents(onlyDetail, this.actualRol)}
             </Collapsable> : ''
           }
         </Container>
         <Container fluid>
           {item.courseId ?
             <Collapsable entityTypeCapName={'Teachers'}>
-              {this.renderTeachers(onlyDetail, actualRol)}
+              {this.renderTeachers(onlyDetail, this.actualRol)}
             </Collapsable> : ''
           }
         </Container>
       </AppNavbar>
     </div>
+    )
   }
 
   renderStudents(onlyDetail, actualRol) {

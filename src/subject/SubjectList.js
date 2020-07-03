@@ -6,11 +6,15 @@ import ButtonBar from '../buttons/ButtonBar';
 import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { userContext } from '../login/UserContext';
-import Log from '../auxiliar/Log';
+import AccessError from '../errorHandling/AccessError';
 
 class FullSubjectList extends ComponentWithErrorHandling {
   render() {
-    return(
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Only Coordinators are allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      :
       <AppNavbar>
         {this.renderErrorModal()}
         <SubjectListContainer 

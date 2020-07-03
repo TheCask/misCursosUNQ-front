@@ -4,15 +4,19 @@ import { Container, Table, InputGroup, Button, Input,
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
 import ButtonBar from '../buttons/ButtonBar';
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError'
 import * as StudentAPI from '../services/StudentAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { userContext } from '../login/UserContext';
-
 
 class FullStudentList extends ComponentWithErrorHandling {
   render() {
-    return(
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      :
       <div>
         <AppNavbar>
           {this.renderErrorModal()}

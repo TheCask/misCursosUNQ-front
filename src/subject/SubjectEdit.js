@@ -8,6 +8,7 @@ import CancelButton from '../buttons/CancelButton'
 import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 
 
 class SubjectEdit extends ComponentWithErrorHandling {
@@ -66,7 +67,11 @@ class SubjectEdit extends ComponentWithErrorHandling {
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail, newSubject);
     let actualRol = this.context.actualRol;
-    return (
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Only Coordinators are allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      :
       <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
