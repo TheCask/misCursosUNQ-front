@@ -129,7 +129,7 @@ export default function EvaluationEdit(props){
                             </td>
                             <td style={tdStyle}>
                                 <Badge color="primary" pill>
-                                    {countValidNotes(ev.califications)}
+                                    {`${countValidNotes(ev.califications)}/${ev.califications.length}`}
                                 </Badge>
                             </td>
                         </tr>
