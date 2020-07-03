@@ -6,6 +6,7 @@ import ButtonBar from '../buttons/ButtonBar';
 import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { userContext } from '../login/UserContext';
+import Log from '../auxiliar/Log';
 
 class FullSubjectList extends ComponentWithErrorHandling {
   render() {
@@ -17,9 +18,7 @@ class FullSubjectList extends ComponentWithErrorHandling {
           onGetAll = { (handleSuccess, handleError) => SubjectAPI.getSubjectsAsync(handleSuccess, handleError) }
           onDelete = { (subjectCode, handleSuccess, handleError) => SubjectAPI.deleteSubjectAsync(subjectCode, handleSuccess, handleError)}
           onDeleteConsequenceList = {[
-          "The subject will no longer be available.",
-          "If the subject has courses associated, deleting is not allowed.",
-          "Please change subject from courses before trying to delete."
+          "The subject will no longer be available."
         ]}
         addButtonTo = {`/subject/new`}
         renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
@@ -65,7 +64,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
     );
   }
 
-  hasCourses(subjectCode){
+  getCourseQty(subjectCode){
     SubjectAPI.getSubjectCourseQtyAsync(subjectCode, 
       qty => this.setState( {couseQty: parseInt(qty)} ), 
       this.showError("get subject course quantity")
@@ -73,7 +72,8 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
   }
 
   disallowsDelete(subjectCode) {
-    return (!(this.state.couseQty) || (this.state.couseQty !== 0))
+    
+    return true == this.state.couseQty;
   }
 
   setSelectedRowColor(rowId) {
@@ -102,6 +102,13 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
             renderAddButton = {this.renderAddButton}
             renderDeleteButton = {this.renderDeleteButton}
             deleteButtonTo = {this.deleteButtonTo}
+            onDisableDeleteTitle={"This subject can't be deleted"}
+            onDisableDeleteBody={
+              <div>
+                <h3>The subject has course instances.</h3>
+                <p>Please remove subject courses before trying to delete subject.</p>
+              </div>
+            }
           /> : ''}
           <h3>{this.title}</h3>
           <Table hover className="mt-4">
@@ -109,7 +116,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
             <tbody>
               <SubjectList
                 subjects = {this.state.subjects}
-                subjectOnClickFunction = {(subjectId) =>  {this.setState({targetId: subjectId}); this.hasCourses(subjectId)}}
+                subjectOnClickFunction = {(subjectId) =>  {this.setState({targetId: subjectId}); this.getCourseQty(subjectId)}}
                 styleFunction = {(subjectId) => this.setSelectedRowColor(subjectId)}
               />
             </tbody>
