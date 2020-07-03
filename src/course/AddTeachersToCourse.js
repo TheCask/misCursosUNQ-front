@@ -4,6 +4,8 @@ import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
 import { Link } from 'react-router-dom';
 import DetailButton from '../buttons/DetailButton';
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as CourseAPI from '../services/CourseAPI';
 import * as UserAPI from '../services/UserAPI';
@@ -87,7 +89,11 @@ class AddTeachersToCourse extends ComponentWithErrorHandling {
     const {isLoading} = this.state;
     if (isLoading) { return <AppSpinner /> }
     const targetId = this.state.currentTeacherId
-    return (
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Cycle Coordinator' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      : 
       <div>
         <AppNavbar>
           <Container fluid> 
@@ -141,6 +147,7 @@ class AddTeachersToCourse extends ComponentWithErrorHandling {
     else { return {backgroundColor:'#FFF0F5'} }
   }
 }
+AddTeachersToCourse.contextType = userContext;
 
 const TeacherListHeaders = () =>
   <thead>

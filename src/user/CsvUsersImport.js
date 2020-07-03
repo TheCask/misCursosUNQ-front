@@ -9,9 +9,25 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Log from '../auxiliar/Log'
 
-const buttonRef = React.createRef()
-
 class CsvUsersImport extends ComponentWithErrorHandling {
+
+  csvToJsonMapping = {
+    dni: 'personalData.dni',
+    firstName: 'personalData.firstName',
+    lastName: 'personalData.lastName',
+    email: 'personalData.email',
+    cellPhone: 'personalData.cellPhone',
+    cuitNumber: 'jobDetail.cuitNumber',
+    category: 'jobDetail.category',
+    grade: 'jobDetail.grade',
+    dedication: 'jobDetail.dedication',
+    contractRelation: 'jobDetail.contractRelation',
+    aditionalHours: 'jobDetail.aditionalHours',
+    cvURL: 'jobDetail.cvURL',
+    lastUpdate: 'jobDetail.lastUpdate',
+    gradeTitles: 'jobDetail.gradeTitles',
+    posGradeTitles: 'jobDetail.posGradeTitles'
+  };
 
   CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
   GradeOptions = ['', 'A', 'B']
@@ -21,52 +37,25 @@ class CsvUsersImport extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {...this.state, fileIsNotLoaded: true,
-      item: this.emptyItem, csvFile: null};
-    this.beginLoading = this.beginLoading.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+      item: this.emptyItem, userList: null, csvData: null};
+      this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleOnFileLoad = (data) => {
-    this.setState({item: data, fileIsNotLoaded: false})
-    Log.info(this.state.item, "DATA")
+  handleOnDrop = (jsonArray) => {
+    let baseUser = {isActive: true, personalData: {}, jobDetail: {}}
+
+    let userList = jsonArray.map((csvUser) => {
+      
+      let csvKeys = Object.keys(csvUser.data);
+      return csvKeys.reduce((acc, curr) => {
+        this.setInnerPropValue(acc, this.csvToJsonMapping[curr], csvUser.data[curr]);
+        return acc;
+      }, baseUser)
+    })
+    Log.info(userList, 'USR LIST')
+    this.setState({userList: userList, fileIsNotLoaded: false})
   }
 
-  completeCallback = () => {
-
-  }
-
-  errorCallback = () => {
-
-  }
-
-  handleOnError = (err) => { Log.info(err) }
-
-  handleOnRemoveFile = (data) => { this.setState({fileIsNotLoaded: true}) }
-
-  handleRemoveFile = (event) => {
-    // Note that the ref is set async, so it might be null at some point
-    if (buttonRef.current) {
-      buttonRef.current.removeFile(event)
-    }
-  }
-
-  async componentDidMount() {
-    // if (this.props.match.params.id !== 'new') {
-    //   UserAPI.getUserByIdAsync(this.props.match.params.id, 
-    //     user => this.setState({item: user}), 
-    //     this.showError("get user info"));
-    // }
-  }
-
-  beginLoading() {
-    // const {name, value} = event.target;
-    // let item = {...this.state.item};
-    // this.setInnerPropValue(item, name, value);
-    // item['coordinatedSubjects'] = []
-    // item['taughtCourses'] = []
-    // this.setState({item});
-  }
-  
   setInnerPropValue(baseObj, subPropString, value){
     const subProps = subPropString.split(".");
     const lastPropName = subProps.pop(); // elimina del array y retorna el ultimo 
@@ -76,13 +65,19 @@ class CsvUsersImport extends ComponentWithErrorHandling {
     });
     propRef[lastPropName] = value;
   }
+
+  handleOnError = (err) => { Log.info(err) }
+
+  handleOnRemoveFile = (data) => { this.setState({fileIsNotLoaded: true}) }
   
-  async handleSubmit(event) {
-    event.preventDefault();
-    const {item} = this.state;
-    UserAPI.postUserAsync(item, 
-      () => this.props.history.push('/users'), 
-      this.showError("save user"));
+  handleSubmit(event) {
+    const {userList} = this.state;
+
+    userList.forEach(user => {
+      UserAPI.postUserAsync(user, 
+        () => {}, 
+        this.showError("save user"));
+    })
   }
 
   render() {
@@ -91,15 +86,15 @@ class CsvUsersImport extends ComponentWithErrorHandling {
       <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
-          <Form onSubmit={this.handleSubmit}>
+          {/* <Form onSubmit={this.handleSubmit}> */}
           <Row xs="2">
             <Col>{title}</Col>
             <Col>
               <ButtonGroup className="float-right">
-                <Button size="sm" color="primary" id="beginLoading" onClick={() => this.beginLoading()} 
+                <Button size="sm" color="primary" id="beginLoading" onClick={this.handleSubmit} 
                   disabled={this.state.fileIsNotLoaded}>
                   <UncontrolledTooltip placement="auto" target="beginLoading">
-                      Begin Users Loading
+                      Submit Users
                   </UncontrolledTooltip>
                   <FontAwesomeIcon icon='play' size="2x" />
                 </Button>
@@ -109,14 +104,14 @@ class CsvUsersImport extends ComponentWithErrorHandling {
           </Row>
           <Row></Row>
           <Row xs="2">
-            <CSVReader onDrop={this.handleOnDrop} onError={this.handleOnError} 
-              onFileLoad={this.handleOnFileLoad} onRemoveFile={this.handleOnRemoveFile} 
+            <CSVReader onDrop={this.handleOnDrop} 
+              onError={this.handleOnError} onRemoveFile={this.handleOnRemoveFile} 
               addRemoveButton removeButtonColor='rgba(88, 14, 14, 0.6)' progressBarColor='rgba(88, 14, 14, 0.6)' 
               config={this.parserConfig}>
               <span>Drop CSV file here or Click to upload.</span>
             </CSVReader>
           </Row>
-          </Form>
+          {/* </Form> */}
         </Container>
       </AppNavbar>
   )}
@@ -156,11 +151,11 @@ class CsvUsersImport extends ComponentWithErrorHandling {
     dynamicTyping: true,
     preview: 0,
     encoding: "",
-    worker: true,
+    worker: false,
     comments: false,
     step: undefined,
-    complete: this.completeCallback,
-    error: this.errorCallback,
+    complete: undefined,
+    error: undefined,
     download: false,
     downloadRequestHeaders: undefined,
     skipEmptyLines: false,

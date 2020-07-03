@@ -92,7 +92,6 @@ class App extends ComponentWithErrorHandling {
             <Route path='/user/:id/detail' component={Detail.UserDetail}/>
             <Route path='/experimenting' component={EXPERIMENTING}/>
   {/*           <Route path='/evaluation' component={EvaluationPage}/> */}
-
           </Switch>
         </Router>
       </userContext.Provider>

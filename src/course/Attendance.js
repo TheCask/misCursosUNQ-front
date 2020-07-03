@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from '../AppNavbar';
 import AppSpinner from '../auxiliar/AppSpinner';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import { userContext } from '../login/UserContext';
+import AccessError from '../errorHandling/AccessError';
 import * as CourseAPI from '../services/CourseAPI';
 import * as LessonAPI from '../services/LessonAPI';
 import DatePicker from "react-datepicker";
@@ -97,8 +99,7 @@ class Attendance extends ComponentWithErrorHandling {
     this.setState({attendantStudentsIds: students4JSON})
   }
 
-  itemDisplayFunc(lesson){ 
-    
+  itemDisplayFunc(lesson){
     return getDisplayFormat(lesson.lessonDay)
   }
 
@@ -120,48 +121,52 @@ class Attendance extends ComponentWithErrorHandling {
   render() {
     const {isLoading} = this.state;
     if (isLoading) { return <AppSpinner/> }
-    return (
-        <AppNavbar>
-          {this.renderErrorModal()}
-          <Container fluid>
-            <Form onSubmit={this.handleSubmit}> 
-              <ButtonGroup className="float-right" inline="true">
-                <Button size="sm" color="primary" type="submit" id="saveAttendance">
-                  <UncontrolledTooltip placement="auto" target="saveAttendance">
-                    Save Attendance
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon='save' size="2x"/>
-                </Button>
-                <Button size="sm"  color="secondary" tag={Link} to="/courses" id="backToCourse">
-                  <UncontrolledTooltip placement="auto" target="backToCourse">
-                    Discard and Back to Courses
-                  </UncontrolledTooltip>
-                  <FontAwesomeIcon icon='backward' size="2x"/>
-                </Button>
-              </ButtonGroup>
-              <ButtonGroup className="float-right" inline="true" style={{padding: "5px 20px"}}>
-                <DatePicker 
-                  selected = {this.state.item.lessonDay}
-                  maxDate={ truncTime(new Date()) }
-                  onChange = {this.handleDateChange}
-                  highlightDates = {this.getLessonDates()}
-                />
-              </ButtonGroup>
-            </Form>
-            <h3>Students</h3>
-            <Table className="mt-4">
-              <StudentListHeaders />
-              <tbody>
-                <StudentList
-                  students = {this.state.students}
-                  studentOnClickFunction = {(fileNumber) =>  {this.toggleAttendance(fileNumber)}}
-                  styleFunction = {(fileNumber) => this.setRowColor(fileNumber)} 
-                  getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
-                />
-              </tbody>
-            </Table>
-          </Container>
-        </AppNavbar>
+    this.actualRol = this.context.actualRol;
+    return (this.actualRol !== 'Teacher' ?
+      <AccessError errorCode="Guests are not allowed" 
+          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+      :
+      <AppNavbar>
+        {this.renderErrorModal()}
+        <Container fluid>
+          <Form onSubmit={this.handleSubmit}> 
+            <ButtonGroup className="float-right" inline="true">
+              <Button size="sm" color="primary" type="submit" id="saveAttendance">
+                <UncontrolledTooltip placement="auto" target="saveAttendance">
+                  Save Attendance
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon='save' size="2x"/>
+              </Button>
+              <Button size="sm"  color="secondary" tag={Link} to="/courses" id="backToCourse">
+                <UncontrolledTooltip placement="auto" target="backToCourse">
+                  Discard and Back to Courses
+                </UncontrolledTooltip>
+                <FontAwesomeIcon icon='backward' size="2x"/>
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup className="float-right" inline="true" style={{padding: "5px 20px"}}>
+              <DatePicker 
+                selected = {this.state.item.lessonDay}
+                maxDate={ truncTime(new Date()) }
+                onChange = {this.handleDateChange}
+                highlightDates = {this.getLessonDates()}
+              />
+            </ButtonGroup>
+          </Form>
+          <h3>Students</h3>
+          <Table className="mt-4">
+            <StudentListHeaders />
+            <tbody>
+              <StudentList
+                students = {this.state.students}
+                studentOnClickFunction = {(fileNumber) =>  {this.toggleAttendance(fileNumber)}}
+                styleFunction = {(fileNumber) => this.setRowColor(fileNumber)} 
+                getIconFunction = {(fileNumber) => this.getCourseIcon(fileNumber)}
+              />
+            </tbody>
+          </Table>
+        </Container>
+      </AppNavbar>
     );
   }
 
@@ -183,6 +188,7 @@ class Attendance extends ComponentWithErrorHandling {
     else { return {backgroundColor:'#FFF0F5'} }
   }
 }
+Attendance.contextType = userContext;
 
 const StudentListHeaders = () =>
   <thead>
