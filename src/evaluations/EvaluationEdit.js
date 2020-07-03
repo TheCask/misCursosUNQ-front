@@ -102,7 +102,8 @@ export default function EvaluationEdit(props){
         }
 
         function avgValidNotes(califications){
-            return (sumValidNotes(califications)/countValidNotes(califications)).toFixed(1)
+            const count = countValidNotes(califications);
+            return count !== 0 ? (sumValidNotes(califications)/count).toFixed(1) : "-"
         }
 
         const tdStyle = {whiteSpace: 'nowrap', textAlign: 'center'};
@@ -112,8 +113,8 @@ export default function EvaluationEdit(props){
                 <thead>
                     <tr>
                         <th width="100%">Instance Name</th>
-                        <th {...tdStyle} width="100%">Average</th>
-                        <th {...tdStyle} width="100%">Califs.</th>
+                        <th  width="100%">Average</th>
+                        <th  width="100%">Califs.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,7 +130,7 @@ export default function EvaluationEdit(props){
                             </td>
                             <td style={tdStyle}>
                                 <Badge color="primary" pill>
-                                    {`${countValidNotes(ev.califications)}/${ev.califications.length}`}
+                                    {`${countValidNotes(ev.califications)}/${props.studentQty}`}
                                 </Badge>
                             </td>
                         </tr>
