@@ -37,7 +37,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...{subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects'}}; 
+    this.state = {...this.state, subjects: [], isLoading: true, targetId: '', subjectsListTitle: 'Subjects', couseQty: undefined}; 
     this.title = this.props.subjectListTitle;
     this.addButtonTo = props.addButtonTo;
     this.renderButtonBar = props.renderButtonBar;
@@ -65,12 +65,15 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
     );
   }
 
+  hasCourses(subjectCode){
+    SubjectAPI.getSubjectCourseQtyAsync(subjectCode, 
+      qty => this.setState( {couseQty: parseInt(qty)} ), 
+      this.showError("get subject course quantity")
+    )
+  }
+
   disallowsDelete(subjectCode) {
-    const targetSubject = this.state.subjects.find(subject => subject.code === subjectCode)
-    if (targetSubject) {
-      return false
-    }
-    return false
+    return (!(this.state.couseQty) || (this.state.couseQty !== 0))
   }
 
   setSelectedRowColor(rowId) {
@@ -106,7 +109,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
             <tbody>
               <SubjectList
                 subjects = {this.state.subjects}
-                subjectOnClickFunction = {(subjectId) =>  {this.setState({targetId: subjectId})}}
+                subjectOnClickFunction = {(subjectId) =>  {this.setState({targetId: subjectId}); this.hasCourses(subjectId)}}
                 styleFunction = {(subjectId) => this.setSelectedRowColor(subjectId)}
               />
             </tbody>

@@ -42,3 +42,10 @@ export async function updateSubjectCoordinatorsAsync(subjectCode, coordinatorsLi
     const response = await fetch(`/api/subject/${subjectCode}/coordinators/`, BackAPI.postInit(coordinatorsListJson));
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
 }
+
+// SUBJECT COURSES
+// getById
+export async function getSubjectCourseQtyAsync(subjectCode, handleSuccess, handleError){
+    const response = await fetch(`/api/subject/${subjectCode}/courseQty`);
+    BackAPI.handleGet(response, handleSuccess, handleError)
+}
