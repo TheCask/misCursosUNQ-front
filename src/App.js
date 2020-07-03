@@ -16,6 +16,7 @@ import FullSubjectList from './subject/SubjectList';
 import SubjectEdit from './subject/SubjectEdit';
 import FullUserList from './user/UserList';
 import UserEdit from './user/UserEdit';
+import CsvUsersImport from './user/CsvUsersImport'
 import * as Detail from './auxiliar/Details'
 import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
@@ -84,6 +85,7 @@ class App extends ComponentWithErrorHandling {
             <Route path='/subject/:id/addCoordinators' component={AddCoordinatorsToSubject}/>
             <Route path='/subject/:id' exact={true} component={SubjectEdit}/>
             <Route path='/subject/:id/detail' component={Detail.SubjectDetail}/>
+            <Route path='/users/importFromCsv' exact={true} component={CsvUsersImport}/>
             <Route path='/users' component={FullUserList}/>
             <Route path='/profile' component={Profile}/>
             <Route path='/user/:id' exact={true} component={UserEdit}/>

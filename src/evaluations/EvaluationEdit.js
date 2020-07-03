@@ -102,7 +102,7 @@ export default function EvaluationEdit(props){
         }
 
         function avgValidNotes(califications){
-            return sumValidNotes(califications)/countValidNotes(califications)
+            return (sumValidNotes(califications)/countValidNotes(califications)).toFixed(1)
         }
 
         const tdStyle = {whiteSpace: 'nowrap', textAlign: 'center'};
