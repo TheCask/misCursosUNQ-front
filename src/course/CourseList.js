@@ -247,9 +247,9 @@ const CourseListItem = props => {
       <td style={tdStyle}>{props.course.students.length || 0}</td>
       <td style={tdStyle}>{
           <Button size="sm" color="secondary" outline block tag={Link} to={`/course/${props.course.courseId}/evaluations`} 
-            id={"attendance_" + props.course.courseId} disabled={false} >
-            <UncontrolledTooltip placement="auto" target={"attendance_" + props.course.courseId}>
-              
+            id={"evals_" + props.course.courseId} disabled={false} >
+            <UncontrolledTooltip placement="auto" target={"evals_" + props.course.courseId}>
+              Go to course evaluations
             </UncontrolledTooltip>         
             {props.course.evaluations.length || 0}
           </Button>

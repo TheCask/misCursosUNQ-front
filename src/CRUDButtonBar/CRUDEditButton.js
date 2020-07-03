@@ -29,7 +29,7 @@ export default function CRUDEditButton(props){
     }
       
     const aModal = <Modal isOpen={modal}  modalTransition={{ timeout: 0.3 }} //toggle={toggle}
-        size="lg" returnFocusAfterClose={false}>
+        size="lg" returnFocusAfterClose={false} autoFocus={false} toggle={toggle} >
         <Form onSubmit={handleSubmit} >
             <ModalHeader>
                 Give a name to your new evaluation instance

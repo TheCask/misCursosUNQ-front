@@ -126,6 +126,7 @@ function CourseEvaluations(props) {
                     <EvaluationEdit  
                         courseId={props.courseId}
                         evaluations = {currCourse.evaluations}
+                        studentQty = {currCourse.students.length}
                         currEvalInstance = {currEvalInstance}
                         onSelectFunc = {setCurrEvalInstanceById}
                         reloadCourse={reloadCourse}
