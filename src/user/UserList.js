@@ -33,7 +33,7 @@ class FullUserList extends ComponentWithErrorHandling {
           onDisableDeleteBody = {
             <div>
             <h3>This action is forbidden: </h3>
-            <ul><li>The user has taught courses or coordinated subjects, deleting is not allowed.</li>
+            <ul><li>The user has taught courses or coordinated subjects, or is alreday deleted.</li>
             <li>Please remove courses or subjects from user before trying to delete.</li></ul>
             </div>
          }
@@ -100,7 +100,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
   disallowsDelete(userId) {
     const targetUser = this.state.users.find(user => user.userId === userId)
     return (targetUser && (targetUser.taughtCourses.length > 0 || 
-        targetUser.coordinatedSubjects.length > 0))
+        targetUser.coordinatedSubjects.length > 0 || !targetUser.isActive))
   } 
 
   setSelectedRowColor(rowId) {
@@ -163,6 +163,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
 const UserListHeaders = () =>
 <thead>
     <tr>
+      <th width="1%">{''}</th>
       <th width="3%">DNI</th>
       <th width="7%">First Name</th>
       <th width="7%">Last Name</th>
@@ -189,6 +190,13 @@ const UserList = props => {
 
 const UserListItem = props =>
   <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style} key={props.user.userId}>
+    <td>
+      {!props.user.isActive ?
+      <Button size="sm" color="danger" outline block id={"active_" + props.user.userId} disabled>        
+        <FontAwesomeIcon icon="user-slash" size="lg"/>
+      </Button> : ''
+      }
+    </td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
     <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.lastName || ''}</td>

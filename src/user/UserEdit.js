@@ -1,11 +1,13 @@
 import React from 'react';
 import {withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, Row, Col } from 'reactstrap';
+import { Container, Form, FormGroup, Input, ButtonGroup, Label, 
+  UncontrolledTooltip, Row, Col, Button } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 import SaveButton from '../buttons/SaveButton'
 import CancelButton from '../buttons/CancelButton'
 import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class UserEdit extends ComponentWithErrorHandling {
 
@@ -15,6 +17,7 @@ class UserEdit extends ComponentWithErrorHandling {
   DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva']
   
   emptyItem = {
+      isActive: true,
       personalData: {
           dni: '',
           firstName: '',
@@ -45,6 +48,7 @@ class UserEdit extends ComponentWithErrorHandling {
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.activateUser = this.activateUser.bind(this);
     this.onlyDetail = props.onlyDetail || false;
   }
 
@@ -89,6 +93,12 @@ class UserEdit extends ComponentWithErrorHandling {
     else if (this.props.match.params.id === 'new') { title = 'Add User'}
     else { title = 'Edit User'}
     return <h2 className="float-left">{title}</h2>;
+  }
+
+  activateUser(event) {
+    let item = {...this.state.item};
+    item["isActive"] = true;
+    this.setState({item});
   }
 
   render() {
@@ -223,7 +233,7 @@ class UserEdit extends ComponentWithErrorHandling {
             </FormGroup>
           </Row>
           <Row form>
-            <Col xs="9">
+            <Col xs="7">
             <FormGroup>
               <Label for="cvUrl">CV Link</Label>
               <Input type="url" name="jobDetail.cvURL" id="cvUrl" value={item.jobDetail.cvURL || ''}
@@ -236,6 +246,31 @@ class UserEdit extends ComponentWithErrorHandling {
               <Input type="date" name="jobDetail.lastUpdate" id="update" value={item.jobDetail.lastUpdate || ''}
                     onChange={this.handleChange} disabled/>
             </FormGroup>
+            </Col>
+            <Col xs="2">
+              <Label for="activeStatus">Active Status</Label>
+              <FormGroup>
+              <ButtonGroup size="sm" id="activeStatus">
+                {item.isActive ?
+                  <>
+                  <Button outline color="success" id="isActive" disabled>
+                    <FontAwesomeIcon icon='user' size="2x" id="isActive"/>
+                  </Button>
+                  <UncontrolledTooltip placement="auto" target="activeStatus"> Active User </UncontrolledTooltip>
+                  </>
+                  :
+                  <>
+                  <Button outline color="danger" id="isInactive" onClick={this.activateUser} disabled={onlyDetail}>
+                    <FontAwesomeIcon icon='user-slash' size="2x" id="isInactive"/>
+                  </Button>
+                  { onlyDetail ? 
+                  <UncontrolledTooltip placement="auto" target="activeStatus"> Inactive User </UncontrolledTooltip>
+                  : 
+                  <UncontrolledTooltip placement="auto" target="activeStatus"> Activate User </UncontrolledTooltip> }
+                  </>
+                }
+              </ButtonGroup>
+              </FormGroup>
             </Col>
           </Row>
           </Form>
