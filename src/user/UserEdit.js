@@ -15,7 +15,7 @@ class UserEdit extends ComponentWithErrorHandling {
   CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
   GradeOptions = ['', 'A', 'B']
   ContractOptions = ['', 'Contratado/a', 'Interino/a', 'Ordinario/a']
-  DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva']
+  DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva', 'Parcial Anual', 'Semi-Exclusiva Anual']
   
   emptyItem = {
       isActive: true,

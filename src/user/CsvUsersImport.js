@@ -1,7 +1,7 @@
 import React from 'react';
 import { CSVReader } from 'react-papaparse'
 import {withRouter } from 'react-router-dom';
-import { Container, Form, ButtonGroup, Row, Col, Button, UncontrolledTooltip } from 'reactstrap';
+import { Container, ButtonGroup, Row, Col, Button, UncontrolledTooltip } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 import CancelButton from '../buttons/CancelButton'
 import * as UserAPI from '../services/UserAPI';
@@ -45,7 +45,7 @@ class CsvUsersImport extends ComponentWithErrorHandling {
 
   handleOnDrop = (jsonArray) => {
     let baseUser = {isActive: true, personalData: {}, jobDetail: {}}
-
+    Log.info(jsonArray, 'JSON ARRAY')
     let userList = jsonArray.map((csvUser) => {
       
       let csvKeys = Object.keys(csvUser.data);
@@ -84,10 +84,6 @@ class CsvUsersImport extends ComponentWithErrorHandling {
 
   render() {
     let title = <h2 className="float-left">Add Users from CSV File</h2>
-
-
-
-
     this.actualRol = this.context.actualRol;
     return (this.actualRol !== 'Cycle Coordinator' ?
       <AccessError errorCode="Guests are not allowed" 
