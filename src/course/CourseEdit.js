@@ -328,7 +328,7 @@ class CourseEdit extends ComponentWithErrorHandling {
   setDefaultSeason() {
     let {item} = {...this.state };
     if (item.courseSeason === '') { 
-      item['courseSeason'] = this.SeasonOptions[1];
+      item['courseSeason'] = Constants.SeasonOptions[1];
       this.setState({item});
     }
   }
@@ -336,7 +336,7 @@ class CourseEdit extends ComponentWithErrorHandling {
   setDefaultShift() {
     let {item} = {...this.state };
     if (item.courseShift === '') { 
-      item['courseShift'] = this.ShiftOptions[1];
+      item['courseShift'] = Constants.ShiftOptions[1];
       this.setState({item});
     }
   }
