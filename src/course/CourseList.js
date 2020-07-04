@@ -1,6 +1,6 @@
 import React  from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Table, Button, UncontrolledTooltip } from 'reactstrap'
+import { Container, Table, Button, UncontrolledTooltip, Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner'
 import AppNavbar from '../AppNavbar'
@@ -21,7 +21,7 @@ class FullCourseList extends ComponentWithErrorHandling {
 
   render() {
     this.actualRol = this.context.actualRol;
-    return (this.actualRol === 'Guest' ?
+    return (this.actualRol === '' ?
       <AccessError errorCode="Guests are not allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       :
@@ -43,7 +43,8 @@ class FullCourseList extends ComponentWithErrorHandling {
             renderAddButton = {this.renderAddButton()}
             renderDeleteButton = {this.renderDeleteButton()}
             renderButtonBar = {this.renderButtonBar()}
-            disableAttendanceBt = {this.disableAttendanceBt()}
+            disableAttendanceBt = {this.actualRol !== 'Teacher'}
+            disableEvaluationBt = {this.actualRol !== 'Teacher'}
             deleteButtonTo = {'./'} //required by delete button
           />
         </AppNavbar>
@@ -58,10 +59,6 @@ class FullCourseList extends ComponentWithErrorHandling {
       case 'Guest': return false
       default: return false
     }
-  }
-
-  disableAttendanceBt() {
-    return this.actualRol !== 'Teacher'
   }
 
   renderAddButton() {
@@ -125,6 +122,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
     this.renderAddButton = props.renderAddButton;
     this.renderDeleteButton = props.renderDeleteButton;
     this.disableAttendanceBt = props.disableAttendanceBt;
+    this.disableEvaluationBt = props.disableEvaluationBt;
     this.deleteButtonTo=props.deleteButtonTo;
     this.contextParams = props;
   }
@@ -161,19 +159,24 @@ export class CourseListContainer extends ComponentWithErrorHandling {
       <div>
         {this.renderErrorModal()}
         <Container fluid>
-          { this.renderButtonBar ?
-          <ButtonBar 
-            entityType='course'
-            targetId = {this.state.targetId} 
-            deleteEntityFunction = {deleteCourseFunction} 
-            consequenceList = {this.contextParams.onDeleteConsequenceList} 
-            addButtonTo = {this.addButtonTo}
-            renderEditButton = {this.renderEditButton}
-            renderAddButton = {this.renderAddButton}
-            renderDeleteButton = {this.renderDeleteButton}
-            deleteButtonTo={this.deleteButtonTo} // required by delete button
-          /> : '' }
-          <h3>{this.title}</h3>
+          <Row xs="2">
+            <Col> <h3>{this.title}</h3> </Col>
+            <Col>
+              { this.renderButtonBar ?
+              <ButtonBar 
+                entityType='course'
+                targetId = {this.state.targetId} 
+                deleteEntityFunction = {deleteCourseFunction} 
+                consequenceList = {this.contextParams.onDeleteConsequenceList} 
+                addButtonTo = {this.addButtonTo}
+                renderEditButton = {this.renderEditButton}
+                renderAddButton = {this.renderAddButton}
+                renderDeleteButton = {this.renderDeleteButton}
+                deleteButtonTo={this.deleteButtonTo} // required by delete button
+              /> : '' }
+            </Col>
+          </Row>
+          <div style={{ maxHeight:720, overflowY:'scroll'}}>
           <Table hover className="mt-4"> 
             <CourseListHeaders />
             <tbody>
@@ -184,10 +187,12 @@ export class CourseListContainer extends ComponentWithErrorHandling {
                 getIconFunction = {(subjectCode) => IconRepo.getCourseIcon(subjectCode)}
                 booleanFormatterFunction = {(boolean) => this.formatYESoNO(boolean)}
                 disableAttendanceBt = {this.disableAttendanceBt}
+                disableEvaluationBt = {this.disableEvaluationBt}
                 targetId = {this.state.targetId}
               />
             </tbody>
           </Table>
+          </div>
         </Container>
       </div>
     );
@@ -208,6 +213,7 @@ const CourseList = props => {
         getIconFunction = {getIconFunction}
         booleanFormatter = {booleanFormatterFunction}
         disableAttendanceBt = {props.disableAttendanceBt}
+        disableEvaluationBt = {props.disableEvaluationBt}
         showIcon = {props.targetId === course.courseId }
       />
     )
@@ -249,9 +255,9 @@ const CourseListItem = props => {
       <td style={tdStyle}>{props.course.students.length || 0}</td>
       <td style={tdStyle}>{
           <Button size="sm" color="secondary" outline block tag={Link} to={`/course/${props.course.courseId}/evaluations`} 
-            id={"evals_" + props.course.courseId} disabled={false} >
+            id={"evals_" + props.course.courseId} disabled={props.disableEvaluationBt} >
             <UncontrolledTooltip placement="auto" target={"evals_" + props.course.courseId}>
-              Go to course evaluations
+              Go to Course evaluations
             </UncontrolledTooltip>         
             {props.course.evaluations.length || 0}
           </Button>

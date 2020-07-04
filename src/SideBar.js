@@ -11,7 +11,7 @@ const sidebarItems = [
   {name: 'Students', link: '/students', icon: 'user-graduate', restrictedTo:['Cycle Coordinator']},
   {name: 'Import Users', link: '/users/importFromCsv', icon: 'users', restrictedTo:['Cycle Coordinator']},
   {name: 'Import Students', link: '/students/importFromCsv', icon: 'users', restrictedTo:['Cycle Coordinator']},
-  {name: 'GitHub', link: 'https://github.com/TheCask/misCursosUNQ-front.git/', icon: ['fab', 'github'], restrictedTo:['Guest', 'Teacher', 'Cycle Coordinator']}
+  {name: 'GitHub Docs', link: 'https://github.com/TheCask/misCursosUNQ-doc', icon: ['fab', 'github'], restrictedTo:['Guest', 'Teacher', 'Cycle Coordinator']}
 ];
 
 export default class SideBar extends Component {

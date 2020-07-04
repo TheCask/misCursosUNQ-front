@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Table } from 'reactstrap';
+import { Container, Table, Col, Row } from 'reactstrap';
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
 import ButtonBar from '../buttons/ButtonBar';
@@ -93,27 +93,32 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
       <div>
         {this.renderErrorModal()}
         <Container fluid>
-          {this.renderButtonBar ?
-          <ButtonBar
-            entityType = 'subject'
-            targetId={this.state.targetId} 
-            deleteEntityFunction={deleteSubjectFunction}
-            disallowDelete = {this.disallowsDelete(this.state.targetId)}
-            consequenceList = {this.contextParams.onDeleteConsequenceList}
-            addButtonTo = {this.addButtonTo}
-            renderEditButton = {this.renderEditButton}
-            renderAddButton = {this.renderAddButton}
-            renderDeleteButton = {this.renderDeleteButton}
-            deleteButtonTo = {this.deleteButtonTo}
-            onDisableDeleteTitle={"This subject can't be deleted"}
-            onDisableDeleteBody={
-              <div>
-                <h3>The subject has course instances.</h3>
-                <p>Please remove subject courses before trying to delete subject.</p>
-              </div>
-            }
-          /> : ''}
-          <h3>{this.title}</h3>
+          <Row xs="2">
+            <Col> <h3>{this.title}</h3> </Col>
+            <Col>
+              { this.renderButtonBar ?
+              <ButtonBar
+                entityType = 'subject'
+                targetId={this.state.targetId} 
+                deleteEntityFunction={deleteSubjectFunction}
+                disallowDelete = {this.disallowsDelete(this.state.targetId)}
+                consequenceList = {this.contextParams.onDeleteConsequenceList}
+                addButtonTo = {this.addButtonTo}
+                renderEditButton = {this.renderEditButton}
+                renderAddButton = {this.renderAddButton}
+                renderDeleteButton = {this.renderDeleteButton}
+                deleteButtonTo = {this.deleteButtonTo}
+                onDisableDeleteTitle={"This subject can't be deleted"}
+                onDisableDeleteBody={
+                  <div>
+                    <h3>The subject has course instances.</h3>
+                    <p>Please remove subject courses before trying to delete subject.</p>
+                  </div>
+                }
+              /> : ''}
+            </Col>
+          </Row>
+          <div style={{ maxHeight:720, overflowY:'scroll'}}>
           <Table hover className="mt-4">
             <SubjectListHeaders/>
             <tbody>
@@ -124,6 +129,7 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
               />
             </tbody>
           </Table>
+          </div>
         </Container>
       </div>
     );
@@ -154,12 +160,13 @@ const SubjectList = props => {
   });
 }
 
+const tr = {whiteSpace: 'nowrap'}
 const SubjectListItem = props =>
   <tr onClick={props.subjectOnClickFunction} id={props.subject.code} style={props.style} key={props.subject.code}>
-    <td style={{whiteSpace: 'nowrap'}}>{props.subject.code || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.subject.name || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.subject.acronym || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.subject.programURL || ''}</td>
+    <td style={tr}>{props.subject.code || ''}</td>
+    <td style={tr}>{props.subject.name || ''}</td>
+    <td style={tr}>{props.subject.acronym || ''}</td>
+    <td style={tr}>{props.subject.programURL || ''}</td>
   </tr>;
 
 FullSubjectList.contextType = userContext;

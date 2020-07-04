@@ -166,15 +166,16 @@ const StudentList = props => {
   });
 }
 
+const tr = {whiteSpace: 'nowrap'}
 const StudentListItem = props => 
   <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}> 
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.fileNumber || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.dni || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.firstName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.email || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.cellPhone || ''}</td>
-    <td style={{textAlign: 'center'}}> {props.setIconFunction(props.student.fileNumber)}</td>
+    <td style={tr}>{props.student.fileNumber || ''}</td>
+    <td style={tr}>{props.student.personalData.dni || ''}</td>
+    <td style={tr}>{props.student.personalData.firstName || ''}</td>
+    <td style={tr}>{props.student.personalData.lastName || ''}</td>
+    <td style={tr}>{props.student.personalData.email || ''}</td>
+    <td style={tr}>{props.student.personalData.cellPhone || ''}</td>
+    <td style={tr}> {props.setIconFunction(props.student.fileNumber)}</td>
   </tr>;
 
 export default AddStudentsToCourse;

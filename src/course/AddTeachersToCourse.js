@@ -167,15 +167,16 @@ const TeacherList = props => {
   });
 }
 
+const tr = {whiteSpace: 'nowrap'}
 const TeacherListItem = props => 
   <tr onClick={props.teacherOnClickFunction} id={props.user.userId} style={props.style}> 
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.lastName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.email || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.cellPhone || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.dedication || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.aditionalHours || ''}</td>
+    <td style={tr}>{props.user.personalData.dni || ''}</td>
+    <td style={tr}>{props.user.personalData.firstName || ''}</td>
+    <td style={tr}>{props.user.personalData.lastName || ''}</td>
+    <td style={tr}>{props.user.personalData.email || ''}</td>
+    <td style={tr}>{props.user.personalData.cellPhone || ''}</td>
+    <td style={tr}>{props.user.jobDetail.dedication || ''}</td>
+    <td style={tr}>{props.user.jobDetail.aditionalHours || ''}</td>
     <td style={{textAlign: 'center'}}> {props.setIconFunction(props.user.userId)}</td>
   </tr>;
 

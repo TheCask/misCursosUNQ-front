@@ -9,6 +9,7 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import App from '../App';
 
 class FullUserList extends ComponentWithErrorHandling {
 
@@ -78,48 +79,48 @@ export class UserListContainer extends ComponentWithErrorHandling {
       this.showError("get users info"));
     }
     
-    remove(userId) {
-      this.contextParams.onDelete(
-        userId, 
-        () => {
-          let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
-          this.setState({users: updatedUsers, targetId: ''});
-        },
-        this.showError("remove user"));
-      }
+  remove(userId) {
+    this.contextParams.onDelete(
+      userId, 
+      () => {
+        let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
+        this.setState({users: updatedUsers, targetId: ''});
+      },
+      this.showError("remove user"));
+  }
       
-      doSearch() {
-        this.setState({isLoading: true});
-        this.contextParams.onSearch(
-          this.state.pageNo,
-          this.state.searchText,
-          json => this.setState({users: json, isLoading: false}),
-          this.showError("search users"));
-        }
+  doSearch() {
+    this.setState({isLoading: true});
+    this.contextParams.onSearch(
+      this.state.pageNo,
+      this.state.searchText,
+      json => this.setState({users: json, isLoading: false}),
+      this.showError("search users"));
+  }
+      
+  handleChange(event) {
+    const {name, value} = event.target;
+    this.setState({[name]: value});
+  }
+      
+  disallowsDelete(userId) {
+    const targetUser = this.state.users.find(user => user.userId === userId)
+    return (targetUser && (targetUser.taughtCourses.length > 0 || 
+      targetUser.coordinatedSubjects.length > 0 || !targetUser.isActive))
+    } 
         
-        handleChange(event) {
-          const {name, value} = event.target;
-          this.setState({[name]: value});
-        }
-        
-        disallowsDelete(userId) {
-          const targetUser = this.state.users.find(user => user.userId === userId)
-          return (targetUser && (targetUser.taughtCourses.length > 0 || 
-            targetUser.coordinatedSubjects.length > 0 || !targetUser.isActive))
-          } 
+  setSelectedRowColor(rowId) {
+    if (rowId === this.state.targetId) {
+      return {backgroundColor:'#F0F8FF'}
+    }
+  }
           
-          setSelectedRowColor(rowId) {
-            if (rowId === this.state.targetId) {
-              return {backgroundColor:'#F0F8FF'}
-            }
-          }
-          
-          render() {
-            const isLoading = this.state.isLoading;
-            if (isLoading) {return (<AppSpinner/>)}
-            const deleteUserFunction = () => {this.remove(this.state.targetId)};
-            return (
-              <div>
+  render() {
+    const isLoading = this.state.isLoading;
+    if (isLoading) {return (<AppSpinner/>)}
+    const deleteUserFunction = () => {this.remove(this.state.targetId)};
+    return (
+      <div>
         {this.renderErrorModal()}
         <Container fluid>
           <Row xs="4">
@@ -148,8 +149,9 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 onDisableDeleteBody = {this.onDisableDeleteBody}
                 /> : '' }
             </Col>
-          </Row>    
-          <Table hover className="mt-4"> 
+          </Row>
+          <div style={{ maxHeight:720, overflowY:'scroll'}}>
+          <Table hover className="mt-4">
             <UserListHeaders/>
             <tbody>
               <UserList 
@@ -159,23 +161,25 @@ export class UserListContainer extends ComponentWithErrorHandling {
                 />
             </tbody>
           </Table>
+          </div>
         </Container>
       </div>
     );
   }
 }
 
+const th = { position: 'sticky', top: 0 };
 const UserListHeaders = () =>
 <thead>
     <tr>
-      <th width="1%">{''}</th>
-      <th width="3%">DNI</th>
-      <th width="7%">First Name</th>
-      <th width="7%">Last Name</th>
-      <th width="7%">e-Mail</th>
-      <th width="4%">Cell Phone</th>
-      <th width="2%">Dedication</th>
-      <th width="1%">Aditional Hours</th>
+      <th width="1%" style={th}>{''}</th>
+      <th width="3%" style={th}>DNI</th>
+      <th width="4%" style={th}>First Name</th>
+      <th width="4%" style={th}>Last Name</th>
+      <th width="7%" style={th}>e-Mail</th>
+      <th width="4%" style={th}>Cell Phone</th>
+      <th width="3%" style={th}>Dedication</th>
+      <th width="5%" style={th}>Ad. Hs.</th>
   </tr>
 </thead>;
 
@@ -193,8 +197,10 @@ const UserList = props => {
     });
   }
   
+  const tr = { whiteSpace: 'nowrap' };
   const UserListItem = props =>
-  <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style} key={props.user.userId}>
+  <tr onClick={props.userOnClickFunction} id={props.user.userId} 
+    style={props.style} key={props.user.userId}>
     <td>
       {!props.user.isActive ?
       <Button size="sm" color="danger" outline block id={"active_" + props.user.userId} disabled>        
@@ -202,13 +208,13 @@ const UserList = props => {
       </Button> : ''
       }
     </td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.lastName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.email || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.cellPhone || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.dedication || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.aditionalHours || ''}</td>
+    <td>{props.user.personalData.dni || ''}</td>
+    <td style={tr}>{props.user.personalData.firstName || ''}</td>
+    <td style={tr}>{props.user.personalData.lastName || ''}</td>
+    <td style={tr}>{props.user.personalData.email || ''}</td>
+    <td style={tr}>{props.user.personalData.cellPhone || ''}</td>
+    <td style={tr}>{props.user.jobDetail.dedication || ''}</td>
+    <td style={tr}>{props.user.jobDetail.aditionalHours || ''}</td>
   </tr>;
 
 const SearchField = props =>
