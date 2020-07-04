@@ -123,7 +123,7 @@ function CourseEvaluations(props) {
                 <Col>
                     <h2>Evaluation Instance</h2>
                     {/* <hr/> */}
-                    <EvaluationEdit  
+                    <EvaluationEdit  data-testid={"evalEdit"}
                         courseId={props.courseId}
                         evaluations = {currCourse.evaluations}
                         studentQty = {currCourse.students.length}
