@@ -44,15 +44,13 @@ class CsvUsersImport extends ComponentWithErrorHandling {
   }
 
   handleOnDrop = (jsonArray) => {
-    let baseUser = {isActive: true, personalData: {}, jobDetail: {}}
-
     let userList = jsonArray.map((csvUser) => {
       
       let csvKeys = Object.keys(csvUser.data);
       return csvKeys.reduce((acc, curr) => {
         this.setInnerPropValue(acc, this.csvToJsonMapping[curr], csvUser.data[curr]);
         return acc;
-      }, baseUser)
+      }, {isActive: true, personalData: {}, jobDetail: {}})
     })
     Log.info(userList, 'USR LIST')
     this.setState({userList: userList, fileIsNotLoaded: false})
