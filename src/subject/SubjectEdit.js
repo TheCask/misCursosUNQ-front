@@ -9,21 +9,15 @@ import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import * as Constants from '../auxiliar/Constants';
 
 
 class SubjectEdit extends ComponentWithErrorHandling {
 
-  emptyItem = {
-    code: '',
-    name: '',
-    acronym: '',
-    programURL: ''
-  };
-
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
-      item: this.emptyItem,
+      item: Constants.emptySubject,
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

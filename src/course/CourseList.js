@@ -21,9 +21,7 @@ class FullCourseList extends ComponentWithErrorHandling {
 
   render() {
     this.actualRol = this.context.actualRol;
-    return ((!(this.actualRol === 'Guest' || 
-      this.actualRol === 'Teacher' || 
-        this.actualRol === 'Cycle Coordinator'))  ?
+    return (this.actualRol === 'Guest' ?
       <AccessError errorCode="Guests are not allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       :
@@ -272,5 +270,4 @@ const CourseListItem = props => {
   )
 }
 FullCourseList.contextType = userContext;
-CourseListContainer.contextType = userContext;
 export default FullCourseList;

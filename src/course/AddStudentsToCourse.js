@@ -10,28 +10,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as CourseAPI from '../services/CourseAPI';
 import * as StudentAPI from '../services/StudentAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
+import * as Constants from '../auxiliar/Constants'
 
 class AddStudentsToCourse extends ComponentWithErrorHandling {
-
-  emptyItem = {
-    courseCode: '',
-    courseShift: '',
-    courseIsOpen: '',
-    courseYear: 0,
-    courseSeason: '',
-    courseLocation: '',
-    subject: {
-        code: ''
-    },
-    students: []
-  };
 
   constructor(props) {
     super(props);
     this.state = {
       courseStudentsIds: [], 
       allStudents: [],
-      item: this.emptyItem,
+      item: Constants.emptyCourse,
       isLoading: true,
       currentStudentId: ''};
     this.toggleInscription = this.toggleInscription.bind(this);

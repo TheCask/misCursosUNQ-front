@@ -76,7 +76,6 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
   }
 
   disallowsDelete(subjectCode) {
-    
     return true == this.state.couseQty;
   }
 

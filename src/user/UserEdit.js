@@ -9,43 +9,14 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import * as Constants from '../auxiliar/Constants'
   
 class UserEdit extends ComponentWithErrorHandling {
-
-  CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
-  GradeOptions = ['', 'A', 'B']
-  ContractOptions = ['', 'Contratado/a', 'Interino/a', 'Ordinario/a']
-  DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva']
-  
-  emptyItem = {
-      isActive: true,
-      personalData: {
-          dni: '',
-          firstName: '',
-          lastName: '',
-          email: '',
-          cellPhone: '' 
-      },
-      jobDetail: {
-          cuitNumber: '',
-          category: '',
-          grade: '',
-          dedication: '',
-          contractRelation: '',
-          aditionalHours: 0,
-          cvURL: '',
-          lastUpdate: '',
-          gradeTitles: '',
-          posGradeTitles: ''
-      },
-      coordinatedSubjects: [],
-      taughtCourses: []
-  };
 
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
-      item: this.emptyItem,
+      item: Constants.emptyUser,
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -103,13 +74,10 @@ class UserEdit extends ComponentWithErrorHandling {
   }
 
   render() {
-    
     const {item} = this.state;
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail);
-   
     this.actualRol = this.context.actualRol;
-    
     return (this.actualRol !== 'Cycle Coordinator' ?
       <AccessError errorCode="Guests are not allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
@@ -286,25 +254,25 @@ class UserEdit extends ComponentWithErrorHandling {
   )}
   
   categoryOptions() {
-    return ( this.CategoryOptions.map(ct => {
+    return ( Constants.CategoryOptions.map(ct => {
       return (<option key={ct}>{ct}</option>) 
     }))
   }
 
   gradeOptions() {
-    return ( this.GradeOptions.map(gd => {
+    return ( Constants.GradeOptions.map(gd => {
       return (<option key={gd}>{gd}</option>) 
     }))
   }
   
   contractOptions() {
-    return ( this.ContractOptions.map(ct => {
+    return ( Constants.ContractOptions.map(ct => {
       return (<option key={ct}>{ct}</option>) 
     }))
   }
   
   dedicationOptions() {
-    return ( this.DedicationOptions.map(dc => {
+    return ( Constants.DedicationOptions.map(dc => {
       return (<option key={dc}>{dc}</option>) 
     }))
   }

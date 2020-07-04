@@ -9,6 +9,7 @@ const sidebarItems = [
   {name: 'Users', link: '/users', icon: 'chalkboard-teacher', restrictedTo:['Cycle Coordinator']},
   {name: 'Subjects', link: '/subjects', icon: 'university', restrictedTo:['Cycle Coordinator']},
   {name: 'Students', link: '/students', icon: 'user-graduate', restrictedTo:['Cycle Coordinator']},
+  {name: 'Import Users', link: '/users/importFromCsv', icon: 'users', restrictedTo:['Cycle Coordinator']},
   {name: 'GitHub', link: 'https://github.com/TheCask/misCursosUNQ-front.git/', icon: ['fab', 'github'], restrictedTo:['Guest', 'Teacher', 'Cycle Coordinator']}
 ];
 
@@ -35,8 +36,8 @@ export default class SideBar extends Component {
                       : ""
                     )
                   }
-                  <svg height="10" width="120">
-                    <line x1="0" y1="0" x2="120" y2="0" style={{stroke: 'rgba(255,255,255,0.4)', strokeWidth: '10'}} />
+                  <svg height="10" width="150">
+                    <line x1="0" y1="0" x2="150" y2="0" style={{stroke: 'rgba(255,255,255,0.4)', strokeWidth: '10'}} />
                   </svg>
               </Nav>
             </Navbar> 

@@ -7,25 +7,9 @@ import Log from '../auxiliar/Log';
 import * as CourseAPI from '../services/CourseAPI';
 import EvaluationEdit from './EvaluationEdit';
 import CalificationEdit from './CalificationEdit';
+import * as Constants from '../auxiliar/Constants'
 
 function CourseEvaluations(props) {
-
-    const emptyCourse = {
-        courseCode: '',
-        courseShift: 'Mañana',
-        courseIsOpen: true,
-        courseYear: 2020,
-        courseSeason: '1C',
-        courseLocation: '',
-        subject: {
-            code: '',
-            name: ''
-        },
-        students: [],
-        lessons: [],
-        teachers: [],
-        evaluations: []
-    }
 
     function newEvalInstance() {
         return {
@@ -36,7 +20,7 @@ function CourseEvaluations(props) {
     }
 
     const [forceApiReqState, forceApiReq] = useState(false);
-    const [currCourse, setCurrCourse] = useState(emptyCourse);
+    const [currCourse, setCurrCourse] = useState(Constants.emptyNewCourse);
     const [currEvalInstance , setCurrEvalInstance] = useState(newEvalInstance());
 
     useEffect( () => {
