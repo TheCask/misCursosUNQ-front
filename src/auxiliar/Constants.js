@@ -16,6 +16,15 @@ export const userCsvToJsonMap = {
     posGradeTitles: 'jobDetail.posGradeTitles'
 };
 
+export const studentsCsvToJsonMap = {
+    fileNumber: 'fileNumber',
+    dni: 'personalData.dni',
+    firstName: 'personalData.firstName', 
+    lastName: 'personalData.lastName', 
+    email: 'personalData.email',
+    cellPhone: 'personalData.cellPhone'
+};
+
 export const CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
 export const GradeOptions = ['', 'A', 'B']
 export const ContractOptions = ['', 'Contratado/a', 'Interino/a', 'Ordinario/a']

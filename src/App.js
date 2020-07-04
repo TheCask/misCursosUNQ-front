@@ -17,6 +17,7 @@ import SubjectEdit from './subject/SubjectEdit';
 import FullUserList from './user/UserList';
 import UserEdit from './user/UserEdit';
 import CsvUsersImport from './user/CsvUsersImport'
+import CsvStudentsImport from './student/CsvStudentsImport'
 import * as Detail from './auxiliar/Details'
 import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
@@ -78,18 +79,24 @@ class App extends ComponentWithErrorHandling {
             <Route path='/course/:id/evaluations' component={EvaluationPage}/>
             <Route path='/course/:id' exact={true} component={CourseEdit}/>
             <Route path='/course/:id/detail' component={Detail.CourseDetail}/>
-            <Route path='/students' component={FullStudentList}/>
+
+            <Route path='/students' exact={true} component={FullStudentList}/>
+            <Route path='/students/importFromCsv' exact={true} component={CsvStudentsImport}/>
             <Route path='/student/:id' exact={true} component={StudentEdit}/>
             <Route path='/student/:id/detail' component={Detail.StudentDetail}/>
-            <Route path='/subjects' component={FullSubjectList}/>
+
+            <Route path='/subjects' exact={true} component={FullSubjectList}/>
             <Route path='/subject/:id/addCoordinators' component={AddCoordinatorsToSubject}/>
             <Route path='/subject/:id' exact={true} component={SubjectEdit}/>
             <Route path='/subject/:id/detail' component={Detail.SubjectDetail}/>
+            
+            <Route path='/users' exact={true} component={FullUserList}/>
             <Route path='/users/importFromCsv' exact={true} component={CsvUsersImport}/>
-            <Route path='/users' component={FullUserList}/>
-            <Route path='/profile' component={Profile}/>
             <Route path='/user/:id' exact={true} component={UserEdit}/>
             <Route path='/user/:id/detail' component={Detail.UserDetail}/>
+
+            <Route path='/profile' component={Profile}/>
+            
             <Route path='/experimenting' component={EXPERIMENTING}/>
           </Switch>
         </Router>
