@@ -109,7 +109,7 @@ export default function EvaluationEdit(props){
         const tdStyle = {whiteSpace: 'nowrap', textAlign: 'center'};
 
         return (
-            <Table hover className="mt-4" >
+            <Table hover className="mt-4" data-testid="evalTable">
                 <thead>
                     <tr>
                         <th width="100%">Instance Name</th>
@@ -119,13 +119,13 @@ export default function EvaluationEdit(props){
                 </thead>
                 <tbody>
                     {filteredList.map( (ev, index) => 
-                        <tr style={setRowColor(ev.evaluationId)}
+                        <tr style={setRowColor(ev.evaluationId)} data-testid={`evalTableRow_${index}`}
                             key={index} 
                             id={ev.evaluationId} 
                             onClick={onClickFunc(ev.evaluationId)} 
                         >
                             <td style={{whiteSpace: 'nowrap'}}>{ev.instanceName || ''}</td>
-                            <td style={tdStyle}>
+                            <td style={tdStyle} data-testid={`evalTableRowAvg_${index}`}>
                                 {avgValidNotes(ev.califications)}
                             </td>
                             <td style={tdStyle}>

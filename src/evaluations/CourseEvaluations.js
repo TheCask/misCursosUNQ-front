@@ -36,66 +36,11 @@ function CourseEvaluations(props) {
     function reloadCourse(){
         forceApiReq(n => !n)
     }
-    /*
-    function selectLastEvaluation(){
-        Log.info(currCourse.evaluations, "currCourse.evaluations")
-        const lastEvalId = currCourse.evaluations.reduce((maxId, elem) => Math.max(elem.evaluationId, maxId), -1);
-        Log.info(lastEvalId, "lastEvalId")
-        if ( !isNaN(lastEvalId) && lastEvalId !== -1 )
-            setCurrEvalInstanceById(lastEvalId);
-    }
-    */
+
     const setCurrEvalInstanceById = itemId => {
             const newCurrEvalInstance = currCourse.evaluations.find( ev => ev.evaluationId === itemId)
             setCurrEvalInstance(newCurrEvalInstance);
     }
-
-  
-
-    /*
-    function filterNonEmptyCalifications(califications){
-        califications.filter( cal => cal.note !== '' && isNaN(cal.note))
-    }
-    function handleAddSubmit(getEval) {
-        CourseAPI.postCourseEvaluationAsync(
-            currCourse.courseId, 
-            getEval(), 
-            (res) => {
-                Log.info(res, "POST SUCCEDED");
-                reloadCourse();
-                
-
-            }, 
-            props.showError("save course"));
-    }
-
-    
-    
-    function EvalEdit(){
-
-        Log.info("EvaEdit");
-
-        return (
-            <>
-            <ButtonGroup style={{ padding: "0em", float: "right"}}>
-                <CRUDAddButton 
-                    behavior = {{ onProceed: handleAddSubmit }}  // requires either {onClick: <myFunc>} or {to: <'/my/link'>' tag={Link}} 
-                    onClick = {() => {}}
-                    entityTypeCapName = {'Evaluation'}
-                    isDisabled = {false}
-                    getEntity = {newEvalInstance()}
-                    />
-            </ButtonGroup>
-            <EvaluationPicker 
-                getEvaluations = {currCourse.evaluations}
-                onSelectFunc = {setCurrEvalInstanceById}
-                currEvalInstance = {currEvalInstance}
-                />
-            </>
-        )
-    }
-    */
-    
 
     Log.info("Course Evaluations")
 

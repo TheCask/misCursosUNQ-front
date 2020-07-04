@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when there's a two-student list and one calification 1`] = `
+<DocumentFragment>
+  <form
+    class=""
+  >
+    <div
+      class="row"
+    >
+      <div
+        class="col-md-10"
+      >
+        <div
+          class="input-group"
+        >
+          <input
+            class="form-control"
+            placeholder="Search student..."
+            type="text"
+            value=""
+          />
+          <div
+            class="input-group-append"
+          >
+            <button
+              class="btn btn-secondary"
+              tabindex="-1"
+              type="button"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col"
+      >
+        <div
+          class="btn-group"
+          role="group"
+          style="padding: 0em; float: right;"
+        >
+          <button
+            class="btn btn-primary btn-sm disabled"
+            disabled=""
+            id="save_Calification"
+            tabindex="0"
+            type="submit"
+          />
+        </div>
+      </div>
+    </div>
+    <table
+      class="mt-4 table table-hover"
+      data-testid="califTable"
+      scrollable="true"
+    >
+      <thead>
+        <tr>
+          <th
+            width="25%"
+          >
+            File Number
+          </th>
+          <th
+            width="50%"
+          >
+            Student Name
+          </th>
+          <th
+            width="25%"
+          >
+            Grade
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          data-testid="califTableRow_0"
+        >
+          <td
+            style="white-space: nowrap;"
+          >
+            1
+          </td>
+          <td
+            style="white-space: nowrap;"
+          >
+            , 
+          </td>
+          <td
+            style="white-space: nowrap;"
+          >
+            <input
+              class="form-control"
+              data-testid="califTableRowInput_0"
+              max="10.0"
+              min="0.0"
+              name="1"
+              pattern="^(10|10.0|10.00|([0-9])([.][0-9]([0-9])?)?)$"
+              title="A number between 0 and 10, with up to 2 decimals"
+              type="float"
+              value="10"
+            />
+          </td>
+        </tr>
+        <tr
+          data-testid="califTableRow_1"
+        >
+          <td
+            style="white-space: nowrap;"
+          >
+            2
+          </td>
+          <td
+            style="white-space: nowrap;"
+          >
+            , 
+          </td>
+          <td
+            style="white-space: nowrap;"
+          >
+            <input
+              class="form-control"
+              data-testid="califTableRowInput_1"
+              max="10.0"
+              min="0.0"
+              name="2"
+              pattern="^(10|10.0|10.00|([0-9])([.][0-9]([0-9])?)?)$"
+              title="A number between 0 and 10, with up to 2 decimals"
+              type="float"
+              value=""
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</DocumentFragment>
+`;

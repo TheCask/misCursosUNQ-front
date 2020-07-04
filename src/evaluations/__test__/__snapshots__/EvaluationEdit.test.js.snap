@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly when there are two evaluations and 2 students with no califications 1`] = `
+<DocumentFragment>
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-9"
+    >
+      <div
+        class="input-group"
+      >
+        <input
+          class="form-control"
+          placeholder="Search evaluation by name"
+          type="text"
+          value=""
+        />
+        <div
+          class="input-group-append"
+        >
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="btn-group"
+        role="group"
+        style="padding: 0em; float: right;"
+      >
+        <div>
+          <button
+            class="btn btn-success btn-sm"
+            id="Add_Evaluation"
+            type="button"
+          />
+        </div>
+        <div>
+          <button
+            class="btn btn-primary btn-sm disabled"
+            disabled=""
+            id="Edit_Evaluation"
+            type="button"
+          />
+        </div>
+        <div>
+          <button
+            class="btn btn-danger btn-sm disabled"
+            disabled=""
+            id="Delete_Evaluation"
+            type="button"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <table
+    class="mt-4 table table-hover"
+    data-testid="evalTable"
+  >
+    <thead>
+      <tr>
+        <th
+          width="100%"
+        >
+          Instance Name
+        </th>
+        <th
+          width="100%"
+        >
+          Average
+        </th>
+        <th
+          width="100%"
+        >
+          Califs.
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        data-testid="evalTableRow_0"
+        id="1"
+      >
+        <td
+          style="white-space: nowrap;"
+        >
+          TP 1
+        </td>
+        <td
+          data-testid="evalTableRowAvg_0"
+          style="white-space: nowrap; text-align: center;"
+        >
+          -
+        </td>
+        <td
+          style="white-space: nowrap; text-align: center;"
+        >
+          <span
+            class="badge badge-primary badge-pill"
+          >
+            0/2
+          </span>
+        </td>
+      </tr>
+      <tr
+        data-testid="evalTableRow_1"
+        id="2"
+      >
+        <td
+          style="white-space: nowrap;"
+        >
+          TP 2
+        </td>
+        <td
+          data-testid="evalTableRowAvg_1"
+          style="white-space: nowrap; text-align: center;"
+        >
+          -
+        </td>
+        <td
+          style="white-space: nowrap; text-align: center;"
+        >
+          <span
+            class="badge badge-primary badge-pill"
+          >
+            0/2
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;

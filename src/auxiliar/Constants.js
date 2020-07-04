@@ -145,3 +145,11 @@ export const parserConfig = {
     transform: undefined,
     delimitersToGuess: [',', '	', '|', ';']
 };
+
+export function newEvalInstance() {
+    return {
+        evaluationId: '',
+        instanceName: 'TP ',
+        califications: []
+    }
+}

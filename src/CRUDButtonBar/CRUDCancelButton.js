@@ -9,7 +9,7 @@ const CRUDCancelButton = (props) =>
         entityTypeCapName = 'Type',
         isDisabled = false   // OPTIONAL
     */
-   <Button {...props.behavior}
+   <Button {...props.behavior} data-testid="buttonTestId"
             id='back'
             size="sm"
             color="secondary"

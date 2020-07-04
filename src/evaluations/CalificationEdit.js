@@ -8,7 +8,7 @@ import Log from '../auxiliar/Log';
 export default function CalificationEdit(props){
     
     const [dirty, setDirty] = useState(false)
-    const [califificationFullList, setCalifFullList] = useState([]) 
+    const [califificationFullList, setCalifFullList] = useState(createCalifFullList(props.students, props.currEvalInstance.califications)) 
     const [filterValue, setFilterValue] = useState('');
 
     Log.info(califificationFullList, "Calification Picker")
@@ -17,7 +17,7 @@ export default function CalificationEdit(props){
         if (props.currEvalInstance){
             setCalifFullList(createCalifFullList(props.students, props.currEvalInstance.califications))
         }
-    }, [props.currEvalInstance])
+    }, [props.currEvalInstance.califications])
 
     function handleNoteChange(event){
         setDirty(true);
@@ -96,7 +96,7 @@ export default function CalificationEdit(props){
                 
                 })             
             )
-        return <Table hover className="mt-4" scrollable={"true"} >
+        return <Table hover className="mt-4" scrollable={"true"} data-testid="califTable" >
             <thead>
                 <tr>
                     <th width="25%">File Number</th>
@@ -106,11 +106,11 @@ export default function CalificationEdit(props){
             </thead>
             <tbody>
                 {filteredList.map( (item, index) => 
-                    <tr key={index} >
+                    <tr key={index} data-testid={`califTableRow_${index}`} >
                         <td style={{whiteSpace: 'nowrap'}}>{item.student.fileNumber || ''}</td>
                         <td style={{whiteSpace: 'nowrap'}}>{`${item.student.personalData.lastName}, ${item.student.personalData.firstName}` || ''}</td>
                         <td style={{whiteSpace: 'nowrap'}}>
-                            <Input 
+                            <Input data-testid={`califTableRowInput_${index}`}
                                 id={item.evaluationId}
                                 name = {item.student.fileNumber}
                                 value={item.note || ''} 
