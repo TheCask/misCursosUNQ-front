@@ -15,33 +15,14 @@ import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import Collapsable from '../buttons/Collapsable';
 import AppSpinner from '../auxiliar/AppSpinner';
+import * as Constants from '../auxiliar/Constants'
 
 class CourseEdit extends ComponentWithErrorHandling {
-
-  SeasonOptions = ['1C', '2C', '3C', '1T', '2T', '3T', '4T', '1S', '2S']
-  ShiftOptions = ['Mañana', 'Tarde', 'Noche']
-
-  emptyItem = {
-    courseCode: '',
-    courseShift: '',
-    courseIsOpen: true,
-    courseYear: 2020,
-    courseSeason: '',
-    courseLocation: '',
-    subject: {
-      code: '',
-      name: ''
-    },
-    students: [],
-    lessons: [],
-    teachers: [],
-    evaluations: []
-  };
 
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
-      item: this.emptyItem,
+      item: Constants.emptyNewCourse,
       subjectList: [], isLoading: true, 
       alert: {on: false, color: '', message: ''}
     }};
@@ -324,13 +305,13 @@ class CourseEdit extends ComponentWithErrorHandling {
   }
 
   seasonsOptions() {
-    return ( this.SeasonOptions.map(sn => {
+    return ( Constants.SeasonOptions.map(sn => {
       return (<option key={sn}>{sn}</option>) 
     }))
   }
 
   shiftOptions() {
-    return ( this.ShiftOptions.map(sf => {
+    return ( Constants.ShiftOptions.map(sf => {
       return (<option key={sf}>{sf}</option>) 
     }))
   }

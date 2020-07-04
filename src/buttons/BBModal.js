@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, UncontrolledTooltip, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { Component } from 'react';
 
 export const BBModal = props => 
     <Modal isOpen={props.isOpen()} modalTransition={{ timeout: 1 }}

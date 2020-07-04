@@ -12,13 +12,6 @@ import AccessError from '../errorHandling/AccessError';
 
 class FullUserList extends ComponentWithErrorHandling {
 
-
-
-
-  
-  
-  
-  
   render() {
     this.actualRol = this.context.actualRol;
     return (this.actualRol !== 'Cycle Coordinator' ?

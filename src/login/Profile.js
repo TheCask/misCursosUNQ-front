@@ -12,33 +12,15 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Button from 'reactstrap/lib/Button';
 import { userContext } from './UserContext';
+import * as Constants from '../auxiliar/Constants'
 
 class Profile extends ComponentWithErrorHandling {
-
-  user = {
-    birthDate: "",
-    data: {}, // not used
-    email: "",
-    firstName: "",
-    fullName: "", // Autoconstruct lastName, firstName
-    imageUrl: "",
-    lastName: "",
-    middleName: "", // Not Used
-    mobilePhone: "",
-    passwordChangeRequired: false,
-    preferredLanguages: [], // this property always concats to the list (PATCH method bug on FusionAuth)
-    timezone: "Etc/GMT-3", // not change
-    twoFactorDelivery: "None", // not used
-    twoFactorEnabled: false, // not used
-    usernameStatus: "", // not used
-    username: ""
-  }
 
   constructor(props) {
     super(props);
     this.state = {isErrorModalOpen: false, 
       lastError: {title: "", description: "", error: null},
-      globalUser: this.user, isLoading: true};
+      globalUser: Constants.profileUser, isLoading: true};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleResetPsw = this.toggleResetPsw.bind(this);

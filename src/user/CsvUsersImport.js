@@ -10,36 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Log from '../auxiliar/Log'
 import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import * as Constants from '../auxiliar/Constants'
 
 class CsvUsersImport extends ComponentWithErrorHandling {
-
-  csvToJsonMapping = {
-    dni: 'personalData.dni',
-    firstName: 'personalData.firstName',
-    lastName: 'personalData.lastName',
-    email: 'personalData.email',
-    cellPhone: 'personalData.cellPhone',
-    cuitNumber: 'jobDetail.cuitNumber',
-    category: 'jobDetail.category',
-    grade: 'jobDetail.grade',
-    dedication: 'jobDetail.dedication',
-    contractRelation: 'jobDetail.contractRelation',
-    aditionalHours: 'jobDetail.aditionalHours',
-    cvURL: 'jobDetail.cvURL',
-    lastUpdate: 'jobDetail.lastUpdate',
-    gradeTitles: 'jobDetail.gradeTitles',
-    posGradeTitles: 'jobDetail.posGradeTitles'
-  };
-
-  CategoryOptions = ['', 'Auxiliar', 'Intructor/a', 'Adjunto/a', 'Asociado/a', 'Titular', 'Emérito/a', 'Consulto/a']
-  GradeOptions = ['', 'A', 'B']
-  ContractOptions = ['', 'Contratado/a', 'Interino/a', 'Ordinario/a']
-  DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva']
 
   constructor(props) {
     super(props);
     this.state = {...this.state, fileIsNotLoaded: true,
-      item: this.emptyItem, userList: null, csvData: null};
+      userList: null, csvData: null};
       this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -48,11 +26,11 @@ class CsvUsersImport extends ComponentWithErrorHandling {
       
       let csvKeys = Object.keys(csvUser.data);
       return csvKeys.reduce((acc, curr) => {
-        this.setInnerPropValue(acc, this.csvToJsonMapping[curr], csvUser.data[curr]);
+        this.setInnerPropValue(acc, Constants.userCsvToJsonMap[curr], csvUser.data[curr]);
         return acc;
       }, {isActive: true, personalData: {}, jobDetail: {}})
     })
-    Log.info(userList, 'USR LIST')
+    Log.info(userList, 'USER LIST')
     this.setState({userList: userList, fileIsNotLoaded: false})
   }
 
@@ -72,12 +50,15 @@ class CsvUsersImport extends ComponentWithErrorHandling {
   
   handleSubmit(event) {
     const {userList} = this.state;
-
+    let addedUsers = [];
+    let errors = [];
     userList.forEach(user => {
       UserAPI.postUserAsync(user, 
-        () => {}, 
-        this.showError("save user"));
+        () => addedUsers.push(user.personalData.email), 
+        () => errors.push(user.personalData.email));
     })
+    Log.info(addedUsers, "ADDED USERS LIST")
+    Log.info(errors, "ERROR USERS LIST")
   }
 
   render() {
@@ -90,7 +71,6 @@ class CsvUsersImport extends ComponentWithErrorHandling {
       <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
-          {/* <Form onSubmit={this.handleSubmit}> */}
           <Row xs="2">
             <Col>{title}</Col>
             <Col>
@@ -110,66 +90,14 @@ class CsvUsersImport extends ComponentWithErrorHandling {
           <Row xs="2">
             <CSVReader onDrop={this.handleOnDrop} 
               onError={this.handleOnError} onRemoveFile={this.handleOnRemoveFile} 
-              addRemoveButton removeButtonColor='rgba(88, 14, 14, 0.6)' progressBarColor='rgba(88, 14, 14, 0.6)' 
-              config={this.parserConfig}>
+              addRemoveButton progressBarColor='rgba(88, 14, 14, 0.6)' 
+              config={Constants.parserConfig}>
               <span>Drop CSV file here or Click to upload.</span>
             </CSVReader>
           </Row>
-          {/* </Form> */}
         </Container>
       </AppNavbar>
   )}
-  
-  emptyItem = {
-    isActive: true,
-    personalData: {
-      dni: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      cellPhone: '' 
-    },
-    jobDetail: {
-      cuitNumber: '',
-      category: '',
-      grade: '',
-      dedication: '',
-      contractRelation: '',
-      aditionalHours: 0,
-      cvURL: '',
-      lastUpdate: '',
-      gradeTitles: '',
-      posGradeTitles: ''
-    },
-    coordinatedSubjects: [],
-    taughtCourses: []
-  };
-  
-  parserConfig = {
-    delimiter: "",  // auto-detect
-    newline: "",  // auto-detect
-    quoteChar: '"',
-    escapeChar: '"',
-    header: true,
-    transformHeader: undefined,
-    dynamicTyping: true,
-    preview: 0,
-    encoding: "",
-    worker: false,
-    comments: false,
-    step: undefined,
-    complete: undefined,
-    error: undefined,
-    download: false,
-    downloadRequestHeaders: undefined,
-    skipEmptyLines: false,
-    chunk: undefined,
-    fastMode: undefined,
-    beforeFirstChunk: undefined,
-    withCredentials: undefined,
-    transform: undefined,
-    delimitersToGuess: [',', '	', '|', ';']
-  }
 }
 
 CsvUsersImport.contextType = userContext;

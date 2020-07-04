@@ -8,27 +8,14 @@ import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
 import * as StudentAPI from '../services/StudentAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
+import * as Constants from '../auxiliar/Constants'
 
 class StudentEdit extends ComponentWithErrorHandling {
-
-  emptyItem = {
-    fileNumber: 0,
-    personalData: {
-      // personalDataId: 0,
-      dni: 0,
-      firstName: '',
-      lastName: '',
-      email: '',
-      cellPhone: ''
-    },
-    takenCourses: [],
-    attendedLessons: []
-  };
 
   constructor(props) {
     super(props);
     this.state = {...this.state, ...{
-      item: this.emptyItem,
+      item: Constants.emptyStudent,
     }};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
