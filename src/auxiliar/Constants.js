@@ -16,7 +16,7 @@ export const userCsvToJsonMap = {
     posGradeTitles: 'jobDetail.posGradeTitles'
 };
 
-export const studentsCsvToJsonMap = {
+export const studentCsvToJsonMap = {
     fileNumber: 'fileNumber',
     dni: 'personalData.dni',
     firstName: 'personalData.firstName', 

@@ -16,13 +16,11 @@ import FullSubjectList from './subject/SubjectList';
 import SubjectEdit from './subject/SubjectEdit';
 import FullUserList from './user/UserList';
 import UserEdit from './user/UserEdit';
-import CsvUsersImport from './user/CsvUsersImport'
-import CsvStudentsImport from './student/CsvStudentsImport'
+import IoTabs from './ioCsv/IoTabs'
 import * as Detail from './auxiliar/Details'
 import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
 import AppSpinner from './auxiliar/AppSpinner';
-import IoTabs from './ioCsv/IoTabs';
 import EvaluationPage from './evaluations/EvaluationPage';
 import EXPERIMENTING from './experimental/EXPERIMENTING';
 // FONT AWESOME
@@ -81,7 +79,6 @@ class App extends ComponentWithErrorHandling {
             <Route path='/course/:id/detail' component={Detail.CourseDetail}/>
 
             <Route path='/students' exact={true} component={FullStudentList}/>
-            <Route path='/students/importFromCsv' exact={true} component={IoTabs}/> {/* //{CsvStudentsImport}/> */}
             <Route path='/student/:id' exact={true} component={StudentEdit}/>
             <Route path='/student/:id/detail' component={Detail.StudentDetail}/>
 
@@ -91,11 +88,12 @@ class App extends ComponentWithErrorHandling {
             <Route path='/subject/:id/detail' component={Detail.SubjectDetail}/>
             
             <Route path='/users' exact={true} component={FullUserList}/>
-            <Route path='/users/importFromCsv' exact={true} component={CsvUsersImport}/>
             <Route path='/user/:id' exact={true} component={UserEdit}/>
             <Route path='/user/:id/detail' component={Detail.UserDetail}/>
 
             <Route path='/profile' component={Profile}/>
+
+            <Route path='/ioData' exact={true} component={IoTabs}/>
             
             <Route path='/experimenting' component={EXPERIMENTING}/>
           </Switch>

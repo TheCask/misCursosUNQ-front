@@ -1,70 +1,84 @@
-import React, { useState } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import React, { useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, 
+  CardTitle, CardText, Row, Col, Container } from 'reactstrap';
+import { userContext } from '../login/UserContext';
 import classnames from 'classnames';
 import * as Constants from '../auxiliar/Constants'
 import CsvUnitsImport from './CsvUnitsImport'
+import AppNavbar from '../AppNavbar'
+import AccessError from '../errorHandling/AccessError'
 import * as StudentAPI from '../services/StudentAPI';
-
+import * as UserAPI from '../services/UserAPI';
 
 const IoTabs = (props) => {
   const [activeTab, setActiveTab] = useState('1');
-
+  const context = useContext(userContext);
   const toggle = tab => {
     if(activeTab !== tab) setActiveTab(tab);
   }
-
-  return (
-    <div>
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '1' })}
-            onClick={() => { toggle('1'); }}
-          >
-            Tab1
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === '2' })}
-            onClick={() => { toggle('2'); }}
-          >
-            More Tabs
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={activeTab}>
+  let title = <h2 className="float-left">Import CSV File</h2>
+  return (context.actualRol !== 'Cycle Coordinator' ?
+  <AccessError errorCode="Guests are not allowed" 
+        errorDetail="Make sure you are signed in with valid role before try to access this page"/>
+    : 
+    <AppNavbar>
+      <Container fluid style={{paddingLeft:40}}>
+      <Row xs="1">{title}</Row>
+      <Row xs="1">
+        <Nav tabs>
+          <NavItem>
+            <NavLink className={classnames({ active: activeTab === '1' })} onClick={() => { toggle('1'); }} >
+              Students
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink  className={classnames({ active: activeTab === '2' })} onClick={() => { toggle('2'); }} >
+              Users
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
             <Row>
             <Col sm="6">
               <Card body>
-                <CardTitle>Special Title Treatment</CardTitle>
-                <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+                  <CardTitle style={{textAlign:'center'}}>
+                    Import Students from CSV File
+                  </CardTitle>
                 {<CsvUnitsImport
-                    csvToJsonMap = {Constants.studentsCsvToJsonMap}// Constants.userCsvToJsonMap
-                    initialObj =  {Constants.initialStudent()}// {isActive: true, personalData: {}, jobDetail: {}}
+                    csvToJsonMap = {Constants.studentCsvToJsonMap}// Constants.userCsvToJsonMap
+                    initialObjFunc =  {Constants.initialStudent}// {isActive: true, personalData: {}, jobDetail: {}}
                     postFunction = {StudentAPI.postStudentAsync} // API post function (ie. UserAPI.postUserAsync)
-                    dropHereText = "Drop CSV file here" // 
+                    dropHereText = "Drop CSV file or Click here" // 
                 />}
-                <Button>Import Students</Button>
               </Card>
             </Col>
-          </Row>
+            </Row>
         </TabPane>
         <TabPane tabId="2">
           <Row>
             <Col sm="6">
-              <Card body>
-                <CardTitle>Special Title Treatment</CardTitle>
-                <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-                <Button>Import Teachers</Button>
+            <Card body>
+                  <CardTitle style={{textAlign:'center'}}>
+                    Import Users from CSV File
+                  </CardTitle>              
+                <CardText>Make sure your CSV file has the correct headers and format.</CardText>
+                {<CsvUnitsImport
+                    csvToJsonMap = {Constants.userCsvToJsonMap}// Constants.userCsvToJsonMap
+                    initialObjFunc =  {Constants.initialUser}// {isActive: true, personalData: {}, jobDetail: {}}
+                    postFunction = {UserAPI.postUserAsync} // API post function (ie. UserAPI.postUserAsync)
+                    dropHereText = "Drop CSV file or Click here" // 
+                />}
               </Card>
             </Col>
           </Row>
         </TabPane>
-      </TabContent>
-    </div>
+        </TabContent>
+        </Row>
+      </Container>
+    </AppNavbar>
   );
 }
-
-export default IoTabs;
+IoTabs.contextType = userContext;
+export default withRouter(IoTabs);
