@@ -90,7 +90,6 @@ class CsvStudentsImport extends ComponentWithErrorHandling {
               </ButtonGroup>
             </Col>
           </Row>
-          <Row></Row>
           <Row xs="2">
             <CSVReader onDrop={this.handleOnDrop} 
               onError={this.handleOnError} onRemoveFile={this.handleOnRemoveFile} 

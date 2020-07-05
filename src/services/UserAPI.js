@@ -6,6 +6,12 @@ export async function getUsersAsync(handleSuccess, handleError){
     BackAPI.handleGet(response, handleSuccess, handleError)
 }
 
+// getAllByActive
+export async function getUsersByActiveStatusAsync(activeStatus, handleSuccess, handleError){
+    const response = await fetch(`/api/users/${activeStatus}`);
+    BackAPI.handleGet(response, handleSuccess, handleError)
+}
+
 // getById
 export async function getUserByIdAsync(userId, handleSuccess, handleError){
     const response = await fetch(`/api/user/${userId}`);

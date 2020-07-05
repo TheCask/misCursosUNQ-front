@@ -9,7 +9,6 @@ export class Home extends ComponentWithErrorHandling {
       <div>
         <AppNavbar>
         {this.renderErrorModal()}
-        <br></br>
         <iframe id="CiSite" title="Embed CI Site" width="100%" height="100%"
           src="http://ciclointroductoriocyt.web.unq.edu.ar/"></iframe>
         </AppNavbar>
@@ -17,5 +16,4 @@ export class Home extends ComponentWithErrorHandling {
     );
   }
 }
-
 export default Home;

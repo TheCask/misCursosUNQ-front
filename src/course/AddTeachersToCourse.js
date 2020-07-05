@@ -28,12 +28,15 @@ class AddTeachersToCourse extends ComponentWithErrorHandling {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
+    CourseAPI.getCourseByIdAsync(
+      this.props.match.params.id, 
       json => this.setState({item: json}), 
       this.showError("get course"));
-    UserAPI.getUsersAsync(json => {
-      this.collectUsersIds(this.state.item.teachers);
-      this.setState({allTeachers: json, isLoading: false})
+    UserAPI.getUsersByActiveStatusAsync(
+      true, 
+      json => {
+        this.collectUsersIds(this.state.item.teachers);
+        this.setState({allTeachers: json, isLoading: false})
       },
       this.showError("get teachers"));
   }

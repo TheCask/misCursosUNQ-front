@@ -37,8 +37,8 @@ export default class SideBar extends Component {
                       : ""
                     )
                   }
-                  <svg height="10" width="150">
-                    <line x1="0" y1="0" x2="150" y2="0" style={{stroke: 'rgba(255,255,255,0.4)', strokeWidth: '10'}} />
+                  <svg height="10" width="170">
+                    <line x1="0" y1="0" x2="170" y2="0" style={{stroke: 'rgba(255,255,255,0.4)', strokeWidth: '10'}} />
                   </svg>
               </Nav>
             </Navbar> 

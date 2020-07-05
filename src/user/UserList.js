@@ -9,7 +9,6 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
-import App from '../App';
 
 class FullUserList extends ComponentWithErrorHandling {
 
@@ -83,8 +82,9 @@ export class UserListContainer extends ComponentWithErrorHandling {
     this.contextParams.onDelete(
       userId, 
       () => {
-        let updatedUsers = [...this.state.users].filter(user => user.userId !== userId);
-        this.setState({users: updatedUsers, targetId: ''});
+        let userFiltered = [...this.state.users].find(user => user.userId === userId)
+        userFiltered.isActive = false;
+        this.setState({targetId: ''});
       },
       this.showError("remove user"));
   }
@@ -168,7 +168,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
   }
 }
 
-const th = { position: 'sticky', top: 0 };
+const th = { position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
 const UserListHeaders = () =>
 <thead>
     <tr>
