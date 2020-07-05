@@ -22,7 +22,7 @@ import * as Detail from './auxiliar/Details'
 import Profile from './login/Profile';
 import * as AuthAPI from './services/AuthAPI';
 import AppSpinner from './auxiliar/AppSpinner';
-//import EvaluationPage from './evaluations/Evaluation';
+import IoTabs from './ioCsv/IoTabs';
 import EvaluationPage from './evaluations/EvaluationPage';
 import EXPERIMENTING from './experimental/EXPERIMENTING';
 // FONT AWESOME
@@ -81,7 +81,7 @@ class App extends ComponentWithErrorHandling {
             <Route path='/course/:id/detail' component={Detail.CourseDetail}/>
 
             <Route path='/students' exact={true} component={FullStudentList}/>
-            <Route path='/students/importFromCsv' exact={true} component={CsvStudentsImport}/>
+            <Route path='/students/importFromCsv' exact={true} component={IoTabs}/> {/* //{CsvStudentsImport}/> */}
             <Route path='/student/:id' exact={true} component={StudentEdit}/>
             <Route path='/student/:id/detail' component={Detail.StudentDetail}/>
 

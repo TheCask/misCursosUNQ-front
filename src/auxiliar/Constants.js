@@ -162,3 +162,7 @@ export function newEvalInstance() {
         califications: []
     }
 }
+
+export const initialStudent = () => { return { personalData: {} } }
+
+export const initialUser = () => { return { isActive: true, personalData: {}, jobDetail: {} } }
