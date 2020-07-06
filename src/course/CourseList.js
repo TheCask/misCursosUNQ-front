@@ -11,7 +11,6 @@ import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { userContext } from '../login/UserContext';
 import * as IconRepo from '../auxiliar/IconRepo'
-import Log from '../auxiliar/Log'
 
 class FullCourseList extends ComponentWithErrorHandling {
 
@@ -22,9 +21,12 @@ class FullCourseList extends ComponentWithErrorHandling {
 
   componentDidUpdate() {
     if (this.context.actualRol !== this.state.lastRol) {
-      Log.info(this.context.actualRol, "Context Rol")
       this.setState({lastRol: this.context.actualRol});
     }
+  }
+
+  componentDidMount() {
+    this.setState({lastRol: this.context.actualRol})
   }
 
   render() {

@@ -16,6 +16,7 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import Collapsable from '../buttons/Collapsable';
 import AppSpinner from '../auxiliar/AppSpinner';
 import * as Constants from '../auxiliar/Constants'
+import Log from '../auxiliar/Log'
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -23,7 +24,7 @@ class CourseEdit extends ComponentWithErrorHandling {
     super(props);
     this.state = {...this.state, ...{
       item: Constants.emptyNewCourse,
-      subjectList: [], isLoading: true, 
+      subjectList: [], isLoading: true, lastRol: 'Guest',
       alert: {on: false, color: '', message: ''}
     }};
     this.handleChange = this.handleChange.bind(this);
@@ -33,6 +34,7 @@ class CourseEdit extends ComponentWithErrorHandling {
   }
 
   async componentDidMount() {
+    this.setState({lastRol: this.context.actualRol})
     if (this.props.match.params.id !== 'new') {
       CourseAPI.getCourseByIdAsync(this.props.match.params.id, 
         course => this.setState({item: course}), 
@@ -43,9 +45,16 @@ class CourseEdit extends ComponentWithErrorHandling {
       this.setDefaultSeason();
       this.setDefaultShift();
       this.setDefaultSubjectName();
-      }, 
+      },
       this.showError("get subjects"))
       .then(this.setState({isLoading: false}));
+  }
+
+  componentDidUpdate() {
+    if (this.context.actualRol !== this.state.lastRol) {
+      Log.info(this.context.actualRol, "Context Rol")
+      this.setState({lastRol: this.context.actualRol});
+    }
   }
 
   handleChange(event) {
@@ -119,21 +128,23 @@ class CourseEdit extends ComponentWithErrorHandling {
     if (isLoading) { return <AppSpinner/> }
     let onlyDetail = this.onlyDetail;
     let title = this.chooseTitle(onlyDetail);
-    this.actualRol = this.context.actualRol;
-    return (this.actualRol === 'Guest' ?
+    let actualRol = this.context.actualRol;
+    return (actualRol === 'Guest' ?
       <AccessError errorCode="Guests are not allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       : 
       <div>
       <AppNavbar>
       {this.renderErrorModal()}
+      { actualRol === this.state.lastRol ?
+      <>
         <Container fluid>
         <Form onSubmit={this.handleSubmit}>
           <Row xs="2">
             <Col>{title}</Col>
             <Col>
             <ButtonGroup className="float-right">
-              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || this.actualRol !== 'Cycle Coordinator'}/>
+              <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
               <CancelButton onClick={() => this.props.history.goBack()} />
             </ButtonGroup>
             </Col>
@@ -228,17 +239,19 @@ class CourseEdit extends ComponentWithErrorHandling {
         <Container fluid>
           {item.courseId ? 
             <Collapsable entityTypeCapName={'Students'} >
-              {this.renderStudents(onlyDetail, this.actualRol)}
+              {this.renderStudents(onlyDetail, actualRol)}
             </Collapsable> : ''
           }
         </Container>
         <Container fluid>
           {item.courseId ?
             <Collapsable entityTypeCapName={'Teachers'}>
-              {this.renderTeachers(onlyDetail, this.actualRol)}
+              {this.renderTeachers(onlyDetail, actualRol)}
             </Collapsable> : ''
           }
         </Container>
+        </>
+        : <h3>{actualRol}</h3> }
       </AppNavbar>
     </div>
     )

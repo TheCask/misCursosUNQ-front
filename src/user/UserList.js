@@ -168,18 +168,18 @@ export class UserListContainer extends ComponentWithErrorHandling {
   }
 }
 
-const th = { position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
+const th = { width: 'auto', position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
 const UserListHeaders = () =>
 <thead>
-    <tr>
-      <th width="1%" style={th}>{''}</th>
-      <th width="3%" style={th}>DNI</th>
-      <th width="4%" style={th}>First Name</th>
-      <th width="4%" style={th}>Last Name</th>
-      <th width="7%" style={th}>e-Mail</th>
-      <th width="4%" style={th}>Cell Phone</th>
-      <th width="3%" style={th}>Dedication</th>
-      <th width="5%" style={th}>Ad. Hs.</th>
+    <tr >
+      <th style={th}>{''}</th>
+      <th style={th}>DNI</th>
+      <th style={th}>First Name</th>
+      <th style={th}>Last Name</th>
+      <th style={th}>e-Mail</th>
+      <th style={th}>Cell Phone</th>
+      <th style={th}>Dedication</th>
+      <th style={th}>Ad. Hs.</th>
   </tr>
 </thead>;
 
@@ -194,11 +194,11 @@ const UserList = props => {
       style = {props.styleFunction(user.userId)}
       />
       )
-    });
-  }
+  });
+}
   
-  const tr = { whiteSpace: 'nowrap' };
-  const UserListItem = props =>
+const tr = { whiteSpace: 'nowrap' };
+const UserListItem = props =>
   <tr onClick={props.userOnClickFunction} id={props.user.userId} 
     style={props.style} key={props.user.userId}>
     <td>
@@ -218,7 +218,7 @@ const UserList = props => {
   </tr>;
 
 const SearchField = props =>
-<InputGroup>
+  <InputGroup>
     <Input type="text" name="searchText" id="searchInput" placeholder="Type to search Users ..."
       value={props.searchText} onChange={props.handleChange}/>
     <InputGroupAddon addonType="append">

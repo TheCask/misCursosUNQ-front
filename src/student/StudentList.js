@@ -147,15 +147,16 @@ export class StudentListContainer extends ComponentWithErrorHandling {
   }
 }
 
+const th = { width: 'auto', position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
 const StudentListHeaders = () =>
   <thead>
     <tr>
-      <th width="7%" >File Number</th>
-      <th width="10%">DNI</th>
-      <th width="5%" >First Name</th>
-      <th width="5%" >Last Name</th>
-      <th width="2%" >e-Mail</th>
-      <th width="2%" >Cell Phone</th>
+      <th style={th}>File Number</th>
+      <th style={th}>DNI</th>
+      <th style={th}>First Name</th>
+      <th style={th}>Last Name</th>
+      <th style={th}>e-Mail</th>
+      <th style={th}>Cell Phone</th>
     </tr>
   </thead>;
 
