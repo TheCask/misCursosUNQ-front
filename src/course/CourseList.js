@@ -1,6 +1,6 @@
-import React  from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Table, Button, UncontrolledTooltip, Row, Col } from 'reactstrap'
+import { Container, Table, Button, UncontrolledTooltip, Row, Col, Label } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner'
 import AppNavbar from '../AppNavbar'
@@ -11,25 +11,31 @@ import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import { userContext } from '../login/UserContext';
 import * as IconRepo from '../auxiliar/IconRepo'
+import Log from '../auxiliar/Log'
 
 class FullCourseList extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state };
+    this.state = {...this.state, lastRol: 'Guest'};
   };
 
+  componentDidUpdate() {
+    if (this.context.actualRol !== this.state.lastRol) {
+      Log.info(this.context.actualRol, "Context Rol")
+      this.setState({lastRol: this.context.actualRol});
+    }
+  }
+
   render() {
-    this.actualRol = this.context.actualRol;
-    return (this.actualRol === '' ?
-      <AccessError errorCode="Guests are not allowed" 
-          errorDetail="Make sure you are signed in with valid role before try to access this page"/>
-      :
+    let actualRol = this.context.actualRol;
+    return (
       <div>
         <AppNavbar>
         {this.renderErrorModal()}
+        { actualRol === this.state.lastRol ?
           <CourseListContainer
-            courseListTitle = {'Courses'}
+            courseListTitle = {'Courses for ' + actualRol }
             onGetAll = {this.rolCourses()}
             onDelete = { (courseId, handleSuccess, handleError) => CourseAPI.deleteCourseAsync(courseId, handleSuccess, handleError)}
             onDeleteConsequenceList = {[
@@ -43,17 +49,18 @@ class FullCourseList extends ComponentWithErrorHandling {
             renderAddButton = {this.renderAddButton()}
             renderDeleteButton = {this.renderDeleteButton()}
             renderButtonBar = {this.renderButtonBar()}
-            disableAttendanceBt = {this.actualRol !== 'Teacher'}
-            disableEvaluationBt = {this.actualRol !== 'Teacher'}
+            disableAttendanceBt = {actualRol !== 'Teacher'}
+            disableEvaluationBt = {actualRol !== 'Teacher'}
             deleteButtonTo = {'./'} //required by delete button
           />
+          : <h3>{actualRol}</h3> }
         </AppNavbar>
       </div>
     )
   }
 
   renderButtonBar() {
-    switch (this.actualRol) {
+    switch (this.context.actualRol) {
       case 'Cycle Coordinator': return true
       case 'Teacher': return true
       case 'Guest': return false
@@ -62,7 +69,7 @@ class FullCourseList extends ComponentWithErrorHandling {
   }
 
   renderAddButton() {
-    switch (this.actualRol) {
+    switch (this.context.actualRol) {
       case 'Cycle Coordinator': return true
       case 'Teacher': return false
       case 'Guest': return false
@@ -71,7 +78,7 @@ class FullCourseList extends ComponentWithErrorHandling {
   }
 
   renderDeleteButton() {
-    switch (this.actualRol) {
+    switch (this.context.actualRol) {
       case 'Cycle Coordinator': return true
       case 'Teacher': return false
       case 'Guest': return false
@@ -81,7 +88,7 @@ class FullCourseList extends ComponentWithErrorHandling {
 
   rolCourses() {
     let rolCourses
-    switch (this.actualRol) {
+    switch (this.context.actualRol) {
       case 'Teacher': {
         let email = this.context.globalUser ? this.context.globalUser.email : '';
         rolCourses = (handleSuccess, handleError) => 
@@ -114,7 +121,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
     this.state = {...this.state, 
       ...{courses: [], isLoading: true, targetId: '', 
       coursesListTitle: 'Courses'}};
-    this.title = this.props.courseListTitle;
+    this.title = props.courseListTitle;
     this.getIcon = this.props.getIcon
     this.addButtonTo = props.addButtonTo;
     this.renderEditButton = props.renderEditButton;
@@ -123,7 +130,7 @@ export class CourseListContainer extends ComponentWithErrorHandling {
     this.renderDeleteButton = props.renderDeleteButton;
     this.disableAttendanceBt = props.disableAttendanceBt;
     this.disableEvaluationBt = props.disableEvaluationBt;
-    this.deleteButtonTo=props.deleteButtonTo;
+    this.deleteButtonTo = props.deleteButtonTo;
     this.contextParams = props;
   }
 
@@ -275,5 +282,6 @@ const CourseListItem = props => {
     </tr>
   )
 }
+CourseListContainer.contextType = userContext;
 FullCourseList.contextType = userContext;
 export default FullCourseList;
