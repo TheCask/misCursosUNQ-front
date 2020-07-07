@@ -22,7 +22,8 @@ export default class CsvUnitsImport extends Component {
       fileIsNotLoaded: true, 
       unitList: [], 
       csvData: null,
-      log: { failedList: [], successList: []}
+      failedList: [], 
+      successList: []
     };
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -30,9 +31,7 @@ export default class CsvUnitsImport extends Component {
   handleOnDrop = (jsonArray) => {
     // Recorre las rows parseadas a json de la libreria (los datos de usuarios). 
     let list = jsonArray.map((csvUnit) => {
-      
       let csvKeys = Object.keys(csvUnit.data);
-      
       // Recorre las keys y por cada una...
       return csvKeys.reduce((acc, curr) => {
         AuxFunc.setInnerPropValue(acc, this.props.csvToJsonMap[curr], csvUnit.data[curr]);
@@ -43,26 +42,20 @@ export default class CsvUnitsImport extends Component {
   }
   
   handleSubmit() {
-    this.postUnitsAsync().then(({successUnits, failedUnits}) => {
-      const log = this.state.log;
-      log['successList'] = successUnits;
-      log['failedList'] = failedUnits;
-      this.setState({log: log})
+    this.postUnitsAsync().then(({successList, failedList}) => {
+      this.setState({successList: successList, failedList: failedList, fileIsNotLoaded: true})
     })
   }
 
   async postUnitsAsync() {
-    const {unitList} = this.state;
-    let successUnits = [];
-    let failedUnits = [];
+    let {unitList, successList, failedList} = this.state;
     unitList.forEach(unit => { 
       this.props.postFunction(
         unit, 
-        () => successUnits.push(unit), 
-        () => failedUnits.push(unit))
-      }
-    )
-    return ({successUnits, failedUnits})
+        () => successList.push(unit), 
+        () => failedList.push(unit))
+    })
+    return ({successList, failedList});
   }
 
   handleOnError = (err) => { Log.info(err) }
@@ -70,8 +63,7 @@ export default class CsvUnitsImport extends Component {
   handleOnRemoveFile = () => { this.setState({fileIsNotLoaded: true}) }
 
   render() {
-    let successLog = this.state.log.successList
-    let failedLog =  this.state.log.failedList
+    let {successList, failedList, fileIsNotLoaded} = this.state
     return (
       <Container fluid>
         <CSVReader style={{color:'rgba(88, 14, 14, 0.6)'}}
@@ -86,37 +78,33 @@ export default class CsvUnitsImport extends Component {
           <FontAwesomeIcon icon='file-csv' size='4x'></FontAwesomeIcon>
         </CSVReader>
         <Button block size="sm" color="primary" id="import" onClick={this.handleSubmit} 
-          disabled={this.state.fileIsNotLoaded} style={{marginBottom:40, marginTop: 40, padding: 10}}>
+          disabled={fileIsNotLoaded} style={{marginBottom:40, marginTop: 40, padding: 10}}>
           Proceed with Import
         </Button>
         <div>
           <Jumbotron>
             <h1 className="display-9">Import Results</h1>
-            <p className="lead">View success and failures of the import process</p>
+            <p className="lead">To view log results please remove file.</p>
             <hr className="my-2" />
             <Container fluid>
-              <Collapsable entityTypeCapName={'Successes'} disabled={false}
-                color={false ? 'secondary' : 'success'}>
+              <Collapsable entityTypeCapName={'Successes'} disabled={successList.length === 0}
+                color={this.getCollapsableColor('successList')}>
                 <div style={{ maxHeight:720, overflowY:'scroll'}}>
                   <Table hover className="mt-4">
                     <LogHeaders/>
-                    <tbody>
-                      <LogList units = {successLog} />
-                    </tbody>
+                    <tbody><LogList units = {successList} /></tbody>
                   </Table>
                 </div>
               </Collapsable>  
             </Container>
             <hr className="my-2" />
             <Container fluid>
-              <Collapsable entityTypeCapName={'Failures'} disabled={false} 
-                color={false ? 'secondary' : 'danger'}>
+              <Collapsable entityTypeCapName={'Failures'} disabled={failedList.length === 0} 
+                color={this.getCollapsableColor('failedList')}>
                 <div style={{ maxHeight:720, overflowY:'scroll'}}>
                   <Table hover className="mt-4">
                     <LogHeaders/>
-                    <tbody>
-                      <LogList units = {failedLog} />
-                    </tbody>
+                    <tbody><LogList units = {failedList}/></tbody>
                   </Table>
                 </div>
               </Collapsable>
@@ -126,13 +114,29 @@ export default class CsvUnitsImport extends Component {
       </Container>
     )
   }
+
+  getCollapsableColor(listName) {
+    let color = 'secondary'
+    let {successList, failedList} = this.state
+    switch (listName) {
+      case 'failedList': 
+        if (failedList.length > 0) { color = 'danger' }
+        break;
+      case 'successList': 
+        if (successList.length > 0) { color = 'success' }
+        break;
+      default: color = 'secondary'
+    }
+    return color;
+  }
 }
 
-const th = { width: 'auto', position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
+const th = { width: 'auto', position: 'sticky', top: 0, 
+  color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
+
 const LogHeaders = () =>
 <thead>
   <tr >
-      <th style={th}>{''}</th>
       <th style={th}>DNI</th>
       <th style={th}>First Name</th>
       <th style={th}>Last Name</th>
@@ -146,9 +150,9 @@ const LogList = props => {
 }
 
 const tr = { whiteSpace: 'nowrap' };
+
 const UnitListItem = props =>
   <tr id={props.unit.personalData.dni} key={props.unit.personalData.dni}>
-    <td>{''}</td>
     <td>{props.unit.personalData.dni || ''}</td>
     <td style={tr}>{props.unit.personalData.firstName || ''}</td>
     <td style={tr}>{props.unit.personalData.lastName || ''}</td>

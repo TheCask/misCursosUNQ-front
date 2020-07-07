@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Table, Button, UncontrolledTooltip, Row, Col, Label } from 'reactstrap'
+import { Container, Table, Button, UncontrolledTooltip, Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner'
 import AppNavbar from '../AppNavbar'
