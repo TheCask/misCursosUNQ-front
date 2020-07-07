@@ -29,16 +29,21 @@ export default class CsvUnitsImport extends Component {
   }
 
   handleOnDrop = (jsonArray) => {
+    let parsingError = false;
     // Recorre las rows parseadas a json de la libreria (los datos de usuarios). 
     let list = jsonArray.map((csvUnit) => {
       let csvKeys = Object.keys(csvUnit.data);
       // Recorre las keys y por cada una...
       return csvKeys.reduce((acc, curr) => {
-        AuxFunc.setInnerPropValue(acc, this.props.csvToJsonMap[curr], csvUnit.data[curr]);
+        try {
+          AuxFunc.setInnerPropValue(acc, this.props.csvToJsonMap[curr], csvUnit.data[curr]);
+        } catch (TypeError) { parsingError = true }
         return acc;
       }, this.props.initialObjFunc())
     })
-    this.setState({unitList: list, fileIsNotLoaded: false})
+    if (!parsingError) {
+      this.setState({unitList: list, fileIsNotLoaded: false})
+    }
   }
   
   handleSubmit() {
