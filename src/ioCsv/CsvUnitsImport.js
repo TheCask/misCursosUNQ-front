@@ -6,8 +6,10 @@ import * as Constants from '../auxiliar/Constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as AuxFunc from '../auxiliar/AuxiliarFunctions'
 import Collapsable from '../buttons/Collapsable';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
+import AppSpinner from '../auxiliar/AppSpinner';
 
-export default class CsvUnitsImport extends Component {
+export default class CsvUnitsImport extends ComponentWithErrorHandling {
 
   /*
     csvToJsonMap = {}// Constants.userCsvToJsonMap
@@ -18,14 +20,27 @@ export default class CsvUnitsImport extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {...this.state,
       fileIsNotLoaded: true, 
       unitList: [], 
       csvData: null,
       failedList: [], 
-      successList: []
+      successList: [],
+      isImporting: false,
+      parsingError: false
     };
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  showSuccess = () => {
+    this.setState({
+        isErrorModalOpen: true,
+        lastError: {
+            title: "Alright, everything worked...", 
+            shortDesc: "Successfully imported Data" ,
+            httpCode: '200',
+        }
+    })
   }
 
   handleOnDrop = (jsonArray) => {
@@ -41,36 +56,41 @@ export default class CsvUnitsImport extends Component {
         return acc;
       }, this.props.initialObjFunc())
     })
-    if (!parsingError) {
-      this.setState({unitList: list, fileIsNotLoaded: false})
-    }
+    if (!parsingError) { this.setState({unitList: list, fileIsNotLoaded: false, parsingError: false}) }
+    else {this.setState({parsingError: true})}
   }
   
-  handleSubmit() {
-    this.postUnitsAsync().then(({successList, failedList}) => {
-      this.setState({successList: successList, failedList: failedList, fileIsNotLoaded: true})
-    })
+  // Log.info(response, "RES")
+  async handleSubmit() {
+    this.setState({isImporting: true})
+    const response = await this.postUnitsAsync()
+    this.setState({successList: response.sc, failedList: response.fl, isImporting: false})
   }
 
   async postUnitsAsync() {
-    let {unitList, successList, failedList} = this.state;
+    let {unitList} = this.state, successList = [], failedList = []
     unitList.forEach(unit => { 
       this.props.postFunction(
         unit, 
         () => successList.push(unit), 
         () => failedList.push(unit))
     })
-    return ({successList, failedList});
+    // if (failedList.length === 0 ) { this.showSuccess() }
+    // else { this.showError('import CSV. Check Log details. Make sure CSV has the correct format and you are not importing duplicated data')}
+    return ({sc: successList, fl: failedList});
   }
 
   handleOnError = (err) => { Log.info(err) }
 
-  handleOnRemoveFile = () => { this.setState({fileIsNotLoaded: true}) }
+  handleOnRemoveFile = () => { 
+    this.setState({fileIsNotLoaded: true, parsingError: false}) 
+  }
 
   render() {
-    let {successList, failedList, fileIsNotLoaded} = this.state
+    const {successList, failedList, fileIsNotLoaded, isImporting, parsingError} = this.state
     return (
       <Container fluid>
+        {this.renderErrorModal()}
         <CSVReader style={{color:'rgba(88, 14, 14, 0.6)'}}
           onDrop={this.handleOnDrop} 
           onError={this.handleOnError} 
@@ -82,11 +102,17 @@ export default class CsvUnitsImport extends Component {
           </span>
           <FontAwesomeIcon icon='file-csv' size='4x'></FontAwesomeIcon>
         </CSVReader>
-        <Button block size="sm" color="primary" id="import" onClick={this.handleSubmit} 
-          disabled={fileIsNotLoaded} style={{marginBottom:40, marginTop: 40, padding: 10}}>
-          Proceed with Import
+        {fileIsNotLoaded && !parsingError ? 
+        <Button block size="sm" color="primary" id="import" disabled style={{marginBottom:40, marginTop: 40, padding: 10}}>
+          Please load a CSV file
         </Button>
+        :
+        <Button block size="sm" color={parsingError ? "danger" : "success"} id="import" onClick={this.handleSubmit} 
+          disabled={fileIsNotLoaded || parsingError} style={{marginBottom:40, marginTop: 40, padding: 10}}>
+          {parsingError ? "Parsing Error, check correct format of CSV file" : "Proceed with Import"}
+        </Button> }
         <div>
+          {isImporting ? <AppSpinner/> :
           <Jumbotron>
             <h1 className="display-9">Import Results</h1>
             <p className="lead">To view log results please remove file.</p>
@@ -114,7 +140,8 @@ export default class CsvUnitsImport extends Component {
                 </div>
               </Collapsable>
             </Container>
-          </Jumbotron>
+            <hr className="my-2" />
+          </Jumbotron> }
         </div>
       </Container>
     )
@@ -122,7 +149,7 @@ export default class CsvUnitsImport extends Component {
 
   getCollapsableColor(listName) {
     let color = 'secondary'
-    let {successList, failedList} = this.state
+    const {successList, failedList} = this.state
     switch (listName) {
       case 'failedList': 
         if (failedList.length > 0) { color = 'danger' }

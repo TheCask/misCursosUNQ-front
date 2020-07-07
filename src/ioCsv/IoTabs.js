@@ -28,12 +28,12 @@ const IoTabs = (props) => {
         <Row xs="1">{title}</Row>
         <Row xs="1">
           <Nav tabs>
-            <NavItem>
+            <NavItem style={{color:"rgba(88, 14, 14, 0.7)"}}>
               <NavLink className={classnames({ active: activeTab === '1' })} onClick={() => { toggle('1'); }} >
                 <FontAwesomeIcon icon="user-graduate" size="1x"/> {'  Students'}
               </NavLink>
             </NavItem>
-            <NavItem>
+            <NavItem style={{color:"rgba(88, 14, 14, 0.7)"}}>
               <NavLink  className={classnames({ active: activeTab === '2' })} onClick={() => { toggle('2'); }} >
               <FontAwesomeIcon icon="chalkboard-teacher" size="1x"/> {'  Users'}
               </NavLink>
@@ -43,8 +43,8 @@ const IoTabs = (props) => {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                <Card body>
-                  <CardTitle style={{textAlign:'center'}}> Import Students from CSV File </CardTitle>
+                <Card body style={{backgroundColor:"rgba(20, 0, 0, 0.19)"}}>
+                  {/* <CardTitle style={{textAlign:'center'}}> Import Students from CSV File </CardTitle> */}
                   {<CsvUnitsImport
                       csvToJsonMap = {Constants.studentCsvToJsonMap}// Constants.userCsvToJsonMap
                       initialObjFunc =  {Constants.initialStudent}// {isActive: true, personalData: {}, jobDetail: {}}
@@ -58,8 +58,8 @@ const IoTabs = (props) => {
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
-                <Card body>
-                  <CardTitle style={{textAlign:'center'}}> Import Users from CSV File </CardTitle>
+                <Card body style={{backgroundColor:"rgba(20, 0, 0, 0.20)"}}>
+                  {/* <CardTitle style={{textAlign:'center'}}> Import Users from CSV File </CardTitle> */}
                   {<CsvUnitsImport
                       csvToJsonMap = {Constants.userCsvToJsonMap}// Constants.userCsvToJsonMap
                       initialObjFunc =  {Constants.initialUser}// {isActive: true, personalData: {}, jobDetail: {}}

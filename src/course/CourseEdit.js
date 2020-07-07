@@ -16,17 +16,16 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import Collapsable from '../buttons/Collapsable';
 import AppSpinner from '../auxiliar/AppSpinner';
 import * as Constants from '../auxiliar/Constants'
-import Log from '../auxiliar/Log'
 
 class CourseEdit extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...{
+    this.state = {...this.state,
       item: Constants.emptyNewCourse,
       subjectList: [], isLoading: true, lastRol: 'Guest',
       alert: {on: false, color: '', message: ''}
-    }};
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleIsOpen = this.toggleIsOpen.bind(this);
@@ -52,7 +51,6 @@ class CourseEdit extends ComponentWithErrorHandling {
 
   componentDidUpdate() {
     if (this.context.actualRol !== this.state.lastRol) {
-      Log.info(this.context.actualRol, "Context Rol")
       this.setState({lastRol: this.context.actualRol});
     }
   }
@@ -89,7 +87,8 @@ class CourseEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    CourseAPI.postCourseAsync(item, 
+    CourseAPI.postCourseAsync(
+      item, 
       () => { this.showSuccess('200', 'The Course has been saved!'); }, 
       this.showError("save course. Check if the course already exists based on code, subject, year and season"));
   }
