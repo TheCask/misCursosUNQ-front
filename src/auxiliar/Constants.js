@@ -155,6 +155,17 @@ export const parserConfig = {
     delimitersToGuess: [',', '	', '|', ';']
 };
 
+export const emptyCsvImport = {
+    fileIsNotLoaded: true, 
+    unitList: [], 
+    csvData: null,
+    failedList: [], 
+    successList: [],
+    actualUnit: 0,
+    totalUnits: 0,
+    parsingError: false
+}
+
 export function newEvalInstance() {
     return {
         evaluationId: '',

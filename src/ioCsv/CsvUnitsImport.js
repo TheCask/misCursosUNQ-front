@@ -17,20 +17,9 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
     dropHereText = "Drop CSV file here" // 
   */
 
-  emptyCsvImport = {
-    fileIsNotLoaded: true, 
-    unitList: [], 
-    csvData: null,
-    failedList: [], 
-    successList: [],
-    actualUnit: 0,
-    totalUnits: 0,
-    parsingError: false
-  }
-
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...this.emptyCsvImport}
+    this.state = {...this.state, ...Constants.emptyCsvImport}
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -91,8 +80,7 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
   handleOnError = (err) => { Log.info(err) }
 
   handleOnRemoveFile = () => { 
-    this.setState({...this.emptyCsvImport})
-    //this.setState({fileIsNotLoaded: true, parsingError: false, totalUnits: 0, actualUnit: 0}) 
+    this.setState({...Constants.emptyCsvImport})
   }
 
   render() {
