@@ -44,11 +44,11 @@ class App extends ComponentWithErrorHandling {
   async componentDidMount() {
     AuthAPI.getGlobalUserByIdAsync(json => this.setState({globalUser: json, isLoadingG: false}), 
       this.showError("get global user"));
-    AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
+    await AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
       this.showError("get app user"));
     
     const rehydrate = localStorage.getItem('rol') || 'Guest';
-    this.setState({actualRol: rehydrate});
+    if (this.state.appUser.registration) {this.setState({actualRol: rehydrate});} 
   }
 
   chooseRol(rol) {
@@ -94,7 +94,7 @@ class App extends ComponentWithErrorHandling {
             <Route path='/profile' component={Profile}/>
 
             <Route path='/ioData' exact={true} component={IoTabs}/>
-            
+
             <Route path='/experimenting' component={EXPERIMENTING}/>
           </Switch>
         </Router>
