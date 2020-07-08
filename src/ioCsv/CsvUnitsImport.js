@@ -17,18 +17,20 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
     dropHereText = "Drop CSV file here" // 
   */
 
+  emptyCsvImport = {
+    fileIsNotLoaded: true, 
+    unitList: [], 
+    csvData: null,
+    failedList: [], 
+    successList: [],
+    actualUnit: 0,
+    totalUnits: 0,
+    parsingError: false
+  }
+
   constructor(props) {
     super(props);
-    this.state = {...this.state,
-      fileIsNotLoaded: true, 
-      unitList: [], 
-      csvData: null,
-      failedList: [], 
-      successList: [],
-      actualUnit: 0,
-      totalUnits: 0,
-      parsingError: false
-    };
+    this.state = {...this.state, ...this.emptyCsvImport}
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -56,8 +58,9 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
         return acc;
       }, this.props.initialObjFunc())
     })
-    if (!parsingError) { this.setState({unitList: list, fileIsNotLoaded: false, parsingError: false, totalUnits: list.length}) }
-    else {this.setState({parsingError: true, totalUnits: 0})}
+    if (!parsingError) { this.setState({unitList: list, fileIsNotLoaded: false, parsingError: false, 
+      totalUnits: list.length, actualUnit: 0, successList: [], failedList: []}) }
+    else {this.setState({parsingError: true})}
   }
   
   async handleSubmit() {
@@ -88,7 +91,8 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
   handleOnError = (err) => { Log.info(err) }
 
   handleOnRemoveFile = () => { 
-    this.setState({fileIsNotLoaded: true, parsingError: false, totalUnits: 0, actualUnit: 0}) 
+    this.setState({...this.emptyCsvImport})
+    //this.setState({fileIsNotLoaded: true, parsingError: false, totalUnits: 0, actualUnit: 0}) 
   }
 
   render() {
@@ -114,7 +118,8 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
           <FontAwesomeIcon icon='file-csv' size='4x'></FontAwesomeIcon>
         </CSVReader>
         {fileIsNotLoaded && !parsingError ? 
-        <Button block size="sm" color="primary" id="import" disabled style={{marginBottom:40, marginTop: 40, padding: 10}}>
+        <Button block size="sm" color="primary" id="import" disabled 
+          style={{marginBottom:40, marginTop: 40, padding: 10}}>
           Please load a CSV file
         </Button>
         :
@@ -124,8 +129,10 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
         </Button> }
         <div>
           <Jumbotron>
+            {fileIsNotLoaded ? <Progress color='secondary' value={0}/> :
             <Progress animated={progressStyleBool} color={this.getProgressBarColor()} 
               value={actualUnit} max={totalUnits} />
+            }
             <hr className="my-2" />
             <Container fluid>
               <Row xs="2">
@@ -157,7 +164,7 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
 
   getProgressBarColor() {
     let color = 'warning'
-    const {failedList, totalUnits, actualUnit} = this.state
+    const {failedList, totalUnits, actualUnit, } = this.state
     if (totalUnits === actualUnit) {
       let fails = failedList.length
       if (fails > 0 && fails > (totalUnits / 2)) { color = 'danger'}
