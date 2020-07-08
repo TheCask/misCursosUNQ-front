@@ -27,9 +27,12 @@ class FullStudentList extends ComponentWithErrorHandling {
             renderAddButton = {true}
             renderDeleteButton = {true}
             renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
-            onGetAll = { (handleSuccess, handleError) => StudentAPI.getStudentsAsync(handleSuccess, handleError) }
-            onDelete = { (studentId, handleSuccess, handleError) => StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
-            onSearch = {(page, text, handleSuccess, handleError) => StudentAPI.searchStudentsAsync(page, text, handleSuccess, handleError)}
+            onGetAll = { (handleSuccess, handleError) => 
+              StudentAPI.getStudentsAsync(handleSuccess, handleError) }
+            onDelete = { (studentId, handleSuccess, handleError) => 
+              StudentAPI.deleteStudentAsync(studentId, handleSuccess, handleError)}
+            onSearch = {(page, text, handleSuccess, handleError) => 
+              StudentAPI.searchStudentsAsync(page, text.toLowerCase(), handleSuccess, handleError)}
             renderSearch = {true}
             onDeleteConsequenceList = {[
               "The student will no longer be available.",

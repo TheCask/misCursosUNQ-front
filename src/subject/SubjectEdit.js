@@ -62,7 +62,7 @@ class SubjectEdit extends ComponentWithErrorHandling {
     let title = this.chooseTitle(onlyDetail, newSubject);
     let actualRol = this.context.actualRol;
     this.actualRol = this.context.actualRol;
-    return (this.actualRol !== 'Cycle Coordinator' ?
+    return (this.actualRol === 'Guest' || (this.actualRol === 'Teacher' && !onlyDetail) ?
       <AccessError errorCode="Only Coordinators are allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       :
