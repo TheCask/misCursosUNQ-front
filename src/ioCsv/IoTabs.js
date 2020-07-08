@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, 
-  CardTitle, Row, Col, Container } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Row, Col, Container } from 'reactstrap';
 import { userContext } from '../login/UserContext';
 import classnames from 'classnames';
 import * as Constants from '../auxiliar/Constants'

@@ -130,7 +130,7 @@ class UserEdit extends ComponentWithErrorHandling {
             <Col xs="4">
             <FormGroup>
               <Label for="cellPhone">Cell Phone</Label>
-              <Input type="tel" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone}
+              <Input type="tel" name="personalData.cellPhone" id="cellPhone" value={item.personalData.cellPhone || ''}
                     title="Separar característica y número con un guión (no incluir 15 al inicio). Ej. 0229-4787658"
                     onChange={this.handleChange} placeholder="Cell Phone" pattern="\d{2,4}-\d{6,8}" required disabled={onlyDetail}/>
             </FormGroup>

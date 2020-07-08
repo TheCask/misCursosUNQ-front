@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { CSVReader } from 'react-papaparse'
-import { Container, Button, Jumbotron, Table } from 'reactstrap';
+import { Container, Button, Jumbotron, Table, Progress, Row } from 'reactstrap';
 import Log from '../auxiliar/Log'
 import * as Constants from '../auxiliar/Constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as AuxFunc from '../auxiliar/AuxiliarFunctions'
 import Collapsable from '../buttons/Collapsable';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
-import AppSpinner from '../auxiliar/AppSpinner';
 
 export default class CsvUnitsImport extends ComponentWithErrorHandling {
 
@@ -26,7 +25,8 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
       csvData: null,
       failedList: [], 
       successList: [],
-      isImporting: false,
+      actualUnit: 0,
+      totalUnits: 0,
       parsingError: false
     };
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -56,38 +56,49 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
         return acc;
       }, this.props.initialObjFunc())
     })
-    if (!parsingError) { this.setState({unitList: list, fileIsNotLoaded: false, parsingError: false}) }
-    else {this.setState({parsingError: true})}
+    if (!parsingError) { this.setState({unitList: list, fileIsNotLoaded: false, parsingError: false, totalUnits: list.length}) }
+    else {this.setState({parsingError: true, totalUnits: 0})}
   }
   
-  // Log.info(response, "RES")
   async handleSubmit() {
-    this.setState({isImporting: true})
     const response = await this.postUnitsAsync()
-    this.setState({successList: response.sc, failedList: response.fl, isImporting: false})
+    this.setState({successList: response.sc, failedList: response.fl})
   }
 
   async postUnitsAsync() {
-    let {unitList} = this.state, successList = [], failedList = []
-    unitList.forEach(unit => { 
+    const {unitList} = this.state
+    let successList = [], failedList = [], progressValue = 0;
+    unitList.forEach(unit => {
       this.props.postFunction(
         unit, 
-        () => successList.push(unit), 
-        () => failedList.push(unit))
+        () => {
+          successList.push(unit);
+          progressValue = progressValue + 1
+          this.setState({actualUnit: progressValue})
+        },
+        () => {
+          failedList.push(unit);
+          progressValue = progressValue + 1
+          this.setState({actualUnit: progressValue})
+        })
     })
-    // if (failedList.length === 0 ) { this.showSuccess() }
-    // else { this.showError('import CSV. Check Log details. Make sure CSV has the correct format and you are not importing duplicated data')}
     return ({sc: successList, fl: failedList});
   }
 
   handleOnError = (err) => { Log.info(err) }
 
   handleOnRemoveFile = () => { 
-    this.setState({fileIsNotLoaded: true, parsingError: false}) 
+    this.setState({fileIsNotLoaded: true, parsingError: false, totalUnits: 0, actualUnit: 0}) 
   }
 
   render() {
-    const {successList, failedList, fileIsNotLoaded, isImporting, parsingError} = this.state
+    const {successList, failedList, fileIsNotLoaded, parsingError, totalUnits, actualUnit} = this.state
+    let existsSuccesses = successList.length > 0
+    let existsFails = failedList.length > 0
+    let progressStyleBool = totalUnits !== actualUnit
+    let notFileOrParsingError = fileIsNotLoaded || parsingError
+    let disableSuccessLog = notFileOrParsingError || !existsSuccesses
+    let disableFailedLog = notFileOrParsingError || !existsFails
     return (
       <Container fluid>
         {this.renderErrorModal()}
@@ -108,56 +119,52 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
         </Button>
         :
         <Button block size="sm" color={parsingError ? "danger" : "success"} id="import" onClick={this.handleSubmit} 
-          disabled={fileIsNotLoaded || parsingError} style={{marginBottom:40, marginTop: 40, padding: 10}}>
+          disabled={notFileOrParsingError} style={{marginBottom:40, marginTop: 40, padding: 10}}>
           {parsingError ? "Parsing Error, check correct format of CSV file" : "Proceed with Import"}
         </Button> }
         <div>
-          {isImporting ? <AppSpinner/> :
+        {/* progressStyleBool ? 'warning' : 'success' */}
           <Jumbotron>
-            <h1 className="display-9">Import Results</h1>
-            <p className="lead">To view log results please remove file.</p>
+            { notFileOrParsingError ? <Progress color='secondary' value='0' /> :
+            <Progress animated={progressStyleBool} color={this.getProgressBarColor()} 
+              value={actualUnit} max={totalUnits} />
+            }
             <hr className="my-2" />
             <Container fluid>
-              <Collapsable entityTypeCapName={'Successes'} disabled={successList.length === 0}
-                color={this.getCollapsableColor('successList')}>
+              <Row xs="2">
+              <Collapsable entityTypeCapName={'Successes'} disabled={disableSuccessLog}
+                color={existsSuccesses ? 'success' : 'secondary'}>
                 <div style={{ maxHeight:720, overflowY:'scroll'}}>
-                  <Table hover className="mt-4">
+                  <Table size='sm' hover className="mt-4">
                     <LogHeaders/>
                     <tbody><LogList units = {successList} /></tbody>
                   </Table>
                 </div>
-              </Collapsable>  
-            </Container>
-            <hr className="my-2" />
-            <Container fluid>
-              <Collapsable entityTypeCapName={'Failures'} disabled={failedList.length === 0} 
-                color={this.getCollapsableColor('failedList')}>
+              </Collapsable>
+              <Collapsable entityTypeCapName={'Failures'} disabled={disableFailedLog} 
+                color={existsFails ? 'danger' : 'secondary'}>
                 <div style={{ maxHeight:720, overflowY:'scroll'}}>
-                  <Table hover className="mt-4">
+                  <Table size='sm' hover className="mt-4">
                     <LogHeaders/>
                     <tbody><LogList units = {failedList}/></tbody>
                   </Table>
                 </div>
               </Collapsable>
+              </Row>
             </Container>
-            <hr className="my-2" />
-          </Jumbotron> }
+          </Jumbotron>
         </div>
       </Container>
     )
   }
 
-  getCollapsableColor(listName) {
-    let color = 'secondary'
-    const {successList, failedList} = this.state
-    switch (listName) {
-      case 'failedList': 
-        if (failedList.length > 0) { color = 'danger' }
-        break;
-      case 'successList': 
-        if (successList.length > 0) { color = 'success' }
-        break;
-      default: color = 'secondary'
+  getProgressBarColor() {
+    let color = 'warning'
+    const {failedList, totalUnits, actualUnit} = this.state
+    if (totalUnits === actualUnit) {
+      let fails = failedList.length
+      if (fails > 0 && fails > (totalUnits / 2)) { color = 'danger'}
+      else if (fails === 0) {color = 'success'}
     }
     return color;
   }
@@ -170,8 +177,8 @@ const LogHeaders = () =>
 <thead>
   <tr >
       <th style={th}>DNI</th>
-      <th style={th}>First Name</th>
-      <th style={th}>Last Name</th>
+      <th style={th}>eMail</th>
+      <th style={th}>Name</th>
   </tr>
 </thead>;
 
@@ -186,6 +193,6 @@ const tr = { whiteSpace: 'nowrap' };
 const UnitListItem = props =>
   <tr id={props.unit.personalData.dni} key={props.unit.personalData.dni}>
     <td>{props.unit.personalData.dni || ''}</td>
-    <td style={tr}>{props.unit.personalData.firstName || ''}</td>
-    <td style={tr}>{props.unit.personalData.lastName || ''}</td>
+    <td>{props.unit.personalData.email || ''}</td>
+    <td style={tr}>{props.unit.personalData.lastName + ', ' +  props.unit.personalData.firstName || ''}</td>
   </tr>;
