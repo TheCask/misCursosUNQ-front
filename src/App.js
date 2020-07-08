@@ -44,11 +44,11 @@ class App extends ComponentWithErrorHandling {
   async componentDidMount() {
     AuthAPI.getGlobalUserByIdAsync(json => this.setState({globalUser: json, isLoadingG: false}), 
       this.showError("get global user"));
-    await AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
+    AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
       this.showError("get app user"));
     
     const rehydrate = localStorage.getItem('rol') || 'Guest';
-    if (this.state.appUser.registration) {this.setState({actualRol: rehydrate});} 
+    this.setState({actualRol: rehydrate})
   }
 
   chooseRol(rol) {
