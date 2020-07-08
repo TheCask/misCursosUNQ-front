@@ -123,12 +123,9 @@ export default class CsvUnitsImport extends ComponentWithErrorHandling {
           {parsingError ? "Parsing Error, check correct format of CSV file" : "Proceed with Import"}
         </Button> }
         <div>
-        {/* progressStyleBool ? 'warning' : 'success' */}
           <Jumbotron>
-            { notFileOrParsingError ? <Progress color='secondary' value='0' /> :
             <Progress animated={progressStyleBool} color={this.getProgressBarColor()} 
               value={actualUnit} max={totalUnits} />
-            }
             <hr className="my-2" />
             <Container fluid>
               <Row xs="2">
