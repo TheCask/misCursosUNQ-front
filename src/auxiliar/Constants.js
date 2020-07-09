@@ -180,4 +180,4 @@ export const initialUser = () => { return { isActive: true, personalData: {}, jo
 
 export const tableHeader = { width: 'auto', position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
 
-export const tableRow = {whiteSpace: 'nowrap', textAlign: 'center'};
+export const tableRow = {whiteSpace: 'nowrap'};

@@ -1,15 +1,16 @@
 import React from 'react';
+import { userContext } from '../login/UserContext';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
-import { Link } from 'react-router-dom';
 import DetailButton from '../buttons/DetailButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
+import AccessError from '../errorHandling/AccessError';
 import * as SubjectAPI from '../services/SubjectAPI';
 import * as UserAPI from '../services/UserAPI';
-import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
-import { userContext } from '../login/UserContext';
-import AccessError from '../errorHandling/AccessError';
+import * as Constants from '../auxiliar/Constants'
 
 class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
 
@@ -147,17 +148,16 @@ class AddCoordinatorsToSubject extends ComponentWithErrorHandling {
   }
 }
 
+const th = Constants.tableHeader
 const UserListHeaders = () =>
 <thead>
     <tr>
-      <th width="3%">DNI</th>
-      <th width="7%" >First Name</th>
-      <th width="7%" >Last Name</th>
-      <th width="7%" >e-Mail</th>
-      <th width="4%" >Cell Phone</th>
-      <th width="2%" >Dedication</th>
-      <th width="1%" >Aditional Hours</th>
-      <th width="3%">Selected</th>
+      <th style={th}>DNI</th>
+      <th style={th}>First Name</th>
+      <th style={th}>Last Name</th>
+      <th style={th}>e-Mail</th>
+      <th style={th}>Dedication</th>
+      <th style={th}>Selected</th>
   </tr>
 </thead>;
 
@@ -176,18 +176,17 @@ const UserList = props => {
       )
     });
   }
-  
-  const UserListItem = props =>
-  <tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style}>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.dni || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.firstName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.lastName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.email || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.personalData.cellPhone || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.dedication || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.user.jobDetail.aditionalHours || ''}</td>
-    <td style={{textAlign: 'center'}}> {props.setIconFunction(props.user.userId)}</td>
-  </tr>;
+
+const tr = Constants.tableRow
+const UserListItem = props =>
+<tr onClick={props.userOnClickFunction} id={props.user.userId} style={props.style}>
+  <td style={tr}>{props.user.personalData.dni || ''}</td>
+  <td style={tr}>{props.user.personalData.firstName || ''}</td>
+  <td style={tr}>{props.user.personalData.lastName || ''}</td>
+  <td style={tr}>{props.user.personalData.email || ''}</td>
+  <td style={tr}>{props.user.jobDetail.dedication || ''}</td>
+  <td style={{textAlign: 'center'}}> {props.setIconFunction(props.user.userId)}</td>
+</tr>;
 
 AddCoordinatorsToSubject.contextType = userContext;
 export default AddCoordinatorsToSubject;

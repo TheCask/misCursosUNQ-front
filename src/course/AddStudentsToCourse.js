@@ -1,15 +1,15 @@
 import React from 'react';
+import { userContext } from '../login/UserContext';
 import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom';
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
-import { Link } from 'react-router-dom';
 import DetailButton from '../buttons/DetailButton';
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 import * as CourseAPI from '../services/CourseAPI';
 import * as StudentAPI from '../services/StudentAPI';
-import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 import * as Constants from '../auxiliar/Constants'
 
 class AddStudentsToCourse extends ComponentWithErrorHandling {
@@ -137,16 +137,16 @@ class AddStudentsToCourse extends ComponentWithErrorHandling {
 }
 AddStudentsToCourse.contextType = userContext;
 
+const th = Constants.tableHeader
 const StudentListHeaders = () =>
   <thead>
     <tr>
-      <th width="7%" >File Number</th>
-      <th width="10%">DNI</th>
-      <th width="5%" >First Name</th>
-      <th width="5%" >Last Name</th>
-      <th width="2%" >e-Mail</th>
-      <th width="2%" >Cell Phone</th>
-      <th width="3%">Selected</th>
+      <th style={th}>File Number</th>
+      <th style={th}>DNI</th>
+      <th style={th}>First Name</th>
+      <th style={th}>Last Name</th>
+      <th style={th}>e-Mail</th>
+      <th style={th}>Selected</th>
     </tr>
   </thead>;
 
@@ -166,7 +166,7 @@ const StudentList = props => {
   });
 }
 
-const tr = {whiteSpace: 'nowrap'}
+const tr = Constants.tableRow
 const StudentListItem = props => 
   <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}> 
     <td style={tr}>{props.student.fileNumber || ''}</td>
@@ -174,7 +174,6 @@ const StudentListItem = props =>
     <td style={tr}>{props.student.personalData.firstName || ''}</td>
     <td style={tr}>{props.student.personalData.lastName || ''}</td>
     <td style={tr}>{props.student.personalData.email || ''}</td>
-    <td style={tr}>{props.student.personalData.cellPhone || ''}</td>
     <td style={tr}> {props.setIconFunction(props.student.fileNumber)}</td>
   </tr>;
 

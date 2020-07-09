@@ -1,15 +1,16 @@
 import React from 'react';
+import { userContext } from '../login/UserContext';
 import { Button, ButtonGroup, Container, Table, Form, UncontrolledTooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from '../AppNavbar';
 import AppSpinner from '../auxiliar/AppSpinner';
-import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import { userContext } from '../login/UserContext';
+import DatePicker from "react-datepicker";
 import AccessError from '../errorHandling/AccessError';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import * as CourseAPI from '../services/CourseAPI';
 import * as LessonAPI from '../services/LessonAPI';
-import DatePicker from "react-datepicker";
+import * as Constants from '../auxiliar/Constants'
 import "react-datepicker/dist/react-datepicker.css";
 
 const truncTime = date => { 
@@ -190,13 +191,14 @@ class Attendance extends ComponentWithErrorHandling {
 }
 Attendance.contextType = userContext;
 
+const th = Constants.tableHeader
 const StudentListHeaders = () =>
   <thead>
     <tr>
-      <th width="10%">File Number</th>
-      <th width="20%">First Name</th>
-      <th width="20%">Last Name</th>
-      <th width="3%">Attended</th>
+      <th style={th}>File Number</th>
+      <th style={th}>First Name</th>
+      <th style={th}>Last Name</th>
+      <th style={th}>Attended</th>
     </tr>
   </thead>;
 
@@ -225,11 +227,12 @@ const getDisplayFormat = date => {
   return date;
 }
 
+const tr = Constants.tableRow
 const StudentListItem = props =>
   <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.fileNumber || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.firstName || ''}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{props.student.personalData.lastName || ''}</td>
+    <td style={tr}>{props.student.fileNumber || ''}</td>
+    <td style={tr}>{props.student.personalData.firstName || ''}</td>
+    <td style={tr}>{props.student.personalData.lastName || ''}</td>
     <td style={{textAlign: 'center'}}> {props.getIconFunction(props.student.fileNumber)}</td>
   </tr>;
 

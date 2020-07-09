@@ -1,15 +1,15 @@
 import React from 'react';
+import { userContext } from '../login/UserContext';
+import { Link } from 'react-router-dom';
 import { Container, Table, ButtonGroup, Button, UncontrolledTooltip, Form } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
-import { Link } from 'react-router-dom';
 import DetailButton from '../buttons/DetailButton';
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 import * as CourseAPI from '../services/CourseAPI';
 import * as UserAPI from '../services/UserAPI';
-import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 import * as Constants from '../auxiliar/Constants'
 
 class AddTeachersToCourse extends ComponentWithErrorHandling {
@@ -140,17 +140,17 @@ class AddTeachersToCourse extends ComponentWithErrorHandling {
 }
 AddTeachersToCourse.contextType = userContext;
 
+const th = Constants.tableHeader
 const TeacherListHeaders = () =>
   <thead>
     <tr>
-      <th width="3%">DNI</th>
-      <th width="7%">First Name</th>
-      <th width="7%">Last Name</th>
-      <th width="7%">e-Mail</th>
-      <th width="4%">Cell Phone</th>
-      <th width="2%">Dedication</th>
-      <th width="1%">Aditional Hours</th>
-      <th width="3%">Selected</th>
+      <th style={th}>DNI</th>
+      <th style={th}>First Name</th>
+      <th style={th}>Last Name</th>
+      <th style={th}>e-Mail</th>
+      <th style={th}>Cell Phone</th>
+      <th style={th}>Dedication</th>
+      <th style={th}>Selected</th>
     </tr>
   </thead>;
 
@@ -170,14 +170,13 @@ const TeacherList = props => {
   });
 }
 
-const tr = {whiteSpace: 'nowrap'}
+const tr = Constants.tableRow
 const TeacherListItem = props => 
   <tr onClick={props.teacherOnClickFunction} id={props.user.userId} style={props.style}> 
     <td style={tr}>{props.user.personalData.dni || ''}</td>
     <td style={tr}>{props.user.personalData.firstName || ''}</td>
     <td style={tr}>{props.user.personalData.lastName || ''}</td>
     <td style={tr}>{props.user.personalData.email || ''}</td>
-    <td style={tr}>{props.user.personalData.cellPhone || ''}</td>
     <td style={tr}>{props.user.jobDetail.dedication || ''}</td>
     <td style={tr}>{props.user.jobDetail.aditionalHours || ''}</td>
     <td style={{textAlign: 'center'}}> {props.setIconFunction(props.user.userId)}</td>
