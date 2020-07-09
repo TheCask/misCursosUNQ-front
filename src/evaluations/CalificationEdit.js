@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Input, Table, Form, ButtonGroup, InputGroup, InputGroupAddon, Button, Row, Col} from 'reactstrap';
 import CRUDSaveButton from '../CRUDButtonBar/CRUDSaveButton';
 import CancelButton from '../buttons/CancelButton'
 import * as CourseAPI from '../services/CourseAPI';
 import Log from '../auxiliar/Log';
 
-export default function CalificationEdit(props){
+export default withRouter(function CalificationEdit(props){
     
     const [dirty, setDirty] = useState(false)
     const [califificationFullList, setCalifFullList] = useState(createCalifFullList(props.students, props.currEvalInstance.califications)) 
@@ -153,7 +154,7 @@ export default function CalificationEdit(props){
                         entityTypeCapName = {'Calification'}
                         isDisabled = {!isEvalSelected() || !dirty}
                         />
-                    <CancelButton onClick={() => this.props.history.goBack()} />
+                    <CancelButton onClick={() => props.history.goBack()} />
                     </ButtonGroup>
                 </Col>
             </Row>
@@ -161,4 +162,4 @@ export default function CalificationEdit(props){
         </Form>
         </>
     )
-}
+})
