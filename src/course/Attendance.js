@@ -124,7 +124,7 @@ class Attendance extends ComponentWithErrorHandling {
     if (isLoading) { return <AppSpinner/> }
     this.actualRol = this.context.actualRol;
     return (this.actualRol !== 'Teacher' ?
-      <AccessError errorCode="Guests are not allowed" 
+      <AccessError errorCode="Only Teachers are allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       :
       <AppNavbar>

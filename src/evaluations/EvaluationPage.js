@@ -9,7 +9,7 @@ export default class EvaluationPage extends ComponentWithErrorHandling {
   render() { 
     this.actualRol = this.context.actualRol;
     return (this.actualRol !== 'Teacher' ?
-      <AccessError errorCode="Guests are not allowed" 
+      <AccessError errorCode="Only Teachers are allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       : 
       <CourseEvaluations courseId={this.props.match.params.id} showError={this.showError} />

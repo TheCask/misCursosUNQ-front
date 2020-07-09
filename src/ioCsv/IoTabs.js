@@ -19,7 +19,7 @@ const IoTabs = (props) => {
   }
   let title = <h2 className="float-left">Import CSV File</h2>
   return (context.actualRol !== 'Cycle Coordinator' ?
-    <AccessError errorCode="Guests are not allowed" 
+    <AccessError errorCode="Only Cycle Coordinator are allowed" 
         errorDetail="Make sure you are signed in with valid role before try to access this page"/>
     : 
     <AppNavbar>

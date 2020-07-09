@@ -62,7 +62,7 @@ class StudentEdit extends ComponentWithErrorHandling {
     let title = this.chooseTitle(onlyDetail, newStudent);
     this.actualRol = this.context.actualRol;
     return (this.actualRol === 'Guest' || (this.actualRol === 'Teacher' && !onlyDetail) ?
-      <AccessError errorCode="Guests are not allowed" 
+      <AccessError errorCode="Only Cycle Coordinator are allowed" 
           errorDetail="Make sure you are signed in with valid role before try to access this page"/>
       :
       <AppNavbar>
