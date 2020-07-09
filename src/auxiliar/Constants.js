@@ -33,6 +33,9 @@ export const DedicationOptions = ['', 'Parcial', 'Semi-Exclusiva', 'Exclusiva']
 export const SeasonOptions = ['1C', '2C', '3C', '1T', '2T', '3T', '4T', '1S', '2S']
 export const ShiftOptions = ['Mañana', 'Tarde', 'Noche']
 
+export const iconsList = ['snowboarding', 'skiing-nordic', 'skiing', 
+'skating', 'hiking', 'walking', 'swimmer', 'running', 'snowboarding', 'biking']
+
 export const emptyUser = {
     isActive: true,
     personalData: {

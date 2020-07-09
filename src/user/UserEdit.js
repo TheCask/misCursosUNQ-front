@@ -1,15 +1,17 @@
 import React from 'react';
-import {withRouter } from 'react-router-dom';
-import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, Row, Col, Button } from 'reactstrap';
+import { withRouter } from 'react-router-dom';
+import { userContext } from '../login/UserContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Container, Form, FormGroup, Input, ButtonGroup, Label, UncontrolledTooltip, 
+  Row, Col, Button } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 import SaveButton from '../buttons/SaveButton'
 import CancelButton from '../buttons/CancelButton'
-import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import * as UserAPI from '../services/UserAPI';
 import * as Constants from '../auxiliar/Constants'
+import * as AuxFunc from '../auxiliar/AuxiliarFunctions'
   
 class UserEdit extends ComponentWithErrorHandling {
 
@@ -35,20 +37,10 @@ class UserEdit extends ComponentWithErrorHandling {
   handleChange(event) {
     const {name, value} = event.target;
     let item = {...this.state.item};
-    this.setInnerPropValue(item, name, value);
+    AuxFunc.setInnerPropValue(item, name, value);
     item['coordinatedSubjects'] = []
     item['taughtCourses'] = []
     this.setState({item});
-  }
-  
-  setInnerPropValue(baseObj, subPropString, value){
-    const subProps = subPropString.split(".");
-    const lastPropName = subProps.pop(); // elimina del array y retorna el ultimo 
-    let propRef = baseObj
-    subProps.forEach(subprop => {
-      propRef = propRef[subprop];
-    });
-    propRef[lastPropName] = value;
   }
   
   async handleSubmit(event) {

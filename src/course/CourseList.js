@@ -122,8 +122,8 @@ export class CourseListContainer extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {...this.state, 
-      ...{courses: [], isLoading: true, targetId: '', 
-      coursesListTitle: 'Courses'}};
+      courses: [], isLoading: true, targetId: '', 
+      coursesListTitle: 'Courses'};
     this.title = props.courseListTitle;
     this.getIcon = this.props.getIcon
     this.addButtonTo = props.addButtonTo;

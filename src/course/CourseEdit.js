@@ -1,21 +1,23 @@
 import React from 'react';
+
 import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Container, Form, FormGroup, Input, ButtonGroup, UncontrolledTooltip, 
   Col, Row, Label } from 'reactstrap';
-import AppNavbar from '../AppNavbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { userContext } from '../login/UserContext';
 import { StudentListContainer } from '../student/StudentList'
 import { UserListContainer } from '../user/UserList'
+import AppNavbar from '../AppNavbar';
 import SaveButton from '../buttons/SaveButton'
 import CancelButton from '../buttons/CancelButton'
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
-import * as CourseAPI from '../services/CourseAPI';
-import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import Collapsable from '../buttons/Collapsable';
 import AppSpinner from '../auxiliar/AppSpinner';
+import * as CourseAPI from '../services/CourseAPI';
+import * as SubjectAPI from '../services/SubjectAPI';
 import * as Constants from '../auxiliar/Constants'
+import * as AuxFunc from '../auxiliar/AuxiliarFunctions'
 
 class CourseEdit extends ComponentWithErrorHandling {
 
@@ -61,8 +63,8 @@ class CourseEdit extends ComponentWithErrorHandling {
     // to save the code of the selected name subject
     if (name === 'subject.code') {
       let code = this.subjectName2Code(value)
-      this.setInnerPropValue(item, name, code);
-      this.setInnerPropValue(item, 'subject.name', value);
+      AuxFunc.setInnerPropValue(item, name, code);
+      AuxFunc.setInnerPropValue(item, 'subject.name', value);
     }
     else { item[name] = value}
     item['lessons'] = []
@@ -72,16 +74,6 @@ class CourseEdit extends ComponentWithErrorHandling {
   subjectName2Code(subjectName) {
     let subject = this.state.subjectList.find(sb => sb.name === subjectName)
     return subject.code
-  }
-
-  setInnerPropValue(baseObj, subPropString, value){
-    const subProps = subPropString.split(".");
-    const lastPropName = subProps.pop(); // elimina del array y retorna el ultimo 
-    let propRef = baseObj;
-    subProps.forEach(subprop => {
-      propRef = propRef[subprop];
-    });
-    propRef[lastPropName] = value;
   }
 
   async handleSubmit(event) {
