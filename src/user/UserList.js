@@ -1,14 +1,15 @@
 import React from 'react';
+import { userContext } from '../login/UserContext';
 import {Container, Table, InputGroup, Button, Input, 
   InputGroupAddon, Col, Row, UncontrolledTooltip} from 'reactstrap';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
 import ButtonBar from '../buttons/ButtonBar';
-import * as UserAPI from '../services/UserAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import * as UserAPI from '../services/UserAPI';
+import * as Constants from '../auxiliar/Constants'
 
 class FullUserList extends ComponentWithErrorHandling {
 
@@ -168,7 +169,7 @@ export class UserListContainer extends ComponentWithErrorHandling {
   }
 }
 
-const th = { width: 'auto', position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
+const th = Constants.tableHeader
 const UserListHeaders = () =>
 <thead>
     <tr >
@@ -197,7 +198,7 @@ const UserList = props => {
   });
 }
   
-const tr = { whiteSpace: 'nowrap' };
+const tr = Constants.tableRow
 const UserListItem = props =>
   <tr onClick={props.userOnClickFunction} id={props.user.userId} 
     style={props.style} key={props.user.userId}>

@@ -1,14 +1,15 @@
 import React from 'react';
+import { userContext } from '../login/UserContext';
 import { Container, Table, InputGroup, Button, Input, 
   InputGroupAddon, Col, Row, UncontrolledTooltip } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
 import ButtonBar from '../buttons/ButtonBar';
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError'
-import * as StudentAPI from '../services/StudentAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import * as StudentAPI from '../services/StudentAPI';
+import * as Constants from '../auxiliar/Constants'
 
 class FullStudentList extends ComponentWithErrorHandling {
   render() {
@@ -150,7 +151,7 @@ export class StudentListContainer extends ComponentWithErrorHandling {
   }
 }
 
-const th = { width: 'auto', position: 'sticky', top: 0, color:"white", backgroundColor:"rgba(88,34,34,0.9)" };
+const th = Constants.tableHeader
 const StudentListHeaders = () =>
   <thead>
     <tr>
@@ -159,7 +160,6 @@ const StudentListHeaders = () =>
       <th style={th}>First Name</th>
       <th style={th}>Last Name</th>
       <th style={th}>e-Mail</th>
-      <th style={th}>Cell Phone</th>
     </tr>
   </thead>;
 
@@ -177,7 +177,7 @@ const StudentList = props => {
   });
 }
 
-const tr = {whiteSpace: 'nowrap'}
+const tr = Constants.tableRow
 const StudentListItem = props => 
   <tr onClick={props.studentOnClickFunction} id={props.student.fileNumber} style={props.style}> 
     <td style={tr}>{props.student.fileNumber || ''}</td>
@@ -185,7 +185,6 @@ const StudentListItem = props =>
     <td style={tr}>{props.student.personalData.firstName || ''}</td>
     <td style={tr}>{props.student.personalData.lastName || ''}</td>
     <td style={tr}>{props.student.personalData.email || ''}</td>
-    <td style={tr}>{props.student.personalData.cellPhone || ''}</td>
   </tr>;
 
 const SearchField = props =>

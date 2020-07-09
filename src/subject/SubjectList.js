@@ -1,12 +1,13 @@
 import React from 'react';
 import { Container, Table, Col, Row } from 'reactstrap';
+import { userContext } from '../login/UserContext';
 import AppSpinner from '../auxiliar/AppSpinner';
 import AppNavbar from '../AppNavbar';
 import ButtonBar from '../buttons/ButtonBar';
-import * as SubjectAPI from '../services/SubjectAPI';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import { userContext } from '../login/UserContext';
 import AccessError from '../errorHandling/AccessError';
+import * as SubjectAPI from '../services/SubjectAPI';
+import * as Constants from '../auxiliar/Constants'
 
 class FullSubjectList extends ComponentWithErrorHandling {
   render() {
@@ -136,13 +137,14 @@ export class SubjectListContainer extends ComponentWithErrorHandling {
   }
 }
 
+const th = Constants.tableHeader
 const SubjectListHeaders = () =>
 <thead>
   <tr>
-    <th width="5%">Subject Code</th>
-    <th width="10%">Subject Name</th>
-    <th width="3%">Acronym</th>
-    <th width="5%">Subject Program</th>
+    <th style={th}>Subject Code</th>
+    <th style={th}>Subject Name</th>
+    <th style={th}>Acronym</th>
+    <th style={th}>Subject Program</th>
   </tr>
 </thead>;
 
@@ -160,7 +162,7 @@ const SubjectList = props => {
   });
 }
 
-const tr = {whiteSpace: 'nowrap'}
+const tr = Constants.tableRow
 const SubjectListItem = props =>
   <tr onClick={props.subjectOnClickFunction} id={props.subject.code} style={props.style} key={props.subject.code}>
     <td style={tr}>{props.subject.code || ''}</td>

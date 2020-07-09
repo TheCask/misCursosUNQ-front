@@ -1,16 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { userContext } from '../login/UserContext';
 import { Container, Table, Button, UncontrolledTooltip, Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner'
 import AppNavbar from '../AppNavbar'
 import AccessError from '../errorHandling/AccessError';
 import ButtonBar from '../buttons/ButtonBar';
+import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
 import * as CourseAPI from '../services/CourseAPI';
 import * as UserAPI from '../services/UserAPI';
-import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling'
-import { userContext } from '../login/UserContext';
 import * as IconRepo from '../auxiliar/IconRepo'
+import * as Constants from '../auxiliar/Constants'
 
 class FullCourseList extends ComponentWithErrorHandling {
 
@@ -229,40 +230,41 @@ const CourseList = props => {
   });
 }
 
+const th = Constants.tableHeader
 const CourseListHeaders = () =>
   <thead>
     <tr>
-      <th width="1%"></th>
-      <th width="2%">Code</th>
-      <th width="3%">Subject</th>
-      <th width="3%">Season</th>
-      <th width="3%">Shift</th>
-      <th width="2%">Open</th>
-      <th width="1%">Students</th>
-      <th width="1%">Evaluations</th>
-      <th width="1%">Lessons</th>
-      <th width="1%">Attendance</th>
+      <th style={th}></th>
+      <th style={th}>Code</th>
+      <th style={th}>Subject</th>
+      <th style={th}>Season</th>
+      <th style={th}>Shift</th>
+      <th style={th}>Open</th>
+      <th style={th}>Students</th>
+      <th style={th}>Evaluations</th>
+      <th style={th}>Lessons</th>
+      <th style={th}>Attendance</th>
     </tr>
   </thead>
 
+const td = Constants.tableRow
 const CourseListItem = props => {
-  const tdStyle = {whiteSpace: 'nowrap', textAlign: 'center'};
   return (
     <tr onClick={props.courseOnClickFunction} id={props.course.courseId} style={props.style}> 
       <td style={{textAlign: 'center'}}> 
-        <span className="fa-layers fa-fw" style={{marginLeft: '-50px', marginRight: '-50px'}}>
+        <span className="fa-layers fa-fw">
           { props.showIcon ? props.getIconFunction(props.course.subject.code) : '' }
         </span>
       </td>
-      <td style={tdStyle}>{props.course.courseCode || ''}</td>
-      <td style={tdStyle}>{props.course.subject.acronym || ''}</td>
-      <td style={tdStyle}>
+      <td style={td}>{props.course.courseCode || ''}</td>
+      <td style={td}>{props.course.subject.acronym || ''}</td>
+      <td style={td}>
         {props.course.courseSeason || ''}{' '}{props.course.courseYear || ''}
       </td>
-      <td style={tdStyle}>{props.course.courseShift || ''}</td>
-      <td style={tdStyle}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
-      <td style={tdStyle}>{props.course.students.length || 0}</td>
-      <td style={tdStyle}>{
+      <td style={td}>{props.course.courseShift || ''}</td>
+      <td style={td}>{props.booleanFormatter(props.course.courseIsOpen) || ''}</td>
+      <td style={td}>{props.course.students.length || 0}</td>
+      <td style={td}>{
           <Button size="sm" color="secondary" outline block tag={Link} to={`/course/${props.course.courseId}/evaluations`} 
             id={"evals_" + props.course.courseId} disabled={props.disableEvaluationBt} >
             <UncontrolledTooltip placement="auto" target={"evals_" + props.course.courseId}>
@@ -271,7 +273,7 @@ const CourseListItem = props => {
             {props.course.evaluations.length || 0}
           </Button>
       }</td>
-      <td style={tdStyle}>{props.course.lessons.length || 0 }</td>
+      <td style={td}>{props.course.lessons.length || 0 }</td>
       <td>
         <Button size="sm" color="success" outline block tag={Link} to={`/course/${props.course.courseId}/lessons`} 
           id={"attendance_" + props.course.courseId} disabled={props.disableAttendanceBt}>
