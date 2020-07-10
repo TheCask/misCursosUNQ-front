@@ -17,9 +17,15 @@ export async function deleteSubjectAsync(subjectCode, handleSuccess, handleError
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)    
 }
 
-// post
-export async function postSubjectAsync(subjectJson, handleSuccess, handleError){
-    const response = await fetch('/api/subject', BackAPI.postInit(subjectJson));
+// post update
+export async function updateSubjectAsync(subjectJson, handleSuccess, handleError){
+    const response = await fetch('/api/updateSubject', BackAPI.postInit(subjectJson));
+    BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
+}
+
+// post create
+export async function createSubjectAsync(subjectJson, handleSuccess, handleError){
+    const response = await fetch('/api/createSubject', BackAPI.postInit(subjectJson));
     BackAPI.handlePostOrDelete(response, handleSuccess, handleError)
 }
 

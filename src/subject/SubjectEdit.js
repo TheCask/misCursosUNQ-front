@@ -42,9 +42,17 @@ class SubjectEdit extends ComponentWithErrorHandling {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-    SubjectAPI.postSubjectAsync(item, 
-      () => this.props.history.push('/subjects'), 
-      this.showError("save subject"));
+    if (this.props.match.params.id !== 'new') { 
+      SubjectAPI.updateSubjectAsync(item, 
+        () => this.props.history.push('/subjects'), 
+        this.showError("update subject"));
+    }
+    else {
+      SubjectAPI.createSubjectAsync(item, 
+        () => this.props.history.push('/subjects'), 
+        this.showError("create subject"));
+    }
+    
   }
 
   chooseTitle(onlyDetail, newSubject) {
