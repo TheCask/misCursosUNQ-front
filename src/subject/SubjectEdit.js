@@ -16,9 +16,9 @@ class SubjectEdit extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...{
+    this.state = {...this.state,
       item: Constants.emptySubject,
-    }};
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onlyDetail = props.onlyDetail || false;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Jumbotron } from 'reactstrap';
 import AppNavbar from '../AppNavbar';
 
-export default class LogInOut extends Component {
+export default class AccessError extends Component {
 
   constructor(props) {
     super(props);

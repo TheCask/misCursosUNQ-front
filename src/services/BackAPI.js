@@ -1,13 +1,21 @@
+import Log from '../auxiliar/Log'
+
 // AUXILIAR
 
 export async function handleGet(response, handleSuccess, handleError) {
     if (response.status >= 200 && response.status <= 299) { handleSuccess(await response.json()) } 
-    else { handleError(response.status, response.statusText) }
+    else {
+        const responseJson = await response.json()
+        handleError(response.status, response.statusText, responseJson.message) 
+    }
 }
 
 export async function handlePostOrDelete(response, handleSuccess, handleError) {
     if (response.status >= 200 && response.status <= 299) { handleSuccess(await response) } 
-    else { handleError(response.status, response.statusText) }
+    else { 
+        const responseJson = await response.json()
+        handleError(response.status, response.statusText, responseJson.message)
+    }
 }
 
 export function postInit(json) {

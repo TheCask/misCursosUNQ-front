@@ -5,7 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 export default function ErrorModal (props) {
 
     const [isDetailShown, setDetailShown] = useState(false);
-    const {title, shortDesc, httpCode, errorText} = props.lastError; 
+    const {title, shortDesc, httpCode, errorText, errorMessage} = props.lastError; 
     
     const toggleShowDetails = () => setDetailShown(!isDetailShown);
 
@@ -14,6 +14,7 @@ export default function ErrorModal (props) {
             <hr/>
             <p>{httpCode}</p>
             <p>{errorText}</p>
+            <p>{errorMessage}</p>
         </div>;
 
 
@@ -28,7 +29,7 @@ export default function ErrorModal (props) {
             </ModalBody>
             <ModalFooter>
                 <Button color={httpCode === '200' ? 'success' : 'danger' } onClick={() => {props.toggle(); toggleShowDetails()}} id="modalCancel">
-                    OK
+                    Dismiss
                 </Button>
                 {httpCode === '200' ? '' :
                 <Button color="secondary" onClick={toggleShowDetails} id="modalCancel">

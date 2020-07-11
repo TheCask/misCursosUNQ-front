@@ -35,7 +35,7 @@ export default class ComponentWithErrorHandling extends Component {
     super(props);
     this.state = {
       isErrorModalOpen: false,
-      lastError: {title: "", shortDesc: "", httpCode: "", errorText:""}
+      lastError: {title: "", shortDesc: "", httpCode: "", errorText:"", errorMessage:""}
     };
     this.toggleErrorModal = this.toggleErrorModal.bind(this);
   }
@@ -55,14 +55,15 @@ export default class ComponentWithErrorHandling extends Component {
   }
 
   showError(whileTryingTo){
-      return (errorCode, errorText) => {
+      return (errorCode, errorText, errorMessage) => {
             this.setState({
               isErrorModalOpen: true,
               lastError: {
                 title: "Ups, something went wrong...", 
                 shortDesc: "An error occurred while trying to " + whileTryingTo + "." ,
                 httpCode: "HTTP CODE: " + errorCode,
-                errorText: errorText
+                errorText: errorText,
+                errorMessage: errorMessage
               }
             })
 

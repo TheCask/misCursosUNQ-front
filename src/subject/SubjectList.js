@@ -24,13 +24,13 @@ class FullSubjectList extends ComponentWithErrorHandling {
           onDelete = { (subjectCode, handleSuccess, handleError) => SubjectAPI.deleteSubjectAsync(subjectCode, handleSuccess, handleError)}
           onDeleteConsequenceList = {[
           "The subject will no longer be available."
-        ]}
-        addButtonTo = {`/subject/new`}
-        renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
-        renderEditButton = {true}
-        renderAddButton = {true}
-        renderDeleteButton = {true}
-        deleteButtonTo = {'/subjects'}
+          ]}
+          addButtonTo = {`/subject/new`}
+          renderButtonBar = {this.context.actualRol === 'Cycle Coordinator'}
+          renderEditButton = {true}
+          renderAddButton = {true}
+          renderDeleteButton = {true}
+          deleteButtonTo = {'/subjects'}
         />
       </AppNavbar>
     )
