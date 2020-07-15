@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {userContext} from './UserContext';
+import { userContext } from './UserContext';
 import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandling';
 
 const config = require('./authConfig');

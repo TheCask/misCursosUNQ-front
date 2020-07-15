@@ -1,5 +1,3 @@
-import Log from '../auxiliar/Log'
-
 // AUXILIAR
 
 export async function handleGet(response, handleSuccess, handleError) {

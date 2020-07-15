@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import {userContext} from './login/UserContext';
+import { userContext } from './login/UserContext';
 // LOCAL
 import './App.css';
 import Home from './Home';
@@ -17,18 +17,18 @@ import SubjectEdit from './subject/SubjectEdit';
 import FullUserList from './user/UserList';
 import UserEdit from './user/UserEdit';
 import IoTabs from './ioCsv/IoTabs'
-import * as Detail from './auxiliar/Details'
 import Profile from './login/Profile';
-import * as AuthAPI from './services/AuthAPI';
 import AppSpinner from './auxiliar/AppSpinner';
 import EvaluationPage from './evaluations/EvaluationPage';
+import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
 import EXPERIMENTING from './experimental/EXPERIMENTING';
+import * as AuthAPI from './services/AuthAPI';
+import * as Detail from './auxiliar/Details'
 // FONT AWESOME
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
-import ComponentWithErrorHandling from './errorHandling/ComponentWithErrorHandling';
 
 library.add(fab, fas, faCheckSquare, faCoffee)
 
@@ -46,9 +46,9 @@ class App extends ComponentWithErrorHandling {
       this.showError("get global user"));
     AuthAPI.getAppUserByIdAsync(json => this.setState({appUser: json, isLoadingA: false}), 
       this.showError("get app user"));
-    
-    const rehydrate = localStorage.getItem('rol') || 'Guest';
-    this.setState({actualRol: rehydrate})
+
+    const savedRol = localStorage.getItem('rol') || 'Guest';
+    this.setState({actualRol: savedRol})
   }
 
   chooseRol(rol) {
@@ -57,14 +57,15 @@ class App extends ComponentWithErrorHandling {
   }
 
   render() {
-    if (this.state.isLoadingG || this.state.isLoadingA) { return (<AppSpinner/>) }
+    let {isLoadingA, isLoadingG, appUser, globalUser, actualRol} = this.state
+    if (isLoadingG || isLoadingA) { return (<AppSpinner/>) }
+    if (!appUser.registration && actualRol !== 'Guest') { this.chooseRol('Guest')}
     const value = {
-      globalUser: this.state.globalUser.user,
-      appUser: this.state.appUser.registration,
-      actualRol: this.state.actualRol,
+      globalUser: globalUser.user,
+      appUser: appUser.registration,
+      actualRol: actualRol,
       chooseRol: rol => this.chooseRol(rol)
     }
-
     return (
       <userContext.Provider value={value}>
         <Router>

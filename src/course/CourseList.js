@@ -18,17 +18,12 @@ class FullCourseList extends ComponentWithErrorHandling {
   constructor(props) {
     super(props);
     this.state = {...this.state, lastRol: 'Guest'};
+    this.updateRol = this.updateRol.bind(this);
   };
 
-  componentDidUpdate() {
-    if (this.context.actualRol !== this.state.lastRol) {
-      this.setState({lastRol: this.context.actualRol});
-    }
-  }
+  componentDidUpdate() { this.updateRol() }
 
-  componentDidMount() {
-    this.setState({lastRol: this.context.actualRol})
-  }
+  componentDidMount() { this.updateRol() }
 
   render() {
     let actualRol = this.context.actualRol;
@@ -114,6 +109,12 @@ class FullCourseList extends ComponentWithErrorHandling {
       <AccessError errorCode="User Not Logged" 
         errorDetail="Make sure you are signed in before try to access this page"/>
     )
+  }
+
+  updateRol() {
+    if (this.state.lastRol !== this.context.actualRol) {
+      this.setState({lastRol: this.context.actualRol})
+    }
   }
 }
 
