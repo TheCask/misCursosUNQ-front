@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { userContext } from '../login/UserContext';
-import { Container, Table, Button, UncontrolledTooltip, Row, Col } from 'reactstrap'
+import { Container, Table, Button, UncontrolledTooltip, Row, Col, UncontrolledAlert } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppSpinner from '../auxiliar/AppSpinner'
 import AppNavbar from '../AppNavbar'
@@ -203,6 +203,10 @@ export class CourseListContainer extends ComponentWithErrorHandling {
               />
             </tbody>
           </Table>
+          {this.state.courses.length === 0 ? 
+            <UncontrolledAlert color="warning"> 
+              You have no asigned Courses
+            </UncontrolledAlert> : '' }
           </div>
         </Container>
       </div>
