@@ -136,7 +136,7 @@ class CourseEdit extends ComponentWithErrorHandling {
             <Col>
             <ButtonGroup className="float-right">
               <SaveButton entityId = {item.courseId} entityTypeCapName = "Course" disabled={onlyDetail || actualRol !== 'Cycle Coordinator'}/>
-              <CancelButton onClick={() => this.props.history.goBack()} />
+              <CancelButton entityTypeCapName='Course' to='/courses' />
             </ButtonGroup>
             </Col>
           </Row>
