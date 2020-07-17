@@ -95,8 +95,6 @@ class App extends ComponentWithErrorHandling {
             <Route path='/profile' component={Profile}/>
 
             <Route path='/ioData' exact={true} component={IoTabs}/>
-
-            <Route path='/experimenting' component={EXPERIMENTING}/>
           </Switch>
         </Router>
       </userContext.Provider>

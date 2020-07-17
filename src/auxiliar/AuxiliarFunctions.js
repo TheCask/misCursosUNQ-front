@@ -14,3 +14,11 @@ export function setInnerPropValue(baseObj, subPropString, value) {
 export function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+export function onShowAlert(message, timeout, caller) {
+  caller.setState({ showAlert: true, alertMessage: message }, () => {
+    window.setTimeout( () => {
+      caller.setState({ showAlert:false, alertMessage: '' })
+    }, timeout)
+  });
+}

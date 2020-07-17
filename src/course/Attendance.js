@@ -1,6 +1,6 @@
 import React from 'react';
 import { userContext } from '../login/UserContext';
-import { Button, ButtonGroup, Container, Table, Form, UncontrolledTooltip } from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, Form, UncontrolledTooltip, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AppNavbar from '../AppNavbar';
@@ -11,6 +11,7 @@ import ComponentWithErrorHandling from '../errorHandling/ComponentWithErrorHandl
 import * as CourseAPI from '../services/CourseAPI';
 import * as LessonAPI from '../services/LessonAPI';
 import * as Constants from '../auxiliar/Constants'
+import * as AuxFunc from '../auxiliar/AuxiliarFunctions'
 import "react-datepicker/dist/react-datepicker.css";
 
 const truncTime = date => { 
@@ -31,17 +32,20 @@ class Attendance extends ComponentWithErrorHandling {
 
   constructor(props) {
     super(props);
-    this.state = {...this.state, ...{
+    this.state = {...this.state,
       attendantStudentsIds: [], 
       students: [], 
       lessons: [], 
       item: this.emptyItem,
+      currentStudentId: '',
       isLoading: true,
-      currentStudentId: ''
-    }};
+      showAlert: false,
+      alertMessage: ''
+    };
     this.toggleAttendance = this.toggleAttendance.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.renderAlert = this.renderAlert.bind(this)
   }
 
   async componentDidMount() {
@@ -74,6 +78,12 @@ class Attendance extends ComponentWithErrorHandling {
     );
   }
 
+  renderAlert = () => {
+    return <Alert color="info" isOpen={this.state.showAlert} >
+            {this.state.alertMessage}
+          </Alert>
+  }
+
   async handleSubmit(event) {
     event.preventDefault();
     let item = {...this.state.item};
@@ -81,7 +91,7 @@ class Attendance extends ComponentWithErrorHandling {
     item['attendantStudents'] = students;
     this.setState({item: item});
     LessonAPI.postLessonAsync(item, 
-      () => this.props.history.push('/courses'), 
+      () => { AuxFunc.onShowAlert('Lesson successfully saved!', 2000, this)},
       this.showError("save lesson")); 
   }
 
@@ -134,6 +144,7 @@ class Attendance extends ComponentWithErrorHandling {
       <AppNavbar>
         {this.renderErrorModal()}
         <Container fluid>
+          {this.renderAlert()}
           <Form onSubmit={this.handleSubmit}> 
             <ButtonGroup className="float-right" inline="true">
               <Button size="sm" color="primary" type="submit" id="saveAttendance">
