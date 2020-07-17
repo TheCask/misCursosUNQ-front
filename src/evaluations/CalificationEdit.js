@@ -89,14 +89,19 @@ export default withRouter(function CalificationEdit(props){
     const tableRender = (itemList) => {
         const filteredFields = ["student.personalData.lastName", "student.personalData.firstName", "student.fileNumber", "note"];
         let filteredList = itemList;
-        if (filterValue !== '')
-            filteredList = itemList.filter( cal => 
-                filteredFields.some( k => {
-                    Log.info(getInnerPropValue(cal, k), "getInnerPropValue(cal, k)");
-                    return getInnerPropValue(cal, k) ? getInnerPropValue(cal, k).toString().toLowerCase().includes(filterValue.toLowerCase()) : false
-                
-                })             
-            )
+        if (props.currEvalInstance.evaluationId === ''){
+            filteredList = []
+        } else {
+
+            if (filterValue !== '')
+                filteredList = itemList.filter( cal => 
+                    filteredFields.some( k => {
+                        Log.info(getInnerPropValue(cal, k), "getInnerPropValue(cal, k)");
+                        return getInnerPropValue(cal, k) ? getInnerPropValue(cal, k).toString().toLowerCase().includes(filterValue.toLowerCase()) : false
+                    
+                    })             
+                )
+        }
         return <Table hover className="mt-4" scrollable={"true"} data-testid="califTable" >
             <thead>
                 <tr>

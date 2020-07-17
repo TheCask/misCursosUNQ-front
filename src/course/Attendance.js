@@ -44,23 +44,27 @@ class Attendance extends ComponentWithErrorHandling {
     this.handleDateChange = this.handleDateChange.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({isLoading: true});
     let courseId = this.props.match.params.id
-    CourseAPI.getCourseStudentsAsync(
+    await CourseAPI.getCourseStudentsAsync(
       courseId, 
       json => { 
         this.setState({students: json}) 
         this.collectStudentsIds(json)}, 
       this.showError("get course students")
     ); 
-    CourseAPI.getCourseLessonsAsync(
+    await CourseAPI.getCourseLessonsAsync(
       courseId, 
       json => {
         let jsonWithParsedDates = json.map( (lesson, index) => {
           let parsedDate = new Date( lesson.lessonDay.replace("-","/") );
           let newLesson = {...lesson};
           newLesson.lessonDay = parsedDate;
+          if (this.isSameDate(parsedDate, truncTime(new Date()))){
+            const studentIds = newLesson.attendantStudents.map( s => { return { fileNumber: s.fileNumber } } )
+            this.setState({item: newLesson, attendantStudentsIds: studentIds })
+          }
           return newLesson;
         });
         this.setState({lessons: jsonWithParsedDates, isLoading:false })

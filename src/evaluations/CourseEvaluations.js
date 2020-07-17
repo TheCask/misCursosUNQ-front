@@ -39,7 +39,11 @@ function CourseEvaluations(props) {
 
     const setCurrEvalInstanceById = itemId => {
             const newCurrEvalInstance = currCourse.evaluations.find( ev => ev.evaluationId === itemId)
-            setCurrEvalInstance(newCurrEvalInstance);
+            if (newCurrEvalInstance){
+                setCurrEvalInstance(newCurrEvalInstance);
+            } else {
+                setCurrEvalInstance(newEvalInstance());
+            }
     }
 
     Log.info("Course Evaluations")

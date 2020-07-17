@@ -46,6 +46,7 @@ export default function EvaluationEdit(props){
             evalInstance, 
             (res) => {
                 Log.info(res, "POST SUCCEDED");
+                props.onSelectFunc(null)
                 props.reloadCourse();     /// NEEDED??????
             }, 
             props.showError("save evaluation"));
@@ -57,6 +58,7 @@ export default function EvaluationEdit(props){
             evalInstance.evaluationId, 
             (res) => {
                 Log.info(res, "DELETE SUCCEDED");
+                props.onSelectFunc(null)
                 props.reloadCourse();     /// NEEDED??????
             }, 
             props.showError("delete evaluation"));
